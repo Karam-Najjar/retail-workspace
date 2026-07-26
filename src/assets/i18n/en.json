@@ -181,6 +181,8 @@
     "costPerBaseUnit": "Cost per base unit",
     "subtotal": "Subtotal",
     "totalCost": "Total cost",
+    "totalSupplies": "Total Supplies",
+    "totalBaseUnits": "Total Base Units",
     "operator": "Operator",
     "exchangeRate": "Exchange rate",
     "review": "Review",
@@ -238,6 +240,43 @@
     },
     "errors": {
       "load": "Sales could not be loaded."
+    },
+    "fifoAllocations": "FIFO batch allocations",
+    "batch": "Batch",
+    "allocatedCost": "Allocated cost"
+  },
+  "reports": {
+    "filters": { "today": "Today", "week": "This Week", "month": "This Month", "custom": "Custom", "from": "From", "to": "To" },
+    "export": "Export to Excel",
+    "exporting": "Exporting..."
+  },
+  "exports": {
+    "sales": { "dateTime": "Date & Time", "product": "Product", "quantity": "Quantity", "unitPriceUsd": "Unit Price (USD)", "unitPriceSyp": "Unit Price (SYP)", "costUsd": "Cost (USD)", "costSyp": "Cost (SYP)", "profitUsd": "Profit (USD)", "profitSyp": "Profit (SYP)", "totalUsd": "Total (USD)", "totalSyp": "Total (SYP)" },
+    "supplies": { "dateTime": "Date & Time", "supplier": "Supplier", "product": "Product", "packageType": "Package Type", "quantity": "Quantity", "unitCostUsd": "Unit Cost (USD)", "unitCostSyp": "Unit Cost (SYP)", "subtotalUsd": "Subtotal (USD)", "subtotalSyp": "Subtotal (SYP)" },
+    "activity": { "dateTime": "Date & Time", "type": "Type", "details": "Details", "operator": "Operator" }
+  },
+  "activityLog": {
+    "title": "Activity Log",
+    "description": "Review recorded activity and export filtered history.",
+    "dateTime": "Date & Time",
+    "type": "Type",
+    "details": "Details",
+    "operator": "Operator",
+    "allTypes": "All types",
+    "emptyTitle": "No activity found",
+    "emptyMessage": "No activity matches the selected filters.",
+    "errors": { "load": "Activity could not be loaded." },
+    "eventDetails": {
+      "saleCompleted": "Sale completed: {{ items }} items, {{ total }} total",
+      "openingBalance": "Opening balance: {{ quantity }} units at {{ unitCost }}/unit",
+      "stockAdded": "Stock added: {{ quantity }} units at {{ unitCost }}/unit",
+      "stockRemoved": "Stock removed: {{ quantity }} units",
+      "writeOff": "Product {{ name }} written off: {{ quantity }} units",
+      "supplyReceived": "Supply received: {{ items }} items, {{ total }} total",
+      "productCreated": "Product '{{ name }}' created",
+      "productDeleted": "Product '{{ name }}' deleted",
+      "categoryDeleted": "Category '{{ name }}' deleted",
+      "supplierDeleted": "Supplier '{{ name }}' deleted"
     }
   },
   "pos": {

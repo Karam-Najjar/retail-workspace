@@ -3,3 +3,5 @@
 .page-header { justify-content: space-between; }
 .page-header h1, .page-header p { margin: 0; }
 .filters mat-form-field { min-inline-size: 14rem; }
+.summary-grid { display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 48rem) { .summary-grid { grid-template-columns: 1fr; } }

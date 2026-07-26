@@ -6,51 +6,13 @@
     </div>
   </header>
 
-  <div class="filters">
-    <mat-button-toggle-group [(ngModel)]="preset" (change)="load()">
-      <mat-button-toggle value="today">{{ 'sales.filters.today' | translate }}</mat-button-toggle>
-      <mat-button-toggle value="week">{{ 'sales.filters.week' | translate }}</mat-button-toggle>
-      <mat-button-toggle value="month">{{ 'sales.filters.month' | translate }}</mat-button-toggle>
-      <mat-button-toggle value="custom">{{ 'sales.filters.custom' | translate }}</mat-button-toggle>
-    </mat-button-toggle-group>
-
-    @if (preset === 'custom') {
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'sales.filters.from' | translate }}</mat-label>
-        <input matInput type="date" [(ngModel)]="customFrom" (change)="load()" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'sales.filters.to' | translate }}</mat-label>
-        <input matInput type="date" [(ngModel)]="customTo" (change)="load()" />
-      </mat-form-field>
-    }
-  </div>
+  <div class="filters"><app-date-range-filter (rangeChange)="rangeChanged($event)" /><app-export-button [busy]="facade.exporting()" (export)="export()" /></div>
 
   <section class="summary-grid" [attr.aria-label]="'sales.summary' | translate">
-    <mat-card appearance="outlined">
-      <mat-card-content>
-        <span>{{ 'sales.totalRevenue' | translate }}</span>
-        <strong>{{ summaryMoney(facade.summary().totalRevenue) }}</strong>
-      </mat-card-content>
-    </mat-card>
-    <mat-card appearance="outlined">
-      <mat-card-content>
-        <span>{{ 'sales.totalCost' | translate }}</span>
-        <strong>{{ summaryMoney(facade.summary().totalCost) }}</strong>
-      </mat-card-content>
-    </mat-card>
-    <mat-card appearance="outlined">
-      <mat-card-content>
-        <span>{{ 'sales.totalProfit' | translate }}</span>
-        <strong>{{ summaryMoney(facade.summary().totalProfit) }}</strong>
-      </mat-card-content>
-    </mat-card>
-    <mat-card appearance="outlined">
-      <mat-card-content>
-        <span>{{ 'sales.totalItemsSold' | translate }}</span>
-        <strong>{{ facade.summary().totalItemsSold }}</strong>
-      </mat-card-content>
-    </mat-card>
+    <app-summary-card labelKey="sales.totalRevenue" [value]="summaryMoney(facade.summary().totalRevenue)" />
+    <app-summary-card labelKey="sales.totalCost" [value]="summaryMoney(facade.summary().totalCost)" />
+    <app-summary-card labelKey="sales.totalProfit" [value]="summaryMoney(facade.summary().totalProfit)" />
+    <app-summary-card labelKey="sales.totalItemsSold" [value]="facade.summary().totalItemsSold" />
   </section>
 
   @if (facade.error()) {

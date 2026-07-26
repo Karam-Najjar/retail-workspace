@@ -38,6 +38,9 @@ td {
   white-space: nowrap;
 }
 
+.allocation-heading td { background: var(--retail-surface-container, #fafafa); font-weight: 600; }
+.allocation-row td { color: var(--retail-on-surface-muted); font-size: .9rem; }
+
 .totals {
   display: grid;
   gap: 1rem;

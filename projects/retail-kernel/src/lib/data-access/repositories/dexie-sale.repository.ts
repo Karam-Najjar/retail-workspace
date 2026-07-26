@@ -211,9 +211,9 @@ export class DexieSaleRepository implements SaleRepository {
   }
 
   async list(filter: SaleListFilter = {}): Promise<readonly SaleListEntry[]> {
-    const sales = (await this.database.sales.toArray())
-      .filter((sale) => (!filter.from || sale.date >= filter.from) && (!filter.to || sale.date <= filter.to))
-      .sort((left, right) => right.date.getTime() - left.date.getTime());
+    const sales = filter.from && filter.to
+      ? await this.database.sales.where('date').between(filter.from, filter.to, true, true).reverse().sortBy('date')
+      : await this.database.sales.orderBy('date').reverse().toArray();
     if (!sales.length) return [];
     const saleIds = sales.map((sale) => sale.id);
     const items = await this.database.saleItems.where('sale_id').anyOf(saleIds).toArray();

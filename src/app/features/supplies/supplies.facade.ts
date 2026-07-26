@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { CurrencyService, DexieInventoryBatchRepository, GetSupplyDetailUseCase, ListProductsUseCase, ListSuppliersUseCase, ListSuppliesUseCase, Product, ReceiveSupplyInput, ReceiveSupplyUseCase, StorePackageType, StoreProfileService, Supplier, Supply, SupplyDetail, SupplyListEntry, SupplyListFilter } from '@retail/kernel';
+import { CurrencyService, DexieInventoryBatchRepository, ExcelExportService, GetSupplyDetailUseCase, ListProductsUseCase, ListSuppliersUseCase, ListSuppliesUseCase, Product, ReceiveSupplyInput, ReceiveSupplyUseCase, StorePackageType, StoreProfileService, Supplier, Supply, SupplyDetail, SupplyListEntry, SupplyListFilter, SupplyReportingService, SuppliesWorkbookMapper, SupplySummary } from '@retail/kernel';
 
 @Injectable()
 export class SuppliesFacade {
@@ -11,18 +11,23 @@ export class SuppliesFacade {
   private readonly currency = inject(CurrencyService);
   private readonly batches = inject(DexieInventoryBatchRepository);
   private readonly profile = inject(StoreProfileService);
+  private readonly reporting = inject(SupplyReportingService);
+  private readonly excel = inject(ExcelExportService);
   readonly supplies = signal<readonly SupplyListEntry[]>([]);
   readonly products = signal<readonly Product[]>([]);
   readonly suppliers = signal<readonly Supplier[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+  readonly summary = signal<SupplySummary>({ total_cost: 0, transaction_count: 0, total_base_units: 0 });
+  readonly exporting = signal(false);
   readonly packageTypes: readonly StorePackageType[] = this.profile.profile.package_types;
 
   async load(filter: SupplyListFilter = {}): Promise<void> {
     this.loading.set(true); this.error.set(null);
     try {
-      const [supplies, suppliers] = await Promise.all([this.listSupplies.execute(filter), this.listSuppliers.execute()]);
+      const [supplies, suppliers, report] = await Promise.all([this.listSupplies.execute(filter), this.listSuppliers.execute(), this.reporting.getReport(filter)]);
       this.supplies.set(supplies); this.suppliers.set(suppliers);
+      this.summary.set(report.summary);
     } catch { this.error.set('supplies.errors.load'); }
     finally { this.loading.set(false); }
   }
@@ -42,4 +47,14 @@ export class SuppliesFacade {
   recentForSupplier(id: string, limit = 10): Promise<readonly Supply[]> { return this.listSupplies.listRecentBySupplier(id, limit); }
   async latestBaseUnitCost(productId: string): Promise<string | null> { return (await this.batches.listByProduct(productId)).at(-1)?.unit_cost_display ?? null; }
   addSupplier(supplier: Supplier): void { this.suppliers.update((current) => [...current.filter((item) => item.id !== supplier.id), supplier].sort((left, right) => left.name.localeCompare(right.name))); }
+
+  async export(filter: SupplyListFilter, fileName: string, rtl: boolean): Promise<void> {
+    this.exporting.set(true);
+    try {
+      const report = await this.reporting.getReport(filter);
+      await this.excel.export({ fileName, rtl, sheets: [SuppliesWorkbookMapper.map(report.details)] });
+    } finally {
+      this.exporting.set(false);
+    }
+  }
 }

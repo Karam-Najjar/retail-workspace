@@ -1,0 +1,12 @@
+<div class="date-range-filter">
+  <mat-button-toggle-group [(ngModel)]="preset" (change)="emitRange()">
+    <mat-button-toggle value="today">{{ 'reports.filters.today' | translate }}</mat-button-toggle>
+    <mat-button-toggle value="week">{{ 'reports.filters.week' | translate }}</mat-button-toggle>
+    <mat-button-toggle value="month">{{ 'reports.filters.month' | translate }}</mat-button-toggle>
+    <mat-button-toggle value="custom">{{ 'reports.filters.custom' | translate }}</mat-button-toggle>
+  </mat-button-toggle-group>
+  @if (preset === 'custom') {
+    <mat-form-field appearance="outline"><mat-label>{{ 'reports.filters.from' | translate }}</mat-label><input matInput type="date" [(ngModel)]="customFrom" (change)="emitRange()" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ 'reports.filters.to' | translate }}</mat-label><input matInput type="date" [(ngModel)]="customTo" (change)="emitRange()" /></mat-form-field>
+  }
+</div>

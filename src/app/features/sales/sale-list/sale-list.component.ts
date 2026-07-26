@@ -1,14 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { SaleCurrencySnapshot, SaleListFilter, StoreProfileService } from '@retail/kernel';
+import { DateRange, SaleCurrencySnapshot, SaleListFilter, StoreProfileService } from '@retail/kernel';
 import { DataTableColumn, DataTableComponent, DataTableRow } from '../../../shared-ui/data-table/data-table.component';
+import { DateRangeFilterComponent } from '../../../shared-ui/date-range-filter/date-range-filter.component';
 import { EmptyStateComponent } from '../../../shared-ui/empty-state/empty-state.component';
+import { ExportButtonComponent } from '../../../shared-ui/export-button/export-button.component';
+import { SummaryCardComponent } from '../../../shared-ui/summary-card/summary-card.component';
 import { SalesFacade } from '../sales.facade';
 
 type DatePreset = 'today' | 'week' | 'month' | 'custom';
@@ -18,11 +17,10 @@ type DatePreset = 'today' | 'week' | 'month' | 'custom';
   imports: [
     DataTableComponent,
     EmptyStateComponent,
-    FormsModule,
-    MatButtonToggleModule,
     MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
+    DateRangeFilterComponent,
+    ExportButtonComponent,
+    SummaryCardComponent,
     TranslatePipe,
   ],
   providers: [SalesFacade],
@@ -38,9 +36,7 @@ export class SaleListComponent implements OnInit {
     timeStyle: 'short',
   });
 
-  protected preset: DatePreset = 'today';
-  protected customFrom = '';
-  protected customTo = '';
+  protected range: DateRange = this.todayRange();
   protected readonly columns: readonly DataTableColumn[] = [
     { labelKey: 'sales.dateTime' },
     { labelKey: 'sales.saleTotal' },
@@ -64,9 +60,9 @@ export class SaleListComponent implements OnInit {
     this.load();
   }
 
-  protected load(): void {
-    void this.facade.load(this.filter());
-  }
+  protected load(): void { void this.facade.load(this.filter()); }
+  protected rangeChanged(range: DateRange): void { this.range = range; this.load(); }
+  protected export(): void { void this.facade.export(this.filter(), this.fileName(), this.isArabic()); }
 
   protected openDetail(id: string): void {
     void this.router.navigate(['/sales', id]);
@@ -84,29 +80,9 @@ export class SaleListComponent implements OnInit {
     return `${(amount / 10 ** snapshot.primary_precision).toFixed(snapshot.primary_precision)} ${snapshot.primary_code}`;
   }
 
-  private filter(): SaleListFilter {
-    const now = new Date();
-    let from: Date | undefined;
-    let to: Date | undefined;
-
-    if (this.preset === 'today') {
-      from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      to = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, -1);
-    }
-    if (this.preset === 'week') {
-      const day = (now.getDay() + 6) % 7;
-      from = new Date(now.getFullYear(), now.getMonth(), now.getDate() - day);
-      to = now;
-    }
-    if (this.preset === 'month') {
-      from = new Date(now.getFullYear(), now.getMonth(), 1);
-      to = now;
-    }
-    if (this.preset === 'custom') {
-      from = this.customFrom ? new Date(`${this.customFrom}T00:00:00`) : undefined;
-      to = this.customTo ? new Date(`${this.customTo}T23:59:59.999`) : undefined;
-    }
-
-    return { from, to };
-  }
+  private filter(): SaleListFilter { return { from: this.range.from, to: this.range.to }; }
+  private todayRange(): DateRange { const now = new Date(); return { from: new Date(now.getFullYear(), now.getMonth(), now.getDate()), to: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, -1), preset: 'today' }; }
+  private fileName(): string { return `sales-report-${this.datePart(this.range.from)}-to-${this.datePart(this.range.to)}.xlsx`; }
+  private datePart(date: Date): string { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; }
+  private isArabic(): boolean { return document.documentElement.lang.toLowerCase().startsWith('ar'); }
 }

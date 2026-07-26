@@ -44,6 +44,12 @@
             <td>{{ primaryAmount(item.total_cost, current.sale.currency_snapshot) }}</td>
             <td>{{ primaryAmount(item.total_profit, current.sale.currency_snapshot) }}</td>
           </tr>
+          @if (allocationsFor(item).length) {
+            <tr class="allocation-heading"><td colspan="7">{{ 'sales.fifoAllocations' | translate }}</td></tr>
+            @for (allocation of allocationsFor(item); track allocation.id) {
+              <tr class="allocation-row"><td colspan="2">{{ 'sales.batch' | translate }} {{ allocation.batch_id }}</td><td>{{ allocation.quantity_consumed }}</td><td colspan="2">{{ 'sales.allocatedCost' | translate }}</td><td colspan="2">{{ primaryAmount(allocation.allocated_cost, current.sale.currency_snapshot) }}</td></tr>
+            }
+          }
         }
       </tbody>
     </table>

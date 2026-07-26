@@ -181,6 +181,8 @@
     "costPerBaseUnit": "",
     "subtotal": "",
     "totalCost": "",
+    "totalSupplies": "",
+    "totalBaseUnits": "",
     "operator": "",
     "exchangeRate": "",
     "review": "",
@@ -238,6 +240,43 @@
     },
     "errors": {
       "load": ""
+    },
+    "fifoAllocations": "",
+    "batch": "",
+    "allocatedCost": ""
+  },
+  "reports": {
+    "filters": { "today": "", "week": "", "month": "", "custom": "", "from": "", "to": "" },
+    "export": "",
+    "exporting": ""
+  },
+  "exports": {
+    "sales": { "dateTime": "", "product": "", "quantity": "", "unitPriceUsd": "", "unitPriceSyp": "", "costUsd": "", "costSyp": "", "profitUsd": "", "profitSyp": "", "totalUsd": "", "totalSyp": "" },
+    "supplies": { "dateTime": "", "supplier": "", "product": "", "packageType": "", "quantity": "", "unitCostUsd": "", "unitCostSyp": "", "subtotalUsd": "", "subtotalSyp": "" },
+    "activity": { "dateTime": "", "type": "", "details": "", "operator": "" }
+  },
+  "activityLog": {
+    "title": "",
+    "description": "",
+    "dateTime": "",
+    "type": "",
+    "details": "",
+    "operator": "",
+    "allTypes": "",
+    "emptyTitle": "",
+    "emptyMessage": "",
+    "errors": { "load": "" },
+    "eventDetails": {
+      "saleCompleted": "",
+      "openingBalance": "",
+      "stockAdded": "",
+      "stockRemoved": "",
+      "writeOff": "",
+      "supplyReceived": "",
+      "productCreated": "",
+      "productDeleted": "",
+      "categoryDeleted": "",
+      "supplierDeleted": ""
     }
   },
   "pos": {

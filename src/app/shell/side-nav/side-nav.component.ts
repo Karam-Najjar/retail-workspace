@@ -27,7 +27,7 @@ export class SideNavComponent {
     { labelKey: 'navigation.sales', icon: 'receipt_long', route: '/sales' },
     { labelKey: 'navigation.supplies', icon: 'local_shipping', route: '/supplies' },
     { labelKey: 'navigation.suppliers', icon: 'storefront', route: '/suppliers' },
-    { labelKey: 'navigation.activityLog', icon: 'history' },
+    { labelKey: 'navigation.activityLog', icon: 'history', route: '/activity-log' },
     { labelKey: 'navigation.settings', icon: 'settings' },
   ];
 }

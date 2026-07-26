@@ -47,10 +47,10 @@ export class DexieSupplyRepository implements SupplyRepository {
   }
 
   async list(filter: SupplyListFilter = {}): Promise<readonly Supply[]> {
-    const supplies = await this.database.supplies.toArray();
-    return supplies.filter((supply) => (!filter.supplierId || supply.supplier_id === filter.supplierId)
-      && (!filter.from || supply.date >= filter.from) && (!filter.to || supply.date <= filter.to))
-      .sort((left, right) => right.date.getTime() - left.date.getTime());
+    const supplies = filter.from && filter.to
+      ? await this.database.supplies.where('date').between(filter.from, filter.to, true, true).reverse().sortBy('date')
+      : await this.database.supplies.orderBy('date').reverse().toArray();
+    return supplies.filter((supply) => !filter.supplierId || supply.supplier_id === filter.supplierId);
   }
 
   async getDetail(id: string): Promise<SupplyDetail | undefined> {
