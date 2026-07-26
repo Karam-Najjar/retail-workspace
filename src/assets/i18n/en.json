@@ -30,7 +30,10 @@
     "confirm": "Confirm",
     "save": "Save",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "createdBy": "Created by",
+    "createdAt": "Created at",
+    "lastModifiedBy": "Last modified by"
   },
   "categories": {
     "title": "Categories",
@@ -102,6 +105,57 @@
     "noBarcodes": "No barcodes have been added.",
     "stock": { "in": "In stock", "low": "Low stock", "out": "Out of stock" },
     "errors": { "load": "Products could not be loaded.", "save": "Product could not be saved.", "delete": "Product could not be deleted.", "barcodes": "Barcodes could not be saved." }
+  },
+  "inventory": {
+    "adjustStock": "Adjust stock",
+    "currentStock": "Current stock",
+    "quantity": "Quantity",
+    "quantityChange": "Quantity change",
+    "unitCost": "Unit cost per base unit",
+    "reason": "Reason",
+    "date": "Date",
+    "batch": "Batch",
+    "operator": "Operator",
+    "source": "Source",
+    "status": "Status",
+    "originalQuantity": "Original quantity",
+    "remainingQuantity": "Remaining quantity",
+    "originalCost": "Original total cost",
+    "remainingCost": "Remaining total cost",
+    "types": {
+      "opening_balance": "Opening Balance",
+      "adjustment_in": "Add Stock",
+      "adjustment_out": "Remove Stock",
+      "write_off": "Write Off and Delete",
+      "supply": "Supply",
+      "sale": "Sale"
+    },
+    "sources": {
+      "opening_balance": "Opening Balance",
+      "adjustment": "Adjustment",
+      "supply": "Supply"
+    },
+    "adjustment": {
+      "title": "Stock adjustment",
+      "type": "Adjustment type",
+      "loading": "Loading adjustment form...",
+      "writeOffWarning": "{{ quantity }} units are in stock. Writing off will permanently delete this product."
+    },
+    "movements": {
+      "title": "Inventory movement history",
+      "empty": "No inventory movements have been recorded."
+    },
+    "batches": {
+      "title": "Inventory batch status",
+      "empty": "No inventory batches have been created.",
+      "active": "Active",
+      "depleted": "Depleted"
+    },
+    "errors": {
+      "load": "Inventory could not be loaded.",
+      "save": "Stock adjustment could not be saved.",
+      "writeOff": "The product could not be written off and deleted."
+    }
   },
   "dashboard": {
     "title": "Dashboard",

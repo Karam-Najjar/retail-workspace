@@ -7,6 +7,9 @@
         <dd>{{ currentCategory.system_code ? ('categories.system.' + currentCategory.system_code | translate) : currentCategory.name }}</dd>
         <dt>{{ 'categories.type' | translate }}</dt>
         <dd>{{ currentCategory.system_code ? ('categories.systemLabel' | translate) : ('categories.customLabel' | translate) }}</dd>
+        <dt>{{ 'common.createdBy' | translate }}</dt><dd>{{ operatorName(currentCategory.created_by_operator_id) }}</dd>
+        <dt>{{ 'common.createdAt' | translate }}</dt><dd>{{ currentCategory.created_at | date: 'medium' }}</dd>
+        <dt>{{ 'common.lastModifiedBy' | translate }}</dt><dd>{{ operatorName(currentCategory.last_modified_by_operator_id) }}</dd>
       </dl>
       @if (currentCategory.system_code) {
         <p class="protected-note">{{ 'categories.systemProtected' | translate }}</p>

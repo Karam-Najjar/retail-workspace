@@ -1,4 +1,4 @@
 <div class="dual-currency-input">
-  <mat-form-field appearance="outline"><mat-label>{{ 'products.sellingPrice' | translate }} (USD)</mat-label><input matInput type="number" min="0" step="0.01" required [ngModel]="cents() / 100" (ngModelChange)="updatePrimary($event)" /></mat-form-field>
-  <mat-form-field appearance="outline"><mat-label>{{ 'products.sellingPrice' | translate }} (SYP)</mat-label><input matInput type="number" min="0" step="1" required [ngModel]="secondaryValue()" (ngModelChange)="updateSecondary($event)" /></mat-form-field>
+  <mat-form-field appearance="outline"><mat-label>{{ labelKey() | translate }} (USD)</mat-label><input matInput type="number" min="0" step="0.01" required [ngModel]="primaryValue()" (ngModelChange)="updatePrimary($event)" /></mat-form-field>
+  <mat-form-field appearance="outline"><mat-label>{{ labelKey() | translate }} (SYP)</mat-label><input matInput type="number" min="0" step="1" required [ngModel]="secondaryValue()" (ngModelChange)="updateSecondary($event)" /></mat-form-field>
 </div>

@@ -1,10 +1,11 @@
+import { DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Supplier } from '@retail/kernel';
+import { ActiveOperatorService, Supplier } from '@retail/kernel';
 import { ConfirmationDialogComponent } from '../../../shared-ui/confirmation-dialog/confirmation-dialog.component';
 import { DetailPageHeaderComponent } from '../../../shared-ui/detail-page-header/detail-page-header.component';
 import { EmptyStateComponent } from '../../../shared-ui/empty-state/empty-state.component';
@@ -13,7 +14,7 @@ import { SupplierFormComponent } from '../supplier-form/supplier-form.component'
 
 @Component({
   selector: 'app-supplier-detail',
-  imports: [ConfirmationDialogComponent, DetailPageHeaderComponent, EmptyStateComponent, MatButtonModule, MatCardModule, MatDialogModule, TranslatePipe],
+  imports: [DatePipe, ConfirmationDialogComponent, DetailPageHeaderComponent, EmptyStateComponent, MatButtonModule, MatCardModule, MatDialogModule, TranslatePipe],
   providers: [SuppliersFacade],
   templateUrl: './supplier-detail.component.html',
   styleUrl: './supplier-detail.component.scss',
@@ -23,6 +24,7 @@ export class SupplierDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
   private readonly facade = inject(SuppliersFacade);
+  private readonly operators = inject(ActiveOperatorService);
   protected readonly supplier = signal<Supplier | null>(null);
   protected readonly confirmDelete = signal(false);
   protected readonly affectedSupplies = signal(0);
@@ -57,6 +59,8 @@ export class SupplierDetailComponent implements OnInit {
     if (deleted !== null) this.goBack();
     else this.error = this.facade.error();
   }
+
+  protected operatorName(id: string): string { return this.operators.operators().find((operator) => operator.id === id)?.display_name ?? '—'; }
 
   private async reload(): Promise<void> {
     const id = this.supplier()?.id;

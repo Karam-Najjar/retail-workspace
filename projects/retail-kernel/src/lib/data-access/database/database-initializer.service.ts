@@ -23,6 +23,8 @@ export class DatabaseInitializerService {
           id: 'category-system-other',
           name: 'Other',
           system_code: 'other',
+          created_by_operator_id: OPERATOR_ONE_ID,
+          last_modified_by_operator_id: OPERATOR_ONE_ID,
           created_at: now,
           updated_at: now,
         };

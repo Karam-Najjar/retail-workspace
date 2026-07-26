@@ -7,6 +7,9 @@
         <dt>{{ 'suppliers.phone' | translate }}</dt><dd>{{ currentSupplier.phone || ('suppliers.notProvided' | translate) }}</dd>
         <dt>{{ 'suppliers.address' | translate }}</dt><dd>{{ currentSupplier.address || ('suppliers.notProvided' | translate) }}</dd>
         <dt>{{ 'suppliers.notes' | translate }}</dt><dd>{{ currentSupplier.notes || ('suppliers.notProvided' | translate) }}</dd>
+        <dt>{{ 'common.createdBy' | translate }}</dt><dd>{{ operatorName(currentSupplier.created_by_operator_id) }}</dd>
+        <dt>{{ 'common.createdAt' | translate }}</dt><dd>{{ currentSupplier.created_at | date: 'medium' }}</dd>
+        <dt>{{ 'common.lastModifiedBy' | translate }}</dt><dd>{{ operatorName(currentSupplier.last_modified_by_operator_id) }}</dd>
       </dl>
       <div class="actions">
         <button mat-button type="button" (click)="edit()">{{ 'common.edit' | translate }}</button>

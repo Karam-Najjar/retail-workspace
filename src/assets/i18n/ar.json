@@ -30,7 +30,10 @@
     "confirm": "",
     "save": "",
     "edit": "",
-    "delete": ""
+    "delete": "",
+    "createdBy": "",
+    "createdAt": "",
+    "lastModifiedBy": ""
   },
   "categories": {
     "title": "",
@@ -102,6 +105,57 @@
     "noBarcodes": "",
     "stock": { "in": "", "low": "", "out": "" },
     "errors": { "load": "", "save": "", "delete": "", "barcodes": "" }
+  },
+  "inventory": {
+    "adjustStock": "",
+    "currentStock": "",
+    "quantity": "",
+    "quantityChange": "",
+    "unitCost": "",
+    "reason": "",
+    "date": "",
+    "batch": "",
+    "operator": "",
+    "source": "",
+    "status": "",
+    "originalQuantity": "",
+    "remainingQuantity": "",
+    "originalCost": "",
+    "remainingCost": "",
+    "types": {
+      "opening_balance": "",
+      "adjustment_in": "",
+      "adjustment_out": "",
+      "write_off": "",
+      "supply": "",
+      "sale": ""
+    },
+    "sources": {
+      "opening_balance": "",
+      "adjustment": "",
+      "supply": ""
+    },
+    "adjustment": {
+      "title": "",
+      "type": "",
+      "loading": "",
+      "writeOffWarning": ""
+    },
+    "movements": {
+      "title": "",
+      "empty": ""
+    },
+    "batches": {
+      "title": "",
+      "empty": "",
+      "active": "",
+      "depleted": ""
+    },
+    "errors": {
+      "load": "",
+      "save": "",
+      "writeOff": ""
+    }
   },
   "dashboard": {
     "title": "",

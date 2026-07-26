@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { Category } from '@retail/kernel';
+import { ActiveOperatorService, Category } from '@retail/kernel';
 import { ConfirmationDialogComponent } from '../../../shared-ui/confirmation-dialog/confirmation-dialog.component';
 import { DataTableComponent, DataTableColumn, DataTableRow } from '../../../shared-ui/data-table/data-table.component';
 import { EmptyStateComponent } from '../../../shared-ui/empty-state/empty-state.component';
@@ -22,11 +22,16 @@ export class CategoryListComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
   private readonly translate = inject(TranslateService);
+  private readonly operators = inject(ActiveOperatorService);
+  private readonly dateFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
   protected readonly selectedCategory = signal<Category | null>(null);
   protected readonly affectedProducts = signal(0);
   protected readonly columns: readonly DataTableColumn[] = [
     { labelKey: 'categories.name' },
     { labelKey: 'categories.type' },
+    { labelKey: 'common.createdBy' },
+    { labelKey: 'common.createdAt' },
+    { labelKey: 'common.lastModifiedBy' },
   ];
 
   readonly rows = (): readonly DataTableRow[] =>
@@ -34,7 +39,7 @@ export class CategoryListComponent implements OnInit {
       id: category.id,
       canEdit: !category.system_code,
       canDelete: !category.system_code,
-      values: [category.system_code ? `categories.system.${category.system_code}` : category.name, category.system_code ? 'categories.systemLabel' : 'categories.customLabel'],
+      values: [category.system_code ? `categories.system.${category.system_code}` : category.name, category.system_code ? 'categories.systemLabel' : 'categories.customLabel', this.operatorName(category.created_by_operator_id), this.dateFormatter.format(category.created_at), this.operatorName(category.last_modified_by_operator_id)],
     }));
 
   ngOnInit(): void {
@@ -73,4 +78,6 @@ export class CategoryListComponent implements OnInit {
     if (!category) return;
     if ((await this.facade.delete(category)) !== null) this.selectedCategory.set(null);
   }
+
+  private operatorName(id: string): string { return this.operators.operators().find((operator) => operator.id === id)?.display_name ?? '—'; }
 }

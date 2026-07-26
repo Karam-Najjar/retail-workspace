@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Category } from '../../../domain/models/category.model';
 import { DexieCategoryRepository } from '../../../data-access/repositories/dexie-category.repository';
+import { ActiveOperatorService } from '../../services/active-operator.service';
 
 export interface SaveCategoryInput {
   readonly id?: string;
@@ -10,6 +11,7 @@ export interface SaveCategoryInput {
 @Injectable({ providedIn: 'root' })
 export class SaveCategoryUseCase {
   private readonly repository = inject(DexieCategoryRepository);
+  private readonly activeOperator = inject(ActiveOperatorService);
 
   async execute(input: SaveCategoryInput): Promise<Category> {
     const name = input.name.trim();
@@ -24,12 +26,16 @@ export class SaveCategoryUseCase {
     if (await this.repository.hasName(name, input.id)) {
       throw new Error('A category with this name already exists.');
     }
+    const operator = this.activeOperator.activeOperator();
+    if (!operator) throw new Error('An active operator is required.');
 
     const now = new Date();
     const category: Category = {
       id: existing?.id ?? crypto.randomUUID(),
       name,
       system_code: existing?.system_code ?? null,
+      created_by_operator_id: existing?.created_by_operator_id ?? operator.id,
+      last_modified_by_operator_id: operator.id,
       created_at: existing?.created_at ?? now,
       updated_at: now,
     };
