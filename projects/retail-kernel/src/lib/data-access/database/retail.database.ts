@@ -14,6 +14,7 @@ import { InventoryMovement } from '../../domain/models/inventory-movement.model'
 import { InventoryAdjustment } from '../../domain/models/inventory-adjustment.model';
 import { Supply } from '../../domain/models/supply.model';
 import { SupplyItem } from '../../domain/models/supply-item.model';
+import { DraftCart } from '../../domain/models/draft-cart.model';
 import { RETAIL_DATABASE_NAME } from './database.constants';
 import { SCHEMA_V2 } from './schema/schema-v2';
 import { SCHEMA_V1 } from './schema/schema-v1';
@@ -21,6 +22,7 @@ import { SCHEMA_V3 } from './schema/schema-v3';
 import { SCHEMA_V4 } from '../schema/schema-v4';
 import { SCHEMA_V5 } from '../schema/schema-v5';
 import { SCHEMA_V6 } from '../schema/schema-v6';
+import { SCHEMA_V7 } from '../schema/schema-v7';
 
 @Injectable({ providedIn: 'root' })
 export class RetailDatabase extends Dexie {
@@ -38,6 +40,7 @@ export class RetailDatabase extends Dexie {
   readonly inventoryAdjustments!: Table<InventoryAdjustment, string>;
   readonly supplies!: Table<Supply, string>;
   readonly supplyItems!: Table<SupplyItem, string>;
+  readonly draftCarts!: Table<DraftCart, 'active'>;
 
   constructor() {
     super(RETAIL_DATABASE_NAME);
@@ -47,5 +50,6 @@ export class RetailDatabase extends Dexie {
     this.version(4).stores(SCHEMA_V4);
     this.version(5).stores(SCHEMA_V5);
     this.version(6).stores(SCHEMA_V6);
+    this.version(7).stores(SCHEMA_V7);
   }
 }

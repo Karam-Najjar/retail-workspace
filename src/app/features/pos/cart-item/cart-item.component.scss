@@ -1,0 +1,4 @@
+.cart-item { align-items: center; border-block-end: 1px solid var(--retail-outline, #ddd); display: grid; gap: .75rem; grid-template-columns: minmax(10rem, 1fr) auto auto auto; padding: .75rem 0; }
+.cart-item__main, .cart-item__price { display: grid; gap: .2rem; } .cart-item__main span, .cart-item__price span { color: var(--retail-on-surface-muted); font-size: .85rem; }
+.cart-item__quantity { align-items: center; display: flex; gap: .25rem; }
+@media (max-width: 40rem) { .cart-item { grid-template-columns: 1fr auto; } .cart-item__quantity { grid-column: 1; } }

@@ -5,6 +5,7 @@ import { categoriesRoutes } from './features/categories/categories.routes';
 import { suppliersRoutes } from './features/suppliers/suppliers.routes';
 import { productsRoutes } from './features/products/products.routes';
 import { suppliesRoutes } from './features/supplies/supplies.routes';
+import { posRoutes } from './features/pos/pos.routes';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,7 @@ export const routes: Routes = [
       ...suppliersRoutes,
       ...productsRoutes,
       ...suppliesRoutes,
+      ...posRoutes,
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',

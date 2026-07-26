@@ -200,6 +200,30 @@
       "receive": ""
     }
   },
+  "pos": {
+    "title": "",
+    "loading": "",
+    "scannerReady": "",
+    "scannerInactive": "",
+    "scanBarcode": "",
+    "searchProducts": "",
+    "cart": "",
+    "emptyCart": "",
+    "manualEntry": "",
+    "baseUnits": "",
+    "increase": "",
+    "decrease": "",
+    "remove": "",
+    "clearCart": "",
+    "total": "",
+    "confirmSale": "",
+    "productNotFound": "",
+    "productNotFoundMessage": "",
+    "outOfStock": "",
+    "onlyMoreAvailable": "",
+    "leaveTitle": "",
+    "leaveMessage": ""
+  },
   "dashboard": {
     "title": "",
     "description": ""

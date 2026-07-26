@@ -200,6 +200,30 @@
       "receive": "The supply could not be received."
     }
   },
+  "pos": {
+    "title": "Point of Sale",
+    "loading": "Loading POS...",
+    "scannerReady": "Scanner ready",
+    "scannerInactive": "Scanner inactive",
+    "scanBarcode": "Scan or enter barcode",
+    "searchProducts": "Search products",
+    "cart": "Cart",
+    "emptyCart": "Your cart is empty.",
+    "manualEntry": "Manual entry",
+    "baseUnits": "base units",
+    "increase": "Increase quantity",
+    "decrease": "Decrease quantity",
+    "remove": "Remove item",
+    "clearCart": "Clear cart",
+    "total": "Total",
+    "confirmSale": "Confirm Sale",
+    "productNotFound": "Product not found",
+    "productNotFoundMessage": "No product was found for barcode '{{ barcode }}'.",
+    "outOfStock": "This product is out of stock.",
+    "onlyMoreAvailable": "Only {{ count }} more available.",
+    "leaveTitle": "Cart not empty",
+    "leaveMessage": "Cart not empty. Clear it and leave POS?"
+  },
   "dashboard": {
     "title": "Dashboard",
     "description": "Your retail dashboard will be available in a later phase."
