@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "Retail App"
+  },
+  "languages": {
+    "english": "English",
+    "arabic": "Arabic"
+  },
+  "shell": {
+    "toggleNavigation": "Toggle navigation"
+  },
+  "navigation": {
+    "label": "Main navigation",
+    "dashboard": "Dashboard",
+    "pos": "POS",
+    "products": "Products",
+    "categories": "Categories",
+    "sales": "Sales",
+    "supplies": "Supplies",
+    "suppliers": "Suppliers",
+    "activityLog": "Activity Log",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Your retail dashboard will be available in a later phase."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you requested is not available.",
+    "goToDashboard": "Go to dashboard"
+  },
+  "packages": {
+    "pocket": "Pocket",
+    "carton": "Carton"
+  }
+}

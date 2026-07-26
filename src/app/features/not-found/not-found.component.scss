@@ -1,0 +1,17 @@
+.not-found {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  margin-inline: auto;
+  max-inline-size: 40rem;
+  padding-block: 4rem;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+p {
+  color: var(--retail-on-surface-muted);
+}

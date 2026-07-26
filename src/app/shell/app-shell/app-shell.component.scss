@@ -1,0 +1,29 @@
+:host,
+.shell-container {
+  display: block;
+  min-block-size: 100dvh;
+}
+
+.shell-navigation {
+  inline-size: 16rem;
+  border-inline-end: 1px solid var(--retail-outline-variant);
+}
+
+.shell-content {
+  min-block-size: 100dvh;
+}
+
+.shell-main {
+  min-block-size: calc(100dvh - 4rem);
+  padding: 1.5rem;
+}
+
+@media (max-width: 48rem) {
+  .shell-navigation {
+    inline-size: min(18rem, 85vw);
+  }
+
+  .shell-main {
+    padding: 1rem;
+  }
+}

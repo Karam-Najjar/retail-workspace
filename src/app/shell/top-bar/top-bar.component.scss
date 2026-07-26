@@ -1,0 +1,19 @@
+.top-bar {
+  min-block-size: 4rem;
+  padding-inline: 0.75rem;
+}
+
+.app-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+@media (min-width: 48.0625rem) {
+  .navigation-toggle {
+    display: none;
+  }
+}

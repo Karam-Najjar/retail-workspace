@@ -1,0 +1,14 @@
+<mat-sidenav-container class="shell-container">
+  <mat-sidenav #navigation class="shell-navigation" mode="side" opened>
+    <app-side-nav (navigate)="closeNavigation()" />
+  </mat-sidenav>
+
+  <mat-sidenav-content class="shell-content">
+    <app-top-bar (navigationToggle)="toggleNavigation()" />
+    <main class="shell-main">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<app-modal-outlet />

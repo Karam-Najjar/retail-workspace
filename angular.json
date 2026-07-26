@@ -11,6 +11,9 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss",
+          "standalone": true,
+          "inlineStyle": false,
+          "inlineTemplate": false,
           "skipTests": true
         },
         "@schematics/angular:class": {
@@ -49,6 +52,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets/"
               }
             ],
             "styles": [
@@ -69,7 +77,8 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
@@ -90,6 +99,58 @@
             }
           },
           "defaultConfiguration": "development"
+        }
+      }
+    },
+    "retail-kernel": {
+      "projectType": "library",
+      "root": "projects/retail-kernel",
+      "sourceRoot": "projects/retail-kernel/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/retail-kernel/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/retail-kernel/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/retail-kernel/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "store-profiles": {
+      "projectType": "library",
+      "root": "projects/store-profiles",
+      "sourceRoot": "projects/store-profiles/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/store-profiles/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/store-profiles/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/store-profiles/tsconfig.spec.json"
+          }
         }
       }
     }

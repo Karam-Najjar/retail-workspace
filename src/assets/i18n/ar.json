@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": ""
+  },
+  "languages": {
+    "english": "",
+    "arabic": ""
+  },
+  "shell": {
+    "toggleNavigation": ""
+  },
+  "navigation": {
+    "label": "",
+    "dashboard": "",
+    "pos": "",
+    "products": "",
+    "categories": "",
+    "sales": "",
+    "supplies": "",
+    "suppliers": "",
+    "activityLog": "",
+    "settings": ""
+  },
+  "dashboard": {
+    "title": "",
+    "description": ""
+  },
+  "notFound": {
+    "title": "",
+    "description": "",
+    "goToDashboard": ""
+  },
+  "packages": {
+    "pocket": "",
+    "carton": ""
+  }
+}

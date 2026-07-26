@@ -1,0 +1,21 @@
+.side-nav {
+  block-size: 100%;
+  padding-block: 1rem;
+}
+
+.side-nav__heading {
+  padding: 0.5rem 1.5rem 1rem;
+  color: var(--retail-primary);
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.is-active {
+  background: var(--retail-primary-container);
+  color: var(--retail-on-primary-container);
+}
+
+.is-disabled {
+  color: var(--retail-on-surface-muted);
+  cursor: not-allowed;
+}
