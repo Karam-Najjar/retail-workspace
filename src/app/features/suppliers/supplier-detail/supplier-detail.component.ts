@@ -5,17 +5,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ActiveOperatorService, Supplier } from '@retail/kernel';
+import { ActiveOperatorService, Supplier, Supply } from '@retail/kernel';
 import { ConfirmationDialogComponent } from '../../../shared-ui/confirmation-dialog/confirmation-dialog.component';
 import { DetailPageHeaderComponent } from '../../../shared-ui/detail-page-header/detail-page-header.component';
 import { EmptyStateComponent } from '../../../shared-ui/empty-state/empty-state.component';
 import { SuppliersFacade } from '../suppliers.facade';
 import { SupplierFormComponent } from '../supplier-form/supplier-form.component';
+import { SuppliesFacade } from '../../supplies/supplies.facade';
 
 @Component({
   selector: 'app-supplier-detail',
   imports: [DatePipe, ConfirmationDialogComponent, DetailPageHeaderComponent, EmptyStateComponent, MatButtonModule, MatCardModule, MatDialogModule, TranslatePipe],
-  providers: [SuppliersFacade],
+  providers: [SuppliersFacade, SuppliesFacade],
   templateUrl: './supplier-detail.component.html',
   styleUrl: './supplier-detail.component.scss',
 })
@@ -25,14 +26,20 @@ export class SupplierDetailComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly facade = inject(SuppliersFacade);
   private readonly operators = inject(ActiveOperatorService);
+  private readonly suppliesFacade = inject(SuppliesFacade);
   protected readonly supplier = signal<Supplier | null>(null);
   protected readonly confirmDelete = signal(false);
   protected readonly affectedSupplies = signal(0);
+  protected readonly recentSupplies = signal<readonly Supply[]>([]);
   protected error: string | null = null;
 
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('supplierId');
-    if (id) this.supplier.set((await this.facade.get(id)) ?? null);
+    if (id) {
+      const [supplier, supplies] = await Promise.all([this.facade.get(id), this.suppliesFacade.recentForSupplier(id, 10)]);
+      this.supplier.set(supplier ?? null);
+      this.recentSupplies.set(supplies);
+    }
   }
 
   goBack(): void { void this.router.navigate(['/suppliers']); }
@@ -61,6 +68,7 @@ export class SupplierDetailComponent implements OnInit {
   }
 
   protected operatorName(id: string): string { return this.operators.operators().find((operator) => operator.id === id)?.display_name ?? '—'; }
+  protected openSupply(id: string): void { void this.router.navigate(['/supplies', id]); }
 
   private async reload(): Promise<void> {
     const id = this.supplier()?.id;

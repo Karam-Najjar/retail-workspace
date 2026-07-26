@@ -17,5 +17,5 @@ export class DexieSupplierRepository implements SupplierRepository {
       await this.database.activity_logs.add(activityLog as ActivityLog);
     });
   }
-  countAffectedSupplies(_supplierId: string): Promise<number> { return Promise.resolve(0); }
+  countAffectedSupplies(supplierId: string): Promise<number> { return this.database.supplies.where('supplier_id').equals(supplierId).count(); }
 }

@@ -1,0 +1,5 @@
+.supply-list { display: grid; gap: 1.25rem; }
+.page-header, .header-actions, .filters { align-items: center; display: flex; flex-wrap: wrap; gap: 1rem; }
+.page-header { justify-content: space-between; }
+.page-header h1, .page-header p { margin: 0; }
+.filters mat-form-field { min-inline-size: 14rem; }

@@ -157,6 +157,49 @@
       "writeOff": ""
     }
   },
+  "supplies": {
+    "title": "",
+    "description": "",
+    "addStock": "",
+    "loading": "",
+    "date": "",
+    "dateTime": "",
+    "supplier": "",
+    "allSuppliers": "",
+    "quickAddSupplier": "",
+    "product": "",
+    "searchProducts": "",
+    "items": "",
+    "itemsCount": "",
+    "addLine": "",
+    "removeLine": "",
+    "packageType": "",
+    "packageQuantity": "",
+    "costPerPackage": "",
+    "baseUnits": "",
+    "totalBaseUnits": "",
+    "costPerBaseUnit": "",
+    "subtotal": "",
+    "totalCost": "",
+    "operator": "",
+    "exchangeRate": "",
+    "review": "",
+    "export": "",
+    "emptyTitle": "",
+    "emptyMessage": "",
+    "filters": {
+      "today": "",
+      "week": "",
+      "month": "",
+      "custom": "",
+      "from": "",
+      "to": ""
+    },
+    "errors": {
+      "load": "",
+      "receive": ""
+    }
+  },
   "dashboard": {
     "title": "",
     "description": ""

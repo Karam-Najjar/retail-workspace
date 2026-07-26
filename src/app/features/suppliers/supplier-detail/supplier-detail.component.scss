@@ -3,3 +3,8 @@ dl { display: grid; gap: .75rem 1.5rem; grid-template-columns: max-content 1fr; 
 dt { color: var(--retail-on-surface-muted); }
 dd { margin: 0; }
 .actions { display: flex; gap: .5rem; margin-block-start: 1.5rem; }
+.recent-supplies { margin-block-start: 1.5rem; }
+.table-scroll { overflow-x: auto; }
+table { border-collapse: collapse; inline-size: 100%; }
+th, td { border-block-end: 1px solid var(--retail-outline, #ddd); padding: .75rem; text-align: start; }
+tbody tr { cursor: pointer; }

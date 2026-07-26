@@ -1,0 +1,4 @@
+<section class="line-item-editor">
+  <header><h2>{{ 'supplies.items' | translate }}</h2><button mat-stroked-button type="button" [disabled]="!canAdd()" (click)="add.emit()">{{ 'supplies.addLine' | translate }}</button></header>
+  <ng-content />
+</section>

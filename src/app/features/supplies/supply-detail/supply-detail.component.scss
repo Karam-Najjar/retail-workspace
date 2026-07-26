@@ -1,0 +1,6 @@
+:host { display: grid; gap: 1.25rem; }
+mat-card { max-inline-size: 52rem; }
+dl { display: grid; gap: .75rem 1.5rem; grid-template-columns: max-content 1fr; }
+dt { color: var(--retail-on-surface-muted); } dd { margin: 0; }
+.table-scroll { overflow-x: auto; } table { border-collapse: collapse; inline-size: 100%; } th, td { border-block-end: 1px solid var(--retail-outline, #ddd); padding: .75rem; text-align: start; }
+.totals { display: flex; justify-content: flex-end; gap: 2rem; }

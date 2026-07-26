@@ -17,7 +17,10 @@
       </div>
     </mat-card-content>
   </mat-card>
-  <app-empty-state titleKey="suppliers.recentSuppliesTitle" messageKey="suppliers.recentSuppliesEmpty" />
+  <section class="recent-supplies"><h2>{{ 'suppliers.recentSuppliesTitle' | translate }}</h2>
+    @if (recentSupplies().length) { <div class="table-scroll"><table><thead><tr><th>{{ 'supplies.dateTime' | translate }}</th><th>{{ 'supplies.totalCost' | translate }}</th><th>{{ 'supplies.operator' | translate }}</th></tr></thead><tbody>@for (supply of recentSupplies(); track supply.id) { <tr tabindex="0" (click)="openSupply(supply.id)" (keydown.enter)="openSupply(supply.id)"><td>{{ supply.date | date: 'medium' }}</td><td>{{ (supply.total_cost / 100).toFixed(2) }} {{ supply.currency_snapshot.primary_code }}</td><td>{{ supply.operator_name }}</td></tr> }</tbody></table></div> }
+    @else { <app-empty-state titleKey="suppliers.recentSuppliesTitle" messageKey="suppliers.recentSuppliesEmpty" /> }
+  </section>
   @if (confirmDelete()) {
     <app-confirmation-dialog
       titleKey="suppliers.deleteTitle"

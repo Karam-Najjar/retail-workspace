@@ -4,6 +4,7 @@ import { licenceGuard } from './core/guards/licence.guard';
 import { categoriesRoutes } from './features/categories/categories.routes';
 import { suppliersRoutes } from './features/suppliers/suppliers.routes';
 import { productsRoutes } from './features/products/products.routes';
+import { suppliesRoutes } from './features/supplies/supplies.routes';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
       ...categoriesRoutes,
       ...suppliersRoutes,
       ...productsRoutes,
+      ...suppliesRoutes,
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',

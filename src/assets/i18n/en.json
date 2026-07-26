@@ -157,6 +157,49 @@
       "writeOff": "The product could not be written off and deleted."
     }
   },
+  "supplies": {
+    "title": "Supplies",
+    "description": "Receive stock from suppliers and review immutable supply records.",
+    "addStock": "Add Stock",
+    "loading": "Loading supply form...",
+    "date": "Supply date",
+    "dateTime": "Date & time",
+    "supplier": "Supplier",
+    "allSuppliers": "All suppliers",
+    "quickAddSupplier": "Add a new supplier",
+    "product": "Product",
+    "searchProducts": "Search products",
+    "items": "Supply items",
+    "itemsCount": "Items count",
+    "addLine": "Add product",
+    "removeLine": "Remove product line",
+    "packageType": "Package type",
+    "packageQuantity": "Package quantity",
+    "costPerPackage": "Cost per package",
+    "baseUnits": "Base units",
+    "totalBaseUnits": "Total base units",
+    "costPerBaseUnit": "Cost per base unit",
+    "subtotal": "Subtotal",
+    "totalCost": "Total cost",
+    "operator": "Operator",
+    "exchangeRate": "Exchange rate",
+    "review": "Review",
+    "export": "Export to Excel",
+    "emptyTitle": "No supplies found",
+    "emptyMessage": "Receive stock to create the first supply record.",
+    "filters": {
+      "today": "Today",
+      "week": "This Week",
+      "month": "This Month",
+      "custom": "Custom",
+      "from": "From",
+      "to": "To"
+    },
+    "errors": {
+      "load": "Supplies could not be loaded.",
+      "receive": "The supply could not be received."
+    }
+  },
   "dashboard": {
     "title": "Dashboard",
     "description": "Your retail dashboard will be available in a later phase."

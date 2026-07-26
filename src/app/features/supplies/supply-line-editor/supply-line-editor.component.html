@@ -1,0 +1,10 @@
+<article class="supply-line">
+  <app-product-picker [products]="products()" [selectedId]="line().productId" (selectedIdChange)="selectProduct($event)" />
+  <div class="line-fields">
+    <mat-form-field appearance="outline"><mat-label>{{ 'supplies.packageType' | translate }}</mat-label><mat-select required [ngModel]="line().packageTypeCode" (ngModelChange)="selectPackage($event)">@for (type of packageTypes(); track type.code) { <mat-option [value]="type.code">{{ type.label_key | translate }} (×{{ type.multiplier }})</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ 'supplies.packageQuantity' | translate }}</mat-label><input matInput type="number" min="1" step="1" required [ngModel]="line().quantityReceived" (ngModelChange)="update({ quantityReceived: +$event })" /></mat-form-field>
+    <app-dual-currency-input [cents]="line().unitCostEntered" [exchangeRate]="exchangeRate()" labelKey="supplies.costPerPackage" (centsChange)="update({ unitCostEntered: $event })" />
+    <button mat-icon-button color="warn" type="button" [attr.aria-label]="'supplies.removeLine' | translate" (click)="remove.emit()"><mat-icon>delete</mat-icon></button>
+  </div>
+  <div class="calculation"><span>{{ 'supplies.baseUnits' | translate }}: {{ baseUnits() }}</span><span>{{ 'supplies.costPerBaseUnit' | translate }}: {{ baseUnitCost() }}</span><span>{{ 'supplies.subtotal' | translate }}: {{ (subtotal() / 100).toFixed(2) }} USD</span></div>
+</article>

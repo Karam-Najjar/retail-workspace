@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{ 'supplies.addStock' | translate }}</h2>
+<mat-dialog-content class="supply-form-content">
+  @if (!ready()) { <p>{{ 'supplies.loading' | translate }}</p> }
+  @else {
+    <div class="header-fields">
+      <app-supplier-picker [suppliers]="facade.suppliers()" [selectedId]="supplierId()" (selectedIdChange)="supplierId.set($event)" (addRequested)="quickAddSupplier()" />
+      <mat-form-field appearance="outline"><mat-label>{{ 'supplies.date' | translate }}</mat-label><input matInput type="datetime-local" required [max]="maxDateValue()" [(ngModel)]="dateValue" /></mat-form-field>
+    </div>
+    <app-line-item-editor (add)="addLine()">
+      <div class="lines">@for (line of lines(); track line.clientId; let index = $index) { <app-supply-line-editor [line]="line" [products]="facade.products()" [packageTypes]="facade.packageTypes" [exchangeRate]="exchangeRate()" (lineChange)="updateLine(index, $event)" (remove)="removeLine(index)" /> }</div>
+    </app-line-item-editor>
+    <section class="review"><h3>{{ 'supplies.review' | translate }}</h3><span>{{ 'supplies.itemsCount' | translate }}: {{ lines().length }}</span><span>{{ 'supplies.totalBaseUnits' | translate }}: {{ totalBaseUnits() }}</span><strong>{{ 'supplies.totalCost' | translate }}: {{ (totalCost() / 100).toFixed(2) }} USD</strong></section>
+    @if (error()) { <p class="form-error">{{ error()! | translate }}</p> }
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button type="button" [disabled]="submitting()" (click)="close()">{{ 'common.cancel' | translate }}</button><button mat-flat-button color="primary" type="button" [disabled]="submitting() || !ready()" (click)="save()">{{ 'common.confirm' | translate }}</button></mat-dialog-actions>

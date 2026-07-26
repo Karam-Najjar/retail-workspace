@@ -1,0 +1,5 @@
+.supply-line { border: 1px solid var(--retail-outline, #d0d0d0); border-radius: .75rem; display: grid; gap: .75rem; padding: 1rem; }
+.line-fields { align-items: start; display: grid; gap: .75rem; grid-template-columns: minmax(9rem, 1fr) minmax(8rem, 1fr) minmax(18rem, 2fr) auto; }
+.calculation { color: var(--retail-on-surface-muted); display: flex; flex-wrap: wrap; gap: 1rem; font-size: .9rem; }
+mat-form-field { inline-size: 100%; }
+@media (max-width: 60rem) { .line-fields { grid-template-columns: 1fr; } }
