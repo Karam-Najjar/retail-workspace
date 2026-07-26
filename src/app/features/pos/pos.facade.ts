@@ -1,13 +1,18 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { AddCartItemResult, AddCartItemUseCase, ChangeCartQuantityUseCase, ClearCartUseCase, CurrencyService, DraftCartItem, ListProductsUseCase, PosCartStore, Product } from '@retail/kernel';
+import { AddCartItemResult, AddCartItemUseCase, ChangeCartQuantityUseCase, CheckoutUseCase, ClearCartUseCase, CurrencyService, DraftCartItem, ListProductsUseCase, PosCartStore, Product, Sale } from '@retail/kernel';
 
-export interface PosFeedback { readonly key: string; readonly params?: Readonly<Record<string, number>>; }
+export interface PosFeedback {
+  readonly key: string;
+  readonly kind: 'error' | 'success';
+  readonly params?: Readonly<Record<string, number>>;
+}
 
 @Injectable()
 export class PosFacade {
   private readonly addItem = inject(AddCartItemUseCase);
   private readonly changeQuantity = inject(ChangeCartQuantityUseCase);
   private readonly clearCart = inject(ClearCartUseCase);
+  private readonly completeSale = inject(CheckoutUseCase);
   private readonly listProducts = inject(ListProductsUseCase);
   private readonly currency = inject(CurrencyService);
   readonly cart = inject(PosCartStore);
@@ -15,6 +20,7 @@ export class PosFacade {
   readonly products = signal<readonly Product[]>([]);
   readonly exchangeRate = signal('0');
   readonly loading = signal(false);
+  readonly checkingOut = signal(false);
   readonly feedback = signal<PosFeedback | null>(null);
 
   async initialize(): Promise<void> {
@@ -32,9 +38,38 @@ export class PosFacade {
   clear(): Promise<void> { return this.enqueue(async () => { await this.clearCart.execute(); this.feedback.set(null); }); }
   total(): number { return this.cart.total(); }
 
+  async checkout(): Promise<Sale | null> {
+    if (this.checkingOut() || !this.cart.hasItems()) return null;
+    this.checkingOut.set(true);
+    this.feedback.set(null);
+    try {
+      const sale = await this.enqueue(() => this.completeSale.execute());
+      this.feedback.set({ key: 'pos.saleCompleted', kind: 'success' });
+      try {
+        await this.refreshProducts();
+      } catch {
+        // The sale is already committed; product search will refresh on the next POS load.
+      }
+      return sale;
+    } catch {
+      this.feedback.set({ key: 'pos.checkoutFailed', kind: 'error' });
+      return null;
+    } finally {
+      this.checkingOut.set(false);
+    }
+  }
+
+  async refreshProducts(): Promise<void> {
+    this.products.set(await this.listProducts.execute());
+  }
+
+  setError(): void {
+    this.feedback.set({ key: 'pos.cartUpdateFailed', kind: 'error' });
+  }
+
   setFeedback(result: AddCartItemResult): void {
-    if (result.status === 'capped') this.feedback.set({ key: 'pos.onlyMoreAvailable', params: { count: result.moreAvailable } });
-    else if (result.status === 'out_of_stock') this.feedback.set({ key: 'pos.outOfStock' });
+    if (result.status === 'capped') this.feedback.set({ key: 'pos.onlyMoreAvailable', kind: 'error', params: { count: result.moreAvailable } });
+    else if (result.status === 'out_of_stock') this.feedback.set({ key: 'pos.outOfStock', kind: 'error' });
     else this.feedback.set(null);
   }
 

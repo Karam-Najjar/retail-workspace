@@ -9,5 +9,6 @@ interface UnknownBarcodeDialogData { readonly barcode: string; }
 export class UnknownBarcodeDialogComponent {
   protected readonly data = inject(MAT_DIALOG_DATA) as UnknownBarcodeDialogData;
   private readonly dialogRef = inject(MatDialogRef<UnknownBarcodeDialogComponent>);
-  protected close(): void { this.dialogRef.close(); }
+  protected close(): void { this.dialogRef.close(false); }
+  protected createProduct(): void { this.dialogRef.close(true); }
 }

@@ -3,6 +3,7 @@ import { DexieDraftCartRepository } from '../../data-access/repositories/dexie-d
 import { DraftCart } from '../../domain/models/draft-cart.model';
 import { DraftCartItem } from '../../domain/models/draft-cart-item.model';
 import { Product } from '../../domain/models/product.model';
+import { CheckoutIdempotencyService } from './checkout-idempotency.service';
 
 export type CartMutationStatus = 'added' | 'capped' | 'out_of_stock';
 
@@ -19,12 +20,19 @@ export class PosCartStore {
   readonly items = signal<readonly DraftCartItem[]>([]);
   readonly initialized = signal(false);
 
-  constructor(repository: DexieDraftCartRepository) { this.repository = repository; }
+  constructor(
+    repository: DexieDraftCartRepository,
+    private readonly checkoutIdempotency: CheckoutIdempotencyService,
+  ) { this.repository = repository; }
 
   async initialize(): Promise<void> {
     if (this.initialized()) return;
     const draft = await this.repository.getActive();
     if (draft) { this.items.set(draft.items); this.createdAt = draft.created_at; }
+    this.checkoutIdempotency.restore(
+      this.items(),
+      draft?.checkout_idempotency_key ?? null,
+    );
     this.initialized.set(true);
   }
 
@@ -77,10 +85,41 @@ export class PosCartStore {
 
   async clear(): Promise<void> { await this.replace([], { status: 'added', moreAvailable: 0 }); }
 
+  async getOrCreateCheckoutIdempotencyKey(): Promise<string> {
+    const items = this.items();
+    if (!items.length) throw new Error('The cart is empty.');
+    const idempotencyKey = this.checkoutIdempotency.getOrCreate(items);
+    const draft: DraftCart = {
+      id: 'active',
+      items,
+      checkout_idempotency_key: idempotencyKey,
+      created_at: this.createdAt,
+      updated_at: new Date(),
+    };
+    this.persistenceQueue = this.persistenceQueue
+      .catch(() => undefined)
+      .then(() => this.repository.save(draft));
+    await this.persistenceQueue;
+    return idempotencyKey;
+  }
+
+  markCheckoutCompleted(): void {
+    this.items.set([]);
+    this.createdAt = new Date();
+    this.checkoutIdempotency.reset([]);
+  }
+
   private productQuantity(productId: string, items: readonly DraftCartItem[]): number { return items.filter((item) => item.product_id === productId).reduce((sum, item) => sum + item.quantity_base_units, 0); }
   private async replace(items: readonly DraftCartItem[], result: CartMutationResult): Promise<CartMutationResult> {
     this.items.set(items);
-    const draft: DraftCart = { id: 'active', items, created_at: this.createdAt, updated_at: new Date() };
+    this.checkoutIdempotency.reset(items);
+    const draft: DraftCart = {
+      id: 'active',
+      items,
+      checkout_idempotency_key: null,
+      created_at: this.createdAt,
+      updated_at: new Date(),
+    };
     this.persistenceQueue = this.persistenceQueue.catch(() => undefined).then(() => this.repository.save(draft));
     await this.persistenceQueue;
     return result;

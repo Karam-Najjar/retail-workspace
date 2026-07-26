@@ -1,0 +1,77 @@
+@if (detail(); as current) {
+  <app-detail-page-header [title]="'sales.detailTitle' | translate" (back)="goBack()" />
+
+  <mat-card appearance="outlined" class="metadata-card">
+    <mat-card-content>
+      <dl>
+        <dt>{{ 'sales.dateTime' | translate }}</dt>
+        <dd>{{ current.sale.date | date: 'medium' }}</dd>
+        <dt>{{ 'sales.operator' | translate }}</dt>
+        <dd>{{ current.sale.operator_name }}</dd>
+        <dt>{{ 'sales.paymentMethod' | translate }}</dt>
+        <dd>{{ 'sales.paymentMethods.' + current.sale.payment_method | translate }}</dd>
+        <dt>{{ 'sales.exchangeRate' | translate }}</dt>
+        <dd>
+          1 {{ current.sale.currency_snapshot.primary_code }} =
+          {{ current.sale.currency_snapshot.exchange_rate }}
+          {{ current.sale.currency_snapshot.secondary_code }}
+        </dd>
+      </dl>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ 'sales.product' | translate }}</th>
+          <th>{{ 'sales.barcode' | translate }}</th>
+          <th>{{ 'sales.quantity' | translate }}</th>
+          <th>{{ 'sales.unitPrice' | translate }}</th>
+          <th>{{ 'sales.subtotal' | translate }}</th>
+          <th>{{ 'sales.costTotal' | translate }}</th>
+          <th>{{ 'sales.profit' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of current.items; track item.id) {
+          <tr>
+            <td>{{ item.product_name }}</td>
+            <td>{{ item.barcode_scanned || '—' }}</td>
+            <td>{{ item.quantity_base_units }}</td>
+            <td>{{ primaryAmount(item.selling_price_per_unit, current.sale.currency_snapshot) }}</td>
+            <td>{{ primaryAmount(item.subtotal_amount, current.sale.currency_snapshot) }}</td>
+            <td>{{ primaryAmount(item.total_cost, current.sale.currency_snapshot) }}</td>
+            <td>{{ primaryAmount(item.total_profit, current.sale.currency_snapshot) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <section class="totals" [attr.aria-label]="'sales.summary' | translate">
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <span>{{ 'sales.totalRevenue' | translate }}</span>
+        <strong>{{ primaryAmount(current.sale.total_amount, current.sale.currency_snapshot) }}</strong>
+        <small>{{ secondaryAmount(current.sale.currency_snapshot.secondary_total_amount, current.sale.currency_snapshot) }}</small>
+      </mat-card-content>
+    </mat-card>
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <span>{{ 'sales.totalCost' | translate }}</span>
+        <strong>{{ primaryAmount(current.sale.total_cost, current.sale.currency_snapshot) }}</strong>
+        <small>{{ secondaryAmount(current.sale.currency_snapshot.secondary_total_cost, current.sale.currency_snapshot) }}</small>
+      </mat-card-content>
+    </mat-card>
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <span>{{ 'sales.totalProfit' | translate }}</span>
+        <strong>{{ primaryAmount(current.sale.total_profit, current.sale.currency_snapshot) }}</strong>
+        <small>{{ secondaryAmount(current.sale.currency_snapshot.secondary_total_profit, current.sale.currency_snapshot) }}</small>
+      </mat-card-content>
+    </mat-card>
+  </section>
+} @else if (!loading()) {
+  <app-empty-state titleKey="sales.notFoundTitle" messageKey="sales.notFoundMessage" />
+}

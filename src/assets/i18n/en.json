@@ -200,6 +200,46 @@
       "receive": "The supply could not be received."
     }
   },
+  "sales": {
+    "title": "Sales",
+    "description": "Review completed sales and their FIFO cost and profit totals.",
+    "dateTime": "Date & Time",
+    "saleTotal": "Sale Total",
+    "costTotal": "Cost Total",
+    "profit": "Profit",
+    "operator": "Operator",
+    "summary": "Sales summary",
+    "totalRevenue": "Total Revenue",
+    "totalCost": "Total Cost",
+    "totalProfit": "Total Profit",
+    "totalItemsSold": "Total Items Sold",
+    "emptyTitle": "No sales found",
+    "emptyMessage": "No completed sales match the selected date range.",
+    "detailTitle": "Sale Details",
+    "paymentMethod": "Payment Method",
+    "paymentMethods": {
+      "cash": "Cash"
+    },
+    "exchangeRate": "Exchange Rate",
+    "product": "Product",
+    "barcode": "Barcode",
+    "quantity": "Quantity",
+    "unitPrice": "Unit Price",
+    "subtotal": "Subtotal",
+    "notFoundTitle": "Sale not found",
+    "notFoundMessage": "The requested sale could not be found.",
+    "filters": {
+      "today": "Today",
+      "week": "This Week",
+      "month": "This Month",
+      "custom": "Custom",
+      "from": "From",
+      "to": "To"
+    },
+    "errors": {
+      "load": "Sales could not be loaded."
+    }
+  },
   "pos": {
     "title": "Point of Sale",
     "loading": "Loading POS...",
@@ -217,8 +257,14 @@
     "clearCart": "Clear cart",
     "total": "Total",
     "confirmSale": "Confirm Sale",
+    "checkingOut": "Completing sale...",
+    "saleCompleted": "Sale completed successfully.",
+    "checkoutFailed": "Sale could not be completed. Your cart was not changed.",
+    "cartUpdateFailed": "The cart could not be updated. Please try again.",
     "productNotFound": "Product not found",
     "productNotFoundMessage": "No product was found for barcode '{{ barcode }}'.",
+    "createProduct": "Create product",
+    "createProductFailed": "The product could not be created. Check the entered values and try again.",
     "outOfStock": "This product is out of stock.",
     "onlyMoreAvailable": "Only {{ count }} more available.",
     "leaveTitle": "Cart not empty",

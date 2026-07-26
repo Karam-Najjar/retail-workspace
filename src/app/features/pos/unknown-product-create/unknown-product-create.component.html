@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{ 'pos.createProduct' | translate }}</h2>
+<mat-dialog-content class="product-create-content">
+  @if (!ready() && !error()) {
+    <p>{{ 'pos.loading' | translate }}</p>
+  } @else {
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>{{ 'products.barcode' | translate }}</mat-label>
+      <input matInput [value]="data.barcode" readonly />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>{{ 'products.name' | translate }}</mat-label>
+      <input matInput maxlength="100" required [(ngModel)]="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>{{ 'products.category' | translate }}</mat-label>
+      <mat-select [(ngModel)]="categoryId">
+        <mat-option value="">&mdash;</mat-option>
+        @for (category of categories(); track category.id) {
+          <mat-option [value]="category.id">{{ category.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <app-dual-currency-input
+      [cents]="sellingPriceCents"
+      [exchangeRate]="exchangeRate()"
+      (centsChange)="sellingPriceCents = $event"
+    />
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>{{ 'inventory.quantity' | translate }}</mat-label>
+      <input
+        matInput
+        type="number"
+        min="1"
+        step="1"
+        required
+        [(ngModel)]="openingQuantity"
+      />
+    </mat-form-field>
+
+    <app-dual-currency-input
+      labelKey="inventory.unitCost"
+      [cents]="unitCostCents"
+      [exchangeRate]="exchangeRate()"
+      (centsChange)="unitCostCents = $event"
+    />
+  }
+
+  @if (error(); as errorMessage) {
+    <p class="form-error" aria-live="polite">{{ errorMessage | translate }}</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" [disabled]="submitting()" (click)="cancel()">
+    {{ 'common.cancel' | translate }}
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    [disabled]="submitting() || !canSave()"
+    (click)="save()"
+  >
+    {{ 'common.save' | translate }}
+  </button>
+</mat-dialog-actions>

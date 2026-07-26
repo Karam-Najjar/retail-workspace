@@ -200,6 +200,46 @@
       "receive": ""
     }
   },
+  "sales": {
+    "title": "",
+    "description": "",
+    "dateTime": "",
+    "saleTotal": "",
+    "costTotal": "",
+    "profit": "",
+    "operator": "",
+    "summary": "",
+    "totalRevenue": "",
+    "totalCost": "",
+    "totalProfit": "",
+    "totalItemsSold": "",
+    "emptyTitle": "",
+    "emptyMessage": "",
+    "detailTitle": "",
+    "paymentMethod": "",
+    "paymentMethods": {
+      "cash": ""
+    },
+    "exchangeRate": "",
+    "product": "",
+    "barcode": "",
+    "quantity": "",
+    "unitPrice": "",
+    "subtotal": "",
+    "notFoundTitle": "",
+    "notFoundMessage": "",
+    "filters": {
+      "today": "",
+      "week": "",
+      "month": "",
+      "custom": "",
+      "from": "",
+      "to": ""
+    },
+    "errors": {
+      "load": ""
+    }
+  },
   "pos": {
     "title": "",
     "loading": "",
@@ -217,8 +257,14 @@
     "clearCart": "",
     "total": "",
     "confirmSale": "",
+    "checkingOut": "",
+    "saleCompleted": "",
+    "checkoutFailed": "",
+    "cartUpdateFailed": "",
     "productNotFound": "",
     "productNotFoundMessage": "",
+    "createProduct": "",
+    "createProductFailed": "",
     "outOfStock": "",
     "onlyMoreAvailable": "",
     "leaveTitle": "",

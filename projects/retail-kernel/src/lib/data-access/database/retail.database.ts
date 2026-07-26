@@ -15,6 +15,9 @@ import { InventoryAdjustment } from '../../domain/models/inventory-adjustment.mo
 import { Supply } from '../../domain/models/supply.model';
 import { SupplyItem } from '../../domain/models/supply-item.model';
 import { DraftCart } from '../../domain/models/draft-cart.model';
+import { SaleItemBatchAllocation } from '../../domain/models/sale-item-batch-allocation.model';
+import { SaleItem } from '../../domain/models/sale-item.model';
+import { Sale } from '../../domain/models/sale.model';
 import { RETAIL_DATABASE_NAME } from './database.constants';
 import { SCHEMA_V2 } from './schema/schema-v2';
 import { SCHEMA_V1 } from './schema/schema-v1';
@@ -23,6 +26,7 @@ import { SCHEMA_V4 } from '../schema/schema-v4';
 import { SCHEMA_V5 } from '../schema/schema-v5';
 import { SCHEMA_V6 } from '../schema/schema-v6';
 import { SCHEMA_V7 } from '../schema/schema-v7';
+import { SCHEMA_V8 } from '../schema/schema-v8';
 
 @Injectable({ providedIn: 'root' })
 export class RetailDatabase extends Dexie {
@@ -41,6 +45,9 @@ export class RetailDatabase extends Dexie {
   readonly supplies!: Table<Supply, string>;
   readonly supplyItems!: Table<SupplyItem, string>;
   readonly draftCarts!: Table<DraftCart, 'active'>;
+  readonly sales!: Table<Sale, string>;
+  readonly saleItems!: Table<SaleItem, string>;
+  readonly saleItemBatchAllocations!: Table<SaleItemBatchAllocation, string>;
 
   constructor() {
     super(RETAIL_DATABASE_NAME);
@@ -51,5 +58,6 @@ export class RetailDatabase extends Dexie {
     this.version(5).stores(SCHEMA_V5);
     this.version(6).stores(SCHEMA_V6);
     this.version(7).stores(SCHEMA_V7);
+    this.version(8).stores(SCHEMA_V8);
   }
 }

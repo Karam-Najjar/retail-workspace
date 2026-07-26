@@ -1,0 +1,65 @@
+<section class="sale-list">
+  <header class="page-header">
+    <div>
+      <h1>{{ 'sales.title' | translate }}</h1>
+      <p>{{ 'sales.description' | translate }}</p>
+    </div>
+  </header>
+
+  <div class="filters">
+    <mat-button-toggle-group [(ngModel)]="preset" (change)="load()">
+      <mat-button-toggle value="today">{{ 'sales.filters.today' | translate }}</mat-button-toggle>
+      <mat-button-toggle value="week">{{ 'sales.filters.week' | translate }}</mat-button-toggle>
+      <mat-button-toggle value="month">{{ 'sales.filters.month' | translate }}</mat-button-toggle>
+      <mat-button-toggle value="custom">{{ 'sales.filters.custom' | translate }}</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    @if (preset === 'custom') {
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'sales.filters.from' | translate }}</mat-label>
+        <input matInput type="date" [(ngModel)]="customFrom" (change)="load()" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'sales.filters.to' | translate }}</mat-label>
+        <input matInput type="date" [(ngModel)]="customTo" (change)="load()" />
+      </mat-form-field>
+    }
+  </div>
+
+  <section class="summary-grid" [attr.aria-label]="'sales.summary' | translate">
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <span>{{ 'sales.totalRevenue' | translate }}</span>
+        <strong>{{ summaryMoney(facade.summary().totalRevenue) }}</strong>
+      </mat-card-content>
+    </mat-card>
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <span>{{ 'sales.totalCost' | translate }}</span>
+        <strong>{{ summaryMoney(facade.summary().totalCost) }}</strong>
+      </mat-card-content>
+    </mat-card>
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <span>{{ 'sales.totalProfit' | translate }}</span>
+        <strong>{{ summaryMoney(facade.summary().totalProfit) }}</strong>
+      </mat-card-content>
+    </mat-card>
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <span>{{ 'sales.totalItemsSold' | translate }}</span>
+        <strong>{{ facade.summary().totalItemsSold }}</strong>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  @if (facade.error()) {
+    <p class="error" role="alert">{{ facade.error() | translate }}</p>
+  }
+
+  @if (facade.sales().length) {
+    <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openDetail($event)" />
+  } @else if (!facade.loading()) {
+    <app-empty-state titleKey="sales.emptyTitle" messageKey="sales.emptyMessage" />
+  }
+</section>

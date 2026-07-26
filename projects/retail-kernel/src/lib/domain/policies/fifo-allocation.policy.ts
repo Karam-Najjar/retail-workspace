@@ -11,6 +11,25 @@ export interface FifoAllocationResult {
   readonly total_allocated_cost: number;
 }
 
+const MAX_SAFE_INTEGER = BigInt(Number.MAX_SAFE_INTEGER);
+
+function allocateProportionalCost(
+  remainingTotalCost: number,
+  quantity: number,
+  remainingQuantity: number,
+): number {
+  const numerator = BigInt(remainingTotalCost) * BigInt(quantity);
+  const denominator = BigInt(remainingQuantity);
+  const quotient = numerator / denominator;
+  const remainder = numerator % denominator;
+  const rounded = remainder * 2n >= denominator ? quotient + 1n : quotient;
+
+  if (rounded < 0n || rounded > MAX_SAFE_INTEGER) {
+    throw new Error('FIFO allocated cost is outside the safe integer range.');
+  }
+  return Number(rounded);
+}
+
 export function allocateFifo(batches: readonly InventoryBatch[], requestedQuantity: number): FifoAllocationResult {
   if (!Number.isSafeInteger(requestedQuantity) || requestedQuantity <= 0) {
     throw new Error('Quantity to remove must be a positive whole number.');
@@ -27,14 +46,16 @@ export function allocateFifo(batches: readonly InventoryBatch[], requestedQuanti
   for (const batch of orderedBatches) {
     if (quantityLeft === 0) break;
     if (batch.remaining_quantity <= 0) continue;
-    if (!Number.isSafeInteger(batch.remaining_quantity) || !Number.isSafeInteger(batch.remaining_total_cost)) {
+    if (!Number.isSafeInteger(batch.remaining_quantity)
+      || !Number.isSafeInteger(batch.remaining_total_cost)
+      || batch.remaining_total_cost < 0) {
       throw new Error('Inventory batch contains invalid values.');
     }
 
     const quantity = Math.min(quantityLeft, batch.remaining_quantity);
     const allocatedCost = quantity === batch.remaining_quantity
       ? batch.remaining_total_cost
-      : Math.round(batch.remaining_total_cost * quantity / batch.remaining_quantity);
+      : allocateProportionalCost(batch.remaining_total_cost, quantity, batch.remaining_quantity);
     const updatedBatch: InventoryBatch = {
       ...batch,
       remaining_quantity: batch.remaining_quantity - quantity,

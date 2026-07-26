@@ -1,4 +1,6 @@
 .pos-page { display: grid; gap: 1.25rem; } .pos-page__header h1 { margin: 0; }
 .scanner-status { align-items: center; color: var(--retail-on-surface-muted); display: inline-flex; font-size: .9rem; gap: .35rem; margin-block-start: .5rem; } .scanner-status--ready { color: #197a38; }
 .pos-layout { align-items: start; display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr); }.pos-layout__cart, .pos-layout__summary { display: grid; gap: 1rem; }.scan-input { inline-size: 100%; }.pos-layout__summary { position: sticky; top: 1rem; }.pos-feedback { color: var(--mat-sys-error, #b3261e); margin: 0; }
+.pos-layout__cart--busy { opacity: .7; pointer-events: none; }
+.pos-feedback--success { color: #197a38; }
 @media (max-width: 60rem) { .pos-layout { grid-template-columns: 1fr; } .pos-layout__summary { position: static; } }

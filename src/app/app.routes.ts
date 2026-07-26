@@ -6,6 +6,7 @@ import { suppliersRoutes } from './features/suppliers/suppliers.routes';
 import { productsRoutes } from './features/products/products.routes';
 import { suppliesRoutes } from './features/supplies/supplies.routes';
 import { posRoutes } from './features/pos/pos.routes';
+import { salesRoutes } from './features/sales/sales.routes';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,7 @@ export const routes: Routes = [
       ...productsRoutes,
       ...suppliesRoutes,
       ...posRoutes,
+      ...salesRoutes,
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',
