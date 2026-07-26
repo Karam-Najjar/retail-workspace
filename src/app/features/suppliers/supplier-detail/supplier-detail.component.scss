@@ -1,0 +1,5 @@
+.supplier-detail { max-inline-size: 52rem; }
+dl { display: grid; gap: .75rem 1.5rem; grid-template-columns: max-content 1fr; }
+dt { color: var(--retail-on-surface-muted); }
+dd { margin: 0; }
+.actions { display: flex; gap: .5rem; margin-block-start: 1.5rem; }

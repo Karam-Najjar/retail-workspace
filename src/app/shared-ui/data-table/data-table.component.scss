@@ -9,3 +9,8 @@ tr[mat-row] {
 tr[mat-row]:hover {
   background: var(--retail-primary-container);
 }
+
+.actions-cell {
+  text-align: end;
+  white-space: nowrap;
+}

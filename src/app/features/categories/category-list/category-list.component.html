@@ -8,7 +8,7 @@
   </header>
 
   @if (facade.hasCategories()) {
-    <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openDetail($event)" />
+    <app-data-table [columns]="columns" [rows]="rows()" [showActions]="true" (rowClick)="openDetail($event)" (editCallback)="edit($event)" (deleteCallback)="prepareDelete($event)" />
   } @else if (!facade.loading()) {
     <app-empty-state titleKey="categories.emptyTitle" messageKey="categories.emptyMessage" />
   }

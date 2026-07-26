@@ -55,6 +55,28 @@
       "delete": ""
     }
   },
+  "suppliers": {
+    "title": "",
+    "description": "",
+    "add": "",
+    "formTitle": "",
+    "name": "",
+    "phone": "",
+    "address": "",
+    "notes": "",
+    "notProvided": "",
+    "emptyTitle": "",
+    "emptyMessage": "",
+    "recentSuppliesTitle": "",
+    "recentSuppliesEmpty": "",
+    "deleteTitle": "",
+    "deleteMessage": "",
+    "errors": {
+      "load": "",
+      "save": "",
+      "delete": ""
+    }
+  },
   "dashboard": {
     "title": "",
     "description": ""

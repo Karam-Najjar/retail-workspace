@@ -55,6 +55,28 @@
       "delete": "Category could not be deleted."
     }
   },
+  "suppliers": {
+    "title": "Suppliers",
+    "description": "Manage supplier contacts for your store.",
+    "add": "Add supplier",
+    "formTitle": "Supplier",
+    "name": "Name",
+    "phone": "Phone",
+    "address": "Address",
+    "notes": "Notes",
+    "notProvided": "Not provided",
+    "emptyTitle": "No suppliers yet",
+    "emptyMessage": "Add a supplier to keep contact information organized.",
+    "recentSuppliesTitle": "Recent supplies",
+    "recentSuppliesEmpty": "No supplies have been recorded for this supplier yet.",
+    "deleteTitle": "Delete supplier",
+    "deleteMessage": "{{ count }} supplies will be affected for '{{ name }}'.",
+    "errors": {
+      "load": "Suppliers could not be loaded.",
+      "save": "Supplier could not be saved.",
+      "delete": "Supplier could not be deleted."
+    }
+  },
   "dashboard": {
     "title": "Dashboard",
     "description": "Your retail dashboard will be available in a later phase."

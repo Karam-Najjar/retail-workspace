@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AppShellComponent } from './shell/app-shell/app-shell.component';
 import { licenceGuard } from './core/guards/licence.guard';
 import { categoriesRoutes } from './features/categories/categories.routes';
+import { suppliersRoutes } from './features/suppliers/suppliers.routes';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,7 @@ export const routes: Routes = [
     canMatch: [licenceGuard],
     children: [
       ...categoriesRoutes,
+      ...suppliersRoutes,
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',

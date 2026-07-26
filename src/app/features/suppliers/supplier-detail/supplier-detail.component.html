@@ -1,0 +1,26 @@
+@if (supplier(); as currentSupplier) {
+  <app-detail-page-header [title]="currentSupplier.name" (back)="goBack()" />
+  <mat-card appearance="outlined" class="supplier-detail">
+    <mat-card-content>
+      <dl>
+        <dt>{{ 'suppliers.name' | translate }}</dt><dd>{{ currentSupplier.name }}</dd>
+        <dt>{{ 'suppliers.phone' | translate }}</dt><dd>{{ currentSupplier.phone || ('suppliers.notProvided' | translate) }}</dd>
+        <dt>{{ 'suppliers.address' | translate }}</dt><dd>{{ currentSupplier.address || ('suppliers.notProvided' | translate) }}</dd>
+        <dt>{{ 'suppliers.notes' | translate }}</dt><dd>{{ currentSupplier.notes || ('suppliers.notProvided' | translate) }}</dd>
+      </dl>
+      <div class="actions">
+        <button mat-button type="button" (click)="edit()">{{ 'common.edit' | translate }}</button>
+        <button mat-button color="warn" type="button" (click)="prepareDelete()">{{ 'common.delete' | translate }}</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <app-empty-state titleKey="suppliers.recentSuppliesTitle" messageKey="suppliers.recentSuppliesEmpty" />
+  @if (confirmDelete()) {
+    <app-confirmation-dialog
+      titleKey="suppliers.deleteTitle"
+      [message]="'suppliers.deleteMessage' | translate: { count: affectedSupplies(), name: currentSupplier.name }"
+      (cancelled)="confirmDelete.set(false)"
+      (confirmed)="delete()"
+    />
+  }
+}
