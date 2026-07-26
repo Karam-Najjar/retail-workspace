@@ -1,0 +1,1 @@
+.dual-currency-input { display: grid; gap: .25rem; grid-template-columns: repeat(2, minmax(0, 1fr)); } @media (max-width: 32rem) { .dual-currency-input { grid-template-columns: 1fr; } }

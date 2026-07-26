@@ -22,7 +22,7 @@ export class SideNavComponent {
   protected readonly navigationItems: readonly NavigationItem[] = [
     { labelKey: 'navigation.dashboard', icon: 'dashboard', route: '/dashboard' },
     { labelKey: 'navigation.pos', icon: 'point_of_sale' },
-    { labelKey: 'navigation.products', icon: 'inventory_2' },
+    { labelKey: 'navigation.products', icon: 'inventory_2', route: '/products' },
     { labelKey: 'navigation.categories', icon: 'category', route: '/categories' },
     { labelKey: 'navigation.sales', icon: 'receipt_long' },
     { labelKey: 'navigation.supplies', icon: 'local_shipping' },

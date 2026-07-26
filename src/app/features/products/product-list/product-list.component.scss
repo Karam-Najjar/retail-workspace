@@ -1,0 +1,1 @@
+.page-header, .filters { display: flex; gap: 1rem; align-items: center; justify-content: space-between; margin-block-end: 1.5rem; } .page-header h1, .page-header p { margin: 0; } .filters { justify-content: flex-start; flex-wrap: wrap; } .filters mat-form-field { min-inline-size: min(100%, 16rem); }

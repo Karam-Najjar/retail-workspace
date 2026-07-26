@@ -77,6 +77,32 @@
       "delete": "Supplier could not be deleted."
     }
   },
+  "products": {
+    "title": "Products",
+    "description": "Manage your product catalog and package barcodes.",
+    "add": "Add product",
+    "formTitle": "Product",
+    "name": "Name",
+    "category": "Category",
+    "allCategories": "All categories",
+    "search": "Search products",
+    "sellingPrice": "Selling price",
+    "secondaryPrice": "Approx. {{ value }} SYP",
+    "quantity": "Quantity",
+    "emptyTitle": "No products yet",
+    "emptyMessage": "Add a product to start building your catalog.",
+    "deleteTitle": "Delete product",
+    "deleteMessage": "This empty product and its barcodes will be permanently deleted.",
+    "barcodesTitle": "Barcodes",
+    "barcode": "Barcode",
+    "packageType": "Package type",
+    "multiplier": "Multiplier",
+    "addBarcode": "Add barcode",
+    "manageBarcodes": "Manage barcodes",
+    "noBarcodes": "No barcodes have been added.",
+    "stock": { "in": "In stock", "low": "Low stock", "out": "Out of stock" },
+    "errors": { "load": "Products could not be loaded.", "save": "Product could not be saved.", "delete": "Product could not be deleted.", "barcodes": "Barcodes could not be saved." }
+  },
   "dashboard": {
     "title": "Dashboard",
     "description": "Your retail dashboard will be available in a later phase."

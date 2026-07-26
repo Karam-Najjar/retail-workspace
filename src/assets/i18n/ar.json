@@ -77,6 +77,32 @@
       "delete": ""
     }
   },
+  "products": {
+    "title": "",
+    "description": "",
+    "add": "",
+    "formTitle": "",
+    "name": "",
+    "category": "",
+    "allCategories": "",
+    "search": "",
+    "sellingPrice": "",
+    "secondaryPrice": "",
+    "quantity": "",
+    "emptyTitle": "",
+    "emptyMessage": "",
+    "deleteTitle": "",
+    "deleteMessage": "",
+    "barcodesTitle": "",
+    "barcode": "",
+    "packageType": "",
+    "multiplier": "",
+    "addBarcode": "",
+    "manageBarcodes": "",
+    "noBarcodes": "",
+    "stock": { "in": "", "low": "", "out": "" },
+    "errors": { "load": "", "save": "", "delete": "", "barcodes": "" }
+  },
   "dashboard": {
     "title": "",
     "description": ""

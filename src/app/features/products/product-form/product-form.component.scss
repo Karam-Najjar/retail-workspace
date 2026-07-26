@@ -1,0 +1,10 @@
+.field { inline-size: 100%; }
+.barcode-section { border-block-start: 1px solid var(--retail-outline-variant); margin-block-start: 1rem; padding-block-start: 1rem; }
+.barcode-section h2 { font-size: 1rem; margin: 0 0 .75rem; }
+.barcode-rows { display: grid; gap: .5rem; }
+.barcode-row { align-items: center; display: grid; gap: .5rem; grid-template-columns: minmax(10rem, 1fr) minmax(8rem, .75fr) auto; }
+.remove-barcode, .add-barcode { background: transparent; border: 0; color: var(--retail-primary); cursor: pointer; font: inherit; padding: .5rem; }
+.remove-barcode { color: var(--retail-error); }
+.is-submitting { opacity: .7; pointer-events: none; }
+.form-error { color: var(--retail-error); }
+@media (max-width: 36rem) { .barcode-row { grid-template-columns: 1fr auto; } .barcode-row app-barcode-input { grid-column: 1 / -1; } }
