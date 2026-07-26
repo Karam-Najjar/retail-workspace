@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { AppMetadata } from '../../domain/models/app-metadata.model';
 import { Operator } from '../../domain/models/operator.model';
 import { Settings } from '../../domain/models/settings.model';
+import { Category } from '../../domain/models/category.model';
 import { APP_SETTINGS_KEY, OPERATOR_ONE_ID, OPERATOR_TWO_ID } from './database.constants';
 import { RetailDatabase } from './retail.database';
 
@@ -15,8 +16,16 @@ export class DatabaseInitializerService {
       this.database.operators,
       this.database.settings,
       this.database.app_metadata,
+      this.database.categories,
       async () => {
         const now = new Date();
+        const systemCategory: Category = {
+          id: 'category-system-other',
+          name: 'Other',
+          system_code: 'other',
+          created_at: now,
+          updated_at: now,
+        };
         const existingOperators = await this.database.operators.count();
 
         if (existingOperators === 0) {
@@ -49,6 +58,9 @@ export class DatabaseInitializerService {
           if (!(await this.database.app_metadata.get(entry.key))) {
             await this.database.app_metadata.add(entry);
           }
+        }
+        if (!(await this.database.categories.where('system_code').equals('other').first())) {
+          await this.database.categories.add(systemCategory);
         }
       },
     );

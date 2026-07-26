@@ -1,0 +1,14 @@
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+h2,
+p {
+  margin: 0;
+}
+
+p {
+  color: var(--retail-on-surface-muted);
+  margin-block-start: 0.5rem;
+}

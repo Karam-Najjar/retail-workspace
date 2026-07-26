@@ -5,7 +5,9 @@ import { AppMetadata } from '../../domain/models/app-metadata.model';
 import { LicenceState } from '../../domain/models/licence-state.model';
 import { Operator } from '../../domain/models/operator.model';
 import { Settings } from '../../domain/models/settings.model';
+import { Category } from '../../domain/models/category.model';
 import { RETAIL_DATABASE_NAME } from './database.constants';
+import { SCHEMA_V2 } from './schema/schema-v2';
 import { SCHEMA_V1 } from './schema/schema-v1';
 
 @Injectable({ providedIn: 'root' })
@@ -15,9 +17,11 @@ export class RetailDatabase extends Dexie {
   readonly activity_logs!: Table<ActivityLog, string>;
   readonly licence_state!: Table<LicenceState, 'active'>;
   readonly app_metadata!: Table<AppMetadata, string>;
+  readonly categories!: Table<Category, string>;
 
   constructor() {
     super(RETAIL_DATABASE_NAME);
     this.version(1).stores(SCHEMA_V1);
+    this.version(2).stores(SCHEMA_V2);
   }
 }

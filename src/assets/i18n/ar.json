@@ -24,6 +24,37 @@
     "activityLog": "",
     "settings": ""
   },
+  "common": {
+    "back": "",
+    "cancel": "",
+    "confirm": "",
+    "save": "",
+    "edit": "",
+    "delete": ""
+  },
+  "categories": {
+    "title": "",
+    "description": "",
+    "add": "",
+    "name": "",
+    "type": "",
+    "systemLabel": "",
+    "customLabel": "",
+    "systemProtected": "",
+    "formTitle": "",
+    "emptyTitle": "",
+    "emptyMessage": "",
+    "deleteTitle": "",
+    "deleteMessage": "",
+    "system": {
+      "other": ""
+    },
+    "errors": {
+      "load": "",
+      "save": "",
+      "delete": ""
+    }
+  },
   "dashboard": {
     "title": "",
     "description": ""

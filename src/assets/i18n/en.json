@@ -24,6 +24,37 @@
     "activityLog": "Activity Log",
     "settings": "Settings"
   },
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "categories": {
+    "title": "Categories",
+    "description": "Manage product categories for your store.",
+    "add": "Add category",
+    "name": "Name",
+    "type": "Type",
+    "systemLabel": "System",
+    "customLabel": "Custom",
+    "systemProtected": "System categories cannot be edited or deleted.",
+    "formTitle": "Category",
+    "emptyTitle": "No categories yet",
+    "emptyMessage": "Add a category to organize your products.",
+    "deleteTitle": "Delete category",
+    "deleteMessage": "{{ count }} products will be moved to '{{ name }}'.",
+    "system": {
+      "other": "Other"
+    },
+    "errors": {
+      "load": "Categories could not be loaded.",
+      "save": "Category could not be saved.",
+      "delete": "Category could not be deleted."
+    }
+  },
   "dashboard": {
     "title": "Dashboard",
     "description": "Your retail dashboard will be available in a later phase."

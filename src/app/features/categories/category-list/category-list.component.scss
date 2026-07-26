@@ -1,0 +1,22 @@
+.category-list {
+  margin-inline: auto;
+  max-inline-size: 70rem;
+}
+
+.page-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-block-end: 1.5rem;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+p {
+  color: var(--retail-on-surface-muted);
+  margin-block-start: 0.5rem;
+}

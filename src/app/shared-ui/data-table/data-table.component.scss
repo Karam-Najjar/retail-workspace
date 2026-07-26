@@ -1,0 +1,11 @@
+.data-table {
+  inline-size: 100%;
+}
+
+tr[mat-row] {
+  cursor: pointer;
+}
+
+tr[mat-row]:hover {
+  background: var(--retail-primary-container);
+}

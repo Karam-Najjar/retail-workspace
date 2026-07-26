@@ -1,0 +1,10 @@
+<table mat-table [dataSource]="rows()" class="data-table">
+  @for (column of columns(); let index = $index; track column.labelKey) {
+    <ng-container [matColumnDef]="column.labelKey">
+      <th mat-header-cell *matHeaderCellDef>{{ column.labelKey | translate }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.values[index] | translate }}</td>
+    </ng-container>
+  }
+  <tr mat-header-row *matHeaderRowDef="columns().map(column => column.labelKey)"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns().map(column => column.labelKey)" (click)="rowClick.emit(row.id)"></tr>
+</table>
