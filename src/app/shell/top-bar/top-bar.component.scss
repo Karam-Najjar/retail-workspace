@@ -12,6 +12,10 @@
   flex: 1 1 auto;
 }
 
+mat-icon {
+  margin-inline-end: 0.25rem;
+}
+
 @media (min-width: 48.0625rem) {
   .navigation-toggle {
     display: none;

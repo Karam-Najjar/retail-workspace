@@ -1,10 +1,19 @@
 import { Routes } from '@angular/router';
 import { AppShellComponent } from './shell/app-shell/app-shell.component';
+import { licenceGuard } from './core/guards/licence.guard';
 
 export const routes: Routes = [
   {
+    path: 'setup/licence',
+    loadComponent: () =>
+      import('./features/licence/licence-setup/licence-setup.component').then(
+        (module) => module.LicenceSetupComponent,
+      ),
+  },
+  {
     path: '',
     component: AppShellComponent,
+    canMatch: [licenceGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {

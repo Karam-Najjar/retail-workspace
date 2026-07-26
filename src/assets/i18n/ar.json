@@ -6,6 +6,9 @@
     "english": "",
     "arabic": ""
   },
+  "operators": {
+    "loading": ""
+  },
   "shell": {
     "toggleNavigation": ""
   },
@@ -29,6 +32,15 @@
     "title": "",
     "description": "",
     "goToDashboard": ""
+  },
+  "licenceSetup": {
+    "title": "",
+    "description": "",
+    "licenceLabel": "",
+    "verifyAndActivate": "",
+    "errors": {
+      "required": ""
+    }
   },
   "packages": {
     "pocket": "",

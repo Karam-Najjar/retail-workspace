@@ -6,6 +6,9 @@
     "english": "English",
     "arabic": "Arabic"
   },
+  "operators": {
+    "loading": "Loading operator"
+  },
   "shell": {
     "toggleNavigation": "Toggle navigation"
   },
@@ -29,6 +32,15 @@
     "title": "Page not found",
     "description": "The page you requested is not available.",
     "goToDashboard": "Go to dashboard"
+  },
+  "licenceSetup": {
+    "title": "Activate your licence",
+    "description": "Paste the compact licence token provided for this store.",
+    "licenceLabel": "Licence token",
+    "verifyAndActivate": "Verify & Activate",
+    "errors": {
+      "required": "Enter a licence token to continue."
+    }
   },
   "packages": {
     "pocket": "Pocket",
