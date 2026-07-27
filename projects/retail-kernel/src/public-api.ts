@@ -122,3 +122,5 @@ export * from './lib/platform/export/excel-export.service';
 export * from './lib/platform/export/sales-workbook.mapper';
 export * from './lib/platform/export/supplies-workbook.mapper';
 export * from './lib/platform/export/activity-workbook.mapper';
+export * from './lib/application/dto/dashboard-snapshot.model';
+export * from './lib/application/services/dashboard-query.service';

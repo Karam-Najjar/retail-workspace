@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -20,6 +21,7 @@ export class PosPageComponent implements AfterViewInit, OnDestroy, OnInit {
   protected readonly facade = inject(PosFacade);
   protected readonly scanner: ScannerGateway = inject(SCANNER_GATEWAY);
   private readonly dialog = inject(MatDialog);
+  private readonly route = inject(ActivatedRoute);
   @ViewChild('scanInput') private scanInput?: ElementRef<HTMLInputElement>;
   protected scanValue = '';
   private destroyed = false;
@@ -28,7 +30,7 @@ export class PosPageComponent implements AfterViewInit, OnDestroy, OnInit {
     await this.facade.initialize();
     this.activateScanner();
   }
-  ngAfterViewInit(): void { this.focusScanInput(); }
+  ngAfterViewInit(): void { if (this.route.snapshot.queryParamMap.get('autofocus') === 'true') this.focusScanInput(); else this.focusScanInput(); }
   ngOnDestroy(): void { this.destroyed = true; this.scanner.deactivate(); }
 
   protected submitManual(event: Event): void {

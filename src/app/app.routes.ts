@@ -33,8 +33,8 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./features/dashboard/dashboard-placeholder/dashboard-placeholder.component').then(
-            (module) => module.DashboardPlaceholderComponent,
+          import('./features/dashboard/dashboard-page/dashboard-page.component').then(
+            (module) => module.DashboardPageComponent,
           ),
       },
       {

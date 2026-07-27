@@ -9,4 +9,5 @@ export interface ActivityLogListFilter {
   readonly from?: Date;
   readonly to?: Date;
   readonly eventCode?: string;
+  readonly eventCodes?: readonly string[];
 }

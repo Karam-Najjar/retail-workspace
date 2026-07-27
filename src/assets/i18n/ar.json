@@ -263,6 +263,7 @@
     "details": "",
     "operator": "",
     "allTypes": "",
+    "types": { "sales": "", "supplies": "", "productChanges": "", "categoryChanges": "", "supplierChanges": "", "settingsChanges": "", "backupChanges": "" },
     "emptyTitle": "",
     "emptyMessage": "",
     "errors": { "load": "" },
@@ -311,7 +312,8 @@
   },
   "dashboard": {
     "title": "",
-    "description": ""
+    "description": "",
+    "todaySales": "", "monthSales": "", "monthProfit": "", "lowStock": "", "recentActivity": "", "topProducts": "", "newSale": "", "newScan": ""
   },
   "notFound": {
     "title": "",

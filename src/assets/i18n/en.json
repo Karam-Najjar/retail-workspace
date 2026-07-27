@@ -263,6 +263,7 @@
     "details": "Details",
     "operator": "Operator",
     "allTypes": "All types",
+    "types": { "sales": "Sales", "supplies": "Supplies", "productChanges": "Product Changes", "categoryChanges": "Category Changes", "supplierChanges": "Supplier Changes", "settingsChanges": "Settings Changes", "backupChanges": "Backup Imported" },
     "emptyTitle": "No activity found",
     "emptyMessage": "No activity matches the selected filters.",
     "errors": { "load": "Activity could not be loaded." },
@@ -311,7 +312,15 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "description": "Your retail dashboard will be available in a later phase."
+    "description": "Operational overview",
+    "todaySales": "Sales Today",
+    "monthSales": "Sales This Month",
+    "monthProfit": "Profit This Month",
+    "lowStock": "Low Stock Alerts",
+    "recentActivity": "Recent Activity",
+    "topProducts": "Top Selling Products",
+    "newSale": "New Sale",
+    "newScan": "New Scan"
   },
   "notFound": {
     "title": "Page not found",
