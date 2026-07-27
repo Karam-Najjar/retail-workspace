@@ -4,6 +4,7 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="shell-content">
+    @if (updates.ready()) { <div class="update-banner">{{ (cartHasItems() ? 'pwa.updateClearCart' : 'pwa.updateReady') | translate }} @if (!cartHasItems()) { <button mat-button (click)="updates.apply()">{{ 'pwa.apply' | translate }}</button> }</div> }
     <app-top-bar (navigationToggle)="toggleNavigation()" />
     <main class="shell-main">
       <router-outlet />

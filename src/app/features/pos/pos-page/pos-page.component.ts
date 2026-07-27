@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe } from '@ngx-translate/core';
-import { AddCartItemResult, DraftCartItem, HidKeyboardTransport, SCANNER_GATEWAY, ScannerGateway } from '@retail/kernel';
+import { AddCartItemResult, DraftCartItem, HidKeyboardTransport, MultiTabService, SCANNER_GATEWAY, ScannerGateway } from '@retail/kernel';
 import { firstValueFrom } from 'rxjs';
 import { CartComponent } from '../cart/cart.component';
 import { CartTotalsComponent } from '../cart-totals/cart-totals.component';
@@ -22,16 +22,19 @@ export class PosPageComponent implements AfterViewInit, OnDestroy, OnInit {
   protected readonly scanner: ScannerGateway = inject(SCANNER_GATEWAY);
   private readonly dialog = inject(MatDialog);
   private readonly route = inject(ActivatedRoute);
+  private readonly multiTab = inject(MultiTabService);
   @ViewChild('scanInput') private scanInput?: ElementRef<HTMLInputElement>;
   protected scanValue = '';
+  protected readonly blockedByOtherTab = signal(false);
   private destroyed = false;
 
   async ngOnInit(): Promise<void> {
+    if (!await this.multiTab.claimPos()) { this.blockedByOtherTab.set(true); return; }
     await this.facade.initialize();
     this.activateScanner();
   }
   ngAfterViewInit(): void { if (this.route.snapshot.queryParamMap.get('autofocus') === 'true') this.focusScanInput(); else this.focusScanInput(); }
-  ngOnDestroy(): void { this.destroyed = true; this.scanner.deactivate(); }
+  ngOnDestroy(): void { this.destroyed = true; this.multiTab.releasePos(); this.scanner.deactivate(); }
 
   protected submitManual(event: Event): void {
     event.preventDefault();

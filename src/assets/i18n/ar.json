@@ -282,6 +282,7 @@
   },
   "pos": {
     "title": "",
+    "alreadyOpenInAnotherTab": "",
     "loading": "",
     "scannerReady": "",
     "scannerInactive": "",
@@ -315,6 +316,8 @@
     "description": "",
     "todaySales": "", "monthSales": "", "monthProfit": "", "lowStock": "", "recentActivity": "", "topProducts": "", "newSale": "", "newScan": ""
   },
+  "settings": { "title": "", "general": "", "operatorOne": "", "operatorTwo": "", "currencyRate": "", "lowStockThreshold": "", "language": "", "backup": "", "lastBackup": "", "never": "", "exportBackup": "", "restoreBackup": "", "storage": "", "usedStorage": "", "availableStorage": "", "lowStorage": "", "persistent": "", "notPersistent": "", "requestPersistence": "", "dangerousActions": "", "clearAllData": "" },
+  "pwa": { "updateReady": "", "updateClearCart": "", "apply": "" },
   "notFound": {
     "title": "",
     "description": "",

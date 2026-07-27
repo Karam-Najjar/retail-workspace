@@ -282,6 +282,7 @@
   },
   "pos": {
     "title": "Point of Sale",
+    "alreadyOpenInAnotherTab": "POS is already open in another tab.",
     "loading": "Loading POS...",
     "scannerReady": "Scanner ready",
     "scannerInactive": "Scanner inactive",
@@ -322,6 +323,8 @@
     "newSale": "New Sale",
     "newScan": "New Scan"
   },
+  "settings": { "title": "Settings", "general": "General", "operatorOne": "Operator 1 Name", "operatorTwo": "Operator 2 Name", "currencyRate": "Currency Rate", "lowStockThreshold": "Low Stock Threshold", "language": "Language", "backup": "Backup", "lastBackup": "Last successful backup", "never": "Never", "exportBackup": "Export backup", "restoreBackup": "Restore backup", "storage": "Storage health", "usedStorage": "Used", "availableStorage": "Available", "lowStorage": "Storage is running low", "persistent": "Persistent storage enabled", "notPersistent": "Persistent storage not enabled", "requestPersistence": "Request persistent storage", "dangerousActions": "Dangerous actions", "clearAllData": "Clear All Data" },
+  "pwa": { "updateReady": "Update ready.", "updateClearCart": "Update ready. Clear your cart to apply.", "apply": "Apply" },
   "notFound": {
     "title": "Page not found",
     "description": "The page you requested is not available.",

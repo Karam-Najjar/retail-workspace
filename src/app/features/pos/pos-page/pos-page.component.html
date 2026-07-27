@@ -9,7 +9,9 @@
     </div>
   </header>
 
-  @if (facade.loading()) {
+  @if (blockedByOtherTab()) {
+    <p class="pos-feedback" aria-live="assertive">{{ 'pos.alreadyOpenInAnotherTab' | translate }}</p>
+  } @else if (facade.loading()) {
     <p>{{ 'pos.loading' | translate }}</p>
   } @else {
     <div class="pos-layout">

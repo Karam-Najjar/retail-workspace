@@ -8,6 +8,7 @@ import { suppliesRoutes } from './features/supplies/supplies.routes';
 import { posRoutes } from './features/pos/pos.routes';
 import { salesRoutes } from './features/sales/sales.routes';
 import { activityLogRoutes } from './features/activity-log/activity-log.routes';
+import { settingsRoutes } from './features/settings/settings.routes';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,7 @@ export const routes: Routes = [
       ...posRoutes,
       ...salesRoutes,
       ...activityLogRoutes,
+      ...settingsRoutes,
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',
