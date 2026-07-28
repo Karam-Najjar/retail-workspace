@@ -1,1 +1,23 @@
-<article class="cart-item"><div class="cart-item__main"><strong>{{ item().product_name }}</strong><span>{{ item().barcode ?? ('pos.manualEntry' | translate) }}</span><span>@if (item().package_type_code) { {{ ('packages.' + item().package_type_code) | translate }} · } {{ item().quantity_base_units }} {{ 'pos.baseUnits' | translate }}</span></div><div class="cart-item__quantity"><button mat-icon-button type="button" [attr.aria-label]="'pos.decrease' | translate" (click)="decrease.emit()"><mat-icon>remove</mat-icon></button><span>{{ item().package_quantity }}</span><button mat-icon-button type="button" [attr.aria-label]="'pos.increase' | translate" (click)="increase.emit()"><mat-icon>add</mat-icon></button></div><div class="cart-item__price"><span>{{ (item().selling_price_per_unit / 100).toFixed(2) }} USD</span><strong>{{ (subtotal() / 100).toFixed(2) }} USD</strong></div><button mat-icon-button color="warn" type="button" [attr.aria-label]="'pos.remove' | translate" (click)="remove.emit()"><mat-icon>delete</mat-icon></button></article>
+<article class="cart-item">
+  <div class="cart-item__main">
+    <strong>{{ item().product_name }}</strong
+    ><span>{{ item().barcode ?? ("pos.manualEntry" | translate) }}</span
+    ><span>
+      @if (item().package_type_code) {
+        {{ "packages." + item().package_type_code | translate }} ·
+      }
+      {{ item().quantity_base_units }} {{ "pos.baseUnits" | translate }}</span
+    >
+  </div>
+  <div class="cart-item__quantity">
+    <button mat-icon-button type="button" [attr.aria-label]="'pos.decrease' | translate" (click)="decrease.emit()"><mat-icon>remove</mat-icon></button
+    ><span>{{ item().package_quantity }}</span
+    ><button mat-icon-button type="button" [attr.aria-label]="'pos.increase' | translate" (click)="increase.emit()"><mat-icon>add</mat-icon></button>
+  </div>
+  <div class="cart-item__price">
+    <span>{{ (item().selling_price_per_unit / 100).toFixed(2) }} USD</span><strong>{{ (subtotal() / 100).toFixed(2) }} USD</strong>
+  </div>
+  <button mat-icon-button color="warn" type="button" [attr.aria-label]="'pos.remove' | translate" (click)="remove.emit()">
+    <mat-icon>delete</mat-icon>
+  </button>
+</article>

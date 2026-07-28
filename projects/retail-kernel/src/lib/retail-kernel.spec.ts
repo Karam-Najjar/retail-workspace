@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { RetailKernel } from './retail-kernel';
+import { RetailKernel } from "./retail-kernel";
 
-describe('RetailKernel', () => {
+describe("RetailKernel", () => {
   let component: RetailKernel;
   let fixture: ComponentFixture<RetailKernel>;
 
@@ -16,7 +16,7 @@ describe('RetailKernel', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

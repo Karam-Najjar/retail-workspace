@@ -1,4 +1,4 @@
-export type DraftCartEntryMethod = 'scan' | 'search';
+export type DraftCartEntryMethod = "scan" | "search";
 
 export interface DraftCartItem {
   readonly product_id: string;

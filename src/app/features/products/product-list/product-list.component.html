@@ -1,5 +1,34 @@
 <section class="product-list">
-  <header class="page-header"><div><h1>{{ 'products.title' | translate }}</h1><p>{{ 'products.description' | translate }}</p></div><button mat-flat-button color="primary" type="button" (click)="openCreate()">{{ 'products.add' | translate }}</button></header>
-  <div class="filters"><mat-form-field appearance="outline"><mat-label>{{ 'products.search' | translate }}</mat-label><input matInput [(ngModel)]="search" (ngModelChange)="load()" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ 'products.category' | translate }}</mat-label><mat-select [(ngModel)]="categoryId" (selectionChange)="load()"><mat-option value="">{{ 'products.allCategories' | translate }}</mat-option>@for (category of facade.categories(); track category.id) { <mat-option [value]="category.id">{{ category.name }}</mat-option> }</mat-select></mat-form-field></div>
-  @if (facade.products().length) { <app-data-table [columns]="columns" [rows]="rows()" [showActions]="true" (rowClick)="openDetail($event)" (editCallback)="edit($event)" (deleteCallback)="prepareDelete($event)" /> } @else if (!facade.loading()) { <app-empty-state titleKey="products.emptyTitle" messageKey="products.emptyMessage" /> }
+  <header class="page-header">
+    <div>
+      <h1>{{ "products.title" | translate }}</h1>
+      <p>{{ "products.description" | translate }}</p>
+    </div>
+    <button mat-flat-button color="primary" type="button" (click)="openCreate()">{{ "products.add" | translate }}</button>
+  </header>
+  <div class="filters">
+    <mat-form-field appearance="outline"
+      ><mat-label>{{ "products.search" | translate }}</mat-label
+      ><input matInput [(ngModel)]="search" (ngModelChange)="load()" /></mat-form-field
+    ><mat-form-field appearance="outline"
+      ><mat-label>{{ "products.category" | translate }}</mat-label
+      ><mat-select [(ngModel)]="categoryId" (selectionChange)="load()"
+        ><mat-option value="">{{ "products.allCategories" | translate }}</mat-option>
+        @for (category of facade.categories(); track category.id) {
+          <mat-option [value]="category.id">{{ category.name }}</mat-option>
+        }
+      </mat-select></mat-form-field
+    >
+  </div>
+  @if (facade.products().length) {
+    <app-data-table
+      [columns]="columns"
+      [rows]="rows()"
+      [showActions]="true"
+      (rowClick)="openDetail($event)"
+      (editCallback)="edit($event)"
+      (deleteCallback)="prepareDelete($event)" />
+  } @else if (!facade.loading()) {
+    <app-empty-state titleKey="products.emptyTitle" messageKey="products.emptyMessage" />
+  }
 </section>

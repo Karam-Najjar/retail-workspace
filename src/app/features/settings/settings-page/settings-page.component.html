@@ -1,1 +1,57 @@
-<section class="settings"><header><h1>{{ 'settings.title' | translate }}</h1></header><mat-card><h2>{{ 'settings.general' | translate }}</h2><div class="form"><mat-form-field><mat-label>{{ 'settings.operatorOne' | translate }}</mat-label><input matInput [(ngModel)]="operatorOne" /></mat-form-field><mat-form-field><mat-label>{{ 'settings.operatorTwo' | translate }}</mat-label><input matInput [(ngModel)]="operatorTwo" /></mat-form-field><mat-form-field><mat-label>{{ 'settings.currencyRate' | translate }}</mat-label><input matInput [(ngModel)]="rate" /></mat-form-field><mat-form-field><mat-label>{{ 'settings.lowStockThreshold' | translate }}</mat-label><input matInput type="number" [(ngModel)]="threshold" /></mat-form-field><mat-form-field><mat-label>{{ 'settings.language' | translate }}</mat-label><mat-select [(ngModel)]="language"><mat-option value="en">English</mat-option><mat-option value="ar">Arabic</mat-option></mat-select></mat-form-field></div><button mat-flat-button (click)="save()" [disabled]="facade.busy()">{{ 'common.save' | translate }}</button></mat-card><mat-card><h2>{{ 'settings.backup' | translate }}</h2><p>{{ 'settings.lastBackup' | translate }}: {{ facade.settings()?.last_backup_date || ('settings.never' | translate) }}</p><button mat-stroked-button (click)="export()" [disabled]="facade.busy()">{{ 'settings.exportBackup' | translate }}</button><label><span>{{ 'settings.restoreBackup' | translate }}</span><input type="file" accept="application/json" (change)="restore($event)" /></label></mat-card><mat-card><h2>{{ 'settings.storage' | translate }}</h2>@if (facade.storage(); as health) {<p>{{ 'settings.usedStorage' | translate }}: {{ health.usage ?? 0 }} | {{ 'settings.availableStorage' | translate }}: {{ health.quota === null || health.usage === null ? 0 : health.quota - health.usage }}</p>@if (health.low_space) {<p class="warning">{{ 'settings.lowStorage' | translate }}</p>}<p>{{ health.persisted ? ('settings.persistent' | translate) : ('settings.notPersistent' | translate) }}</p><button mat-stroked-button (click)="persist()" [disabled]="facade.busy()">{{ 'settings.requestPersistence' | translate }}</button>@if (facade.storageFeedback(); as feedback) {<p aria-live="polite">{{ feedback | translate }}</p>}}</mat-card><mat-card class="danger"><h2>{{ 'settings.dangerousActions' | translate }}</h2><button mat-stroked-button color="warn" (click)="clearAll()" [disabled]="facade.busy()">{{ 'settings.clearAllData' | translate }}</button></mat-card></section>
+<section class="settings">
+  <header>
+    <h1>{{ "settings.title" | translate }}</h1>
+  </header>
+  <mat-card
+    ><h2>{{ "settings.general" | translate }}</h2>
+    <div class="form">
+      <mat-form-field
+        ><mat-label>{{ "settings.operatorOne" | translate }}</mat-label
+        ><input matInput [(ngModel)]="operatorOne" /></mat-form-field
+      ><mat-form-field
+        ><mat-label>{{ "settings.operatorTwo" | translate }}</mat-label
+        ><input matInput [(ngModel)]="operatorTwo" /></mat-form-field
+      ><mat-form-field
+        ><mat-label>{{ "settings.currencyRate" | translate }}</mat-label
+        ><input matInput [(ngModel)]="rate" /></mat-form-field
+      ><mat-form-field
+        ><mat-label>{{ "settings.lowStockThreshold" | translate }}</mat-label
+        ><input matInput type="number" [(ngModel)]="threshold" /></mat-form-field
+      ><mat-form-field
+        ><mat-label>{{ "settings.language" | translate }}</mat-label
+        ><mat-select [(ngModel)]="language"
+          ><mat-option value="en">English</mat-option><mat-option value="ar">Arabic</mat-option></mat-select
+        ></mat-form-field
+      >
+    </div>
+    <button mat-flat-button (click)="save()" [disabled]="facade.busy()">{{ "common.save" | translate }}</button></mat-card
+  ><mat-card
+    ><h2>{{ "settings.backup" | translate }}</h2>
+    <p>{{ "settings.lastBackup" | translate }}: {{ facade.settings()?.last_backup_date || ("settings.never" | translate) }}</p>
+    <button mat-stroked-button (click)="export()" [disabled]="facade.busy()">{{ "settings.exportBackup" | translate }}</button
+    ><label
+      ><span>{{ "settings.restoreBackup" | translate }}</span
+      ><input type="file" accept="application/json" (change)="restore($event)" /></label></mat-card
+  ><mat-card
+    ><h2>{{ "settings.storage" | translate }}</h2>
+    @if (facade.storage(); as health) {
+      <p>
+        {{ "settings.usedStorage" | translate }}: {{ health.usage ?? 0 }} | {{ "settings.availableStorage" | translate }}:
+        {{ health.quota === null || health.usage === null ? 0 : health.quota - health.usage }}
+      </p>
+      @if (health.low_space) {
+        <p class="warning">{{ "settings.lowStorage" | translate }}</p>
+      }
+      <p>{{ health.persisted ? ("settings.persistent" | translate) : ("settings.notPersistent" | translate) }}</p>
+      <button mat-stroked-button (click)="persist()" [disabled]="facade.busy()">{{ "settings.requestPersistence" | translate }}</button>
+      @if (facade.storageFeedback(); as feedback) {
+        <p aria-live="polite">{{ feedback | translate }}</p>
+      }
+    }</mat-card
+  ><mat-card class="danger"
+    ><h2>{{ "settings.dangerousActions" | translate }}</h2>
+    <button mat-stroked-button color="warn" (click)="clearAll()" [disabled]="facade.busy()">
+      {{ "settings.clearAllData" | translate }}
+    </button></mat-card
+  >
+</section>

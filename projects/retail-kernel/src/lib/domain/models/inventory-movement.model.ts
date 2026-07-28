@@ -1,6 +1,6 @@
-import { InventoryAdjustmentType } from './inventory-adjustment.model';
+import { InventoryAdjustmentType } from "./inventory-adjustment.model";
 
-export type InventoryMovementType = InventoryAdjustmentType | 'supply' | 'sale';
+export type InventoryMovementType = InventoryAdjustmentType | "supply" | "sale";
 
 export interface InventoryMovement {
   readonly id: string;

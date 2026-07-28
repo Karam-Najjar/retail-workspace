@@ -18,7 +18,7 @@ export interface StoreProfile {
     readonly primary: StoreCurrency;
     readonly secondary: StoreCurrency;
   };
-  readonly costing: 'fifo';
+  readonly costing: "fifo";
   readonly default_category_system_code: string;
-  readonly carton_pricing: 'multiply_pocket';
+  readonly carton_pricing: "multiply_pocket";
 }

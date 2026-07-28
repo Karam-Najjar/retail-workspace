@@ -1,6 +1,34 @@
 <section class="supply-list">
-  <header class="page-header"><div><h1>{{ 'supplies.title' | translate }}</h1><p>{{ 'supplies.description' | translate }}</p></div><div class="header-actions"><button mat-flat-button color="primary" type="button" (click)="openCreate()">{{ 'supplies.addStock' | translate }}</button></div></header>
-  <div class="filters"><app-date-range-filter (rangeChange)="rangeChanged($event)" /><mat-form-field appearance="outline"><mat-label>{{ 'supplies.supplier' | translate }}</mat-label><mat-select [(ngModel)]="supplierId" (selectionChange)="load()"><mat-option value="">{{ 'supplies.allSuppliers' | translate }}</mat-option>@for (supplier of facade.suppliers(); track supplier.id) { <mat-option [value]="supplier.id">{{ supplier.name }}</mat-option> }</mat-select></mat-form-field><app-export-button [busy]="facade.exporting()" (export)="export()" /></div>
-  <section class="summary-grid"><app-summary-card labelKey="supplies.totalSupplies" [value]="facade.summary().transaction_count" /><app-summary-card labelKey="supplies.totalBaseUnits" [value]="facade.summary().total_base_units" /><app-summary-card labelKey="supplies.totalCost" [value]="(facade.summary().total_cost / 100).toFixed(2)" /></section>
-  @if (facade.supplies().length) { <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openDetail($event)" /> } @else if (!facade.loading()) { <app-empty-state titleKey="supplies.emptyTitle" messageKey="supplies.emptyMessage" /> }
+  <header class="page-header">
+    <div>
+      <h1>{{ "supplies.title" | translate }}</h1>
+      <p>{{ "supplies.description" | translate }}</p>
+    </div>
+    <div class="header-actions">
+      <button mat-flat-button color="primary" type="button" (click)="openCreate()">{{ "supplies.addStock" | translate }}</button>
+    </div>
+  </header>
+  <div class="filters">
+    <app-date-range-filter (rangeChange)="rangeChanged($event)" /><mat-form-field appearance="outline"
+      ><mat-label>{{ "supplies.supplier" | translate }}</mat-label
+      ><mat-select [(ngModel)]="supplierId" (selectionChange)="load()"
+        ><mat-option value="">{{ "supplies.allSuppliers" | translate }}</mat-option>
+        @for (supplier of facade.suppliers(); track supplier.id) {
+          <mat-option [value]="supplier.id">{{ supplier.name }}</mat-option>
+        }
+      </mat-select></mat-form-field
+    ><app-export-button [busy]="facade.exporting()" (export)="export()" />
+  </div>
+  <section class="summary-grid">
+    <app-summary-card labelKey="supplies.totalSupplies" [value]="facade.summary().transaction_count" /><app-summary-card
+      labelKey="supplies.totalBaseUnits"
+      [value]="facade.summary().total_base_units" /><app-summary-card
+      labelKey="supplies.totalCost"
+      [value]="(facade.summary().total_cost / 100).toFixed(2)" />
+  </section>
+  @if (facade.supplies().length) {
+    <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openDetail($event)" />
+  } @else if (!facade.loading()) {
+    <app-empty-state titleKey="supplies.emptyTitle" messageKey="supplies.emptyMessage" />
+  }
 </section>

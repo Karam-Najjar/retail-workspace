@@ -1,22 +1,22 @@
-import { DatePipe } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { TranslatePipe } from '@ngx-translate/core';
-import { ActiveOperatorService, Category } from '@retail/kernel';
-import { ConfirmationDialogComponent } from '../../../shared-ui/confirmation-dialog/confirmation-dialog.component';
-import { DetailPageHeaderComponent } from '../../../shared-ui/detail-page-header/detail-page-header.component';
-import { CategoriesFacade } from '../categories.facade';
-import { CategoryFormComponent } from '../category-form/category-form.component';
+import { DatePipe } from "@angular/common";
+import { Component, inject, OnInit, signal } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { TranslatePipe } from "@ngx-translate/core";
+import { ActiveOperatorService, Category } from "@retail/kernel";
+import { ConfirmationDialogComponent } from "../../../shared-ui/confirmation-dialog/confirmation-dialog.component";
+import { DetailPageHeaderComponent } from "../../../shared-ui/detail-page-header/detail-page-header.component";
+import { CategoriesFacade } from "../categories.facade";
+import { CategoryFormComponent } from "../category-form/category-form.component";
 
 @Component({
-  selector: 'app-category-detail',
+  selector: "app-category-detail",
   imports: [DatePipe, ConfirmationDialogComponent, DetailPageHeaderComponent, MatButtonModule, MatCardModule, MatDialogModule, TranslatePipe],
   providers: [CategoriesFacade],
-  templateUrl: './category-detail.component.html',
-  styleUrl: './category-detail.component.scss',
+  templateUrl: "./category-detail.component.html",
+  styleUrl: "./category-detail.component.scss",
 })
 export class CategoryDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -30,21 +30,24 @@ export class CategoryDetailComponent implements OnInit {
   protected error: string | null = null;
 
   async ngOnInit(): Promise<void> {
-    const id = this.route.snapshot.paramMap.get('categoryId');
+    const id = this.route.snapshot.paramMap.get("categoryId");
     if (id) this.category.set((await this.facade.get(id)) ?? null);
   }
 
   goBack(): void {
-    void this.router.navigate(['/categories']);
+    void this.router.navigate(["/categories"]);
   }
 
   edit(): void {
     const id = this.category()?.id;
     if (id) {
-      this.dialog.open(CategoryFormComponent, {
-        width: 'min(32rem, calc(100vw - 2rem))',
-        data: { categoryId: id },
-      }).afterClosed().subscribe(() => void this.reload());
+      this.dialog
+        .open(CategoryFormComponent, {
+          width: "min(32rem, calc(100vw - 2rem))",
+          data: { categoryId: id },
+        })
+        .afterClosed()
+        .subscribe(() => void this.reload());
     }
   }
 
@@ -63,7 +66,9 @@ export class CategoryDetailComponent implements OnInit {
     else this.error = this.facade.error();
   }
 
-  protected operatorName(id: string): string { return this.operators.operators().find((operator) => operator.id === id)?.display_name ?? '—'; }
+  protected operatorName(id: string): string {
+    return this.operators.operators().find(operator => operator.id === id)?.display_name ?? "—";
+  }
 
   private async reload(): Promise<void> {
     const id = this.category()?.id;

@@ -1,3 +1,13 @@
-.product-picker { display: grid; gap: .75rem; grid-template-columns: minmax(10rem, 1fr) minmax(12rem, 2fr); }
-mat-form-field { inline-size: 100%; }
-@media (max-width: 42rem) { .product-picker { grid-template-columns: 1fr; } }
+.product-picker {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(10rem, 1fr) minmax(12rem, 2fr);
+}
+mat-form-field {
+  inline-size: 100%;
+}
+@media (max-width: 42rem) {
+  .product-picker {
+    grid-template-columns: 1fr;
+  }
+}

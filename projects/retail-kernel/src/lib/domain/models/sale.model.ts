@@ -1,6 +1,6 @@
-import { SaleCurrencySnapshot } from './sale-currency-snapshot.model';
+import { SaleCurrencySnapshot } from "./sale-currency-snapshot.model";
 
-export type SalePaymentMethod = 'cash';
+export type SalePaymentMethod = "cash";
 
 export interface Sale {
   readonly id: string;

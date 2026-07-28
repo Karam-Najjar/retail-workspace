@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { DraftCartItem } from '../../domain/models/draft-cart-item.model';
+import { Injectable } from "@angular/core";
+import { DraftCartItem } from "../../domain/models/draft-cart-item.model";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class CheckoutIdempotencyService {
   private cartFingerprint: string | null = null;
   private idempotencyKey: string | null = null;
@@ -24,17 +24,19 @@ export class CheckoutIdempotencyService {
   }
 
   private fingerprint(items: readonly DraftCartItem[]): string {
-    return JSON.stringify(items.map((item) => [
-      item.product_id,
-      item.product_name,
-      item.product_barcode_id,
-      item.barcode,
-      item.package_type_code,
-      item.multiplier,
-      item.package_quantity,
-      item.quantity_base_units,
-      item.selling_price_per_unit,
-      item.entry_method,
-    ]));
+    return JSON.stringify(
+      items.map(item => [
+        item.product_id,
+        item.product_name,
+        item.product_barcode_id,
+        item.barcode,
+        item.package_type_code,
+        item.multiplier,
+        item.package_quantity,
+        item.quantity_base_units,
+        item.selling_price_per_unit,
+        item.entry_method,
+      ])
+    );
   }
 }

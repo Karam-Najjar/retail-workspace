@@ -1,4 +1,4 @@
-import { DraftCart } from '../models/draft-cart.model';
+import { DraftCart } from "../models/draft-cart.model";
 
 export interface DraftCartRepository {
   getActive(): Promise<DraftCart | undefined>;

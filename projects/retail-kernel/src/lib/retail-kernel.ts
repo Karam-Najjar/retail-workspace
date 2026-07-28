@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'lib-retail-kernel',
+  selector: "lib-retail-kernel",
   imports: [],
   template: ` <p>retail-kernel works!</p> `,
   styles: ``,

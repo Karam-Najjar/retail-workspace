@@ -1,4 +1,4 @@
-export type InventoryBatchSourceType = 'opening_balance' | 'supply' | 'adjustment';
+export type InventoryBatchSourceType = "opening_balance" | "supply" | "adjustment";
 
 export interface InventoryBatch {
   readonly id: string;

@@ -1,4 +1,4 @@
-export type InventoryAdjustmentType = 'opening_balance' | 'adjustment_in' | 'adjustment_out' | 'write_off';
+export type InventoryAdjustmentType = "opening_balance" | "adjustment_in" | "adjustment_out" | "write_off";
 
 export interface InventoryAdjustment {
   readonly id: string;

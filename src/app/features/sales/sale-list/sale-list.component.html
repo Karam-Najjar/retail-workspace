@@ -1,12 +1,14 @@
 <section class="sale-list">
   <header class="page-header">
     <div>
-      <h1>{{ 'sales.title' | translate }}</h1>
-      <p>{{ 'sales.description' | translate }}</p>
+      <h1>{{ "sales.title" | translate }}</h1>
+      <p>{{ "sales.description" | translate }}</p>
     </div>
   </header>
 
-  <div class="filters"><app-date-range-filter (rangeChange)="rangeChanged($event)" /><app-export-button [busy]="facade.exporting()" (export)="export()" /></div>
+  <div class="filters">
+    <app-date-range-filter (rangeChange)="rangeChanged($event)" /><app-export-button [busy]="facade.exporting()" (export)="export()" />
+  </div>
 
   <section class="summary-grid" [attr.aria-label]="'sales.summary' | translate">
     <app-summary-card labelKey="sales.totalRevenue" [value]="summaryMoney(facade.summary().totalRevenue)" />

@@ -1,1 +1,4 @@
-<mat-form-field appearance="outline" class="barcode-input"><mat-label>{{ labelKey() | translate }}</mat-label><input matInput type="text" autocomplete="off" [ngModel]="value()" (ngModelChange)="valueChange.emit($event)" /></mat-form-field>
+<mat-form-field appearance="outline" class="barcode-input"
+  ><mat-label>{{ labelKey() | translate }}</mat-label
+  ><input matInput type="text" autocomplete="off" [ngModel]="value()" (ngModelChange)="valueChange.emit($event)"
+/></mat-form-field>

@@ -1,4 +1,4 @@
-import { Settings } from '../models/settings.model';
+import { Settings } from "../models/settings.model";
 
 export interface SettingsRepository {
   get(): Promise<Settings | undefined>;

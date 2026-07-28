@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from "@angular/core";
 import {
   Category,
   DeleteCategoryUseCase,
@@ -6,8 +6,8 @@ import {
   ListCategoriesUseCase,
   SaveCategoryInput,
   SaveCategoryUseCase,
-} from '@retail/kernel';
-import { DexieCategoryRepository } from '@retail/kernel';
+} from "@retail/kernel";
+import { DexieCategoryRepository } from "@retail/kernel";
 
 @Injectable()
 export class CategoriesFacade {
@@ -28,7 +28,7 @@ export class CategoriesFacade {
     try {
       this.categories.set(await this.listCategories.execute());
     } catch {
-      this.error.set('categories.errors.load');
+      this.error.set("categories.errors.load");
     } finally {
       this.loading.set(false);
     }
@@ -44,7 +44,7 @@ export class CategoriesFacade {
       await this.load();
       return category;
     } catch (error: unknown) {
-      this.error.set(error instanceof Error ? error.message : 'categories.errors.save');
+      this.error.set(error instanceof Error ? error.message : "categories.errors.save");
       return null;
     }
   }
@@ -55,7 +55,7 @@ export class CategoriesFacade {
       await this.load();
       return affectedProducts;
     } catch (error: unknown) {
-      this.error.set(error instanceof Error ? error.message : 'categories.errors.delete');
+      this.error.set(error instanceof Error ? error.message : "categories.errors.delete");
       return null;
     }
   }

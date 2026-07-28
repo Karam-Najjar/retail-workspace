@@ -1,6 +1,23 @@
-.field { inline-size: 100%; }
-.adjustment-content { display: grid; min-inline-size: min(34rem, calc(100vw - 4rem)); padding-block-start: .5rem; }
-.stock-summary { color: var(--retail-on-surface-muted); }
-.warning, .form-error { color: var(--retail-error); }
-.warning { font-weight: 600; }
-@media (max-width: 32rem) { .adjustment-content { min-inline-size: 0; } }
+.field {
+  inline-size: 100%;
+}
+.adjustment-content {
+  display: grid;
+  min-inline-size: min(34rem, calc(100vw - 4rem));
+  padding-block-start: 0.5rem;
+}
+.stock-summary {
+  color: var(--retail-on-surface-muted);
+}
+.warning,
+.form-error {
+  color: var(--retail-error);
+}
+.warning {
+  font-weight: 600;
+}
+@media (max-width: 32rem) {
+  .adjustment-content {
+    min-inline-size: 0;
+  }
+}

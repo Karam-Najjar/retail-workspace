@@ -1,5 +1,20 @@
 <section class="supplier-list">
-  <header class="page-header"><div><h1>{{ 'suppliers.title' | translate }}</h1><p>{{ 'suppliers.description' | translate }}</p></div><button mat-flat-button color="primary" type="button" (click)="openCreate()">{{ 'suppliers.add' | translate }}</button></header>
-  @if (facade.suppliers().length) { <app-data-table [columns]="columns" [rows]="rows()" [showActions]="true" (rowClick)="openDetail($event)" (editCallback)="edit($event)" (deleteCallback)="prepareDelete($event)" /> }
-  @else if (!facade.loading()) { <app-empty-state titleKey="suppliers.emptyTitle" messageKey="suppliers.emptyMessage" /> }
+  <header class="page-header">
+    <div>
+      <h1>{{ "suppliers.title" | translate }}</h1>
+      <p>{{ "suppliers.description" | translate }}</p>
+    </div>
+    <button mat-flat-button color="primary" type="button" (click)="openCreate()">{{ "suppliers.add" | translate }}</button>
+  </header>
+  @if (facade.suppliers().length) {
+    <app-data-table
+      [columns]="columns"
+      [rows]="rows()"
+      [showActions]="true"
+      (rowClick)="openDetail($event)"
+      (editCallback)="edit($event)"
+      (deleteCallback)="prepareDelete($event)" />
+  } @else if (!facade.loading()) {
+    <app-empty-state titleKey="suppliers.emptyTitle" messageKey="suppliers.emptyMessage" />
+  }
 </section>

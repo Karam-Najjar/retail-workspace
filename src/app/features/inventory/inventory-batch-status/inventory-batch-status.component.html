@@ -1,1 +1,37 @@
-<section class="inventory-section"><h2>{{ 'inventory.batches.title' | translate }}</h2>@if (batches().length) { <div class="table-scroll"><table><thead><tr><th>#</th><th>{{ 'inventory.date' | translate }}</th><th>{{ 'inventory.source' | translate }}</th><th>{{ 'inventory.originalQuantity' | translate }}</th><th>{{ 'inventory.remainingQuantity' | translate }}</th><th>{{ 'inventory.originalCost' | translate }}</th><th>{{ 'inventory.remainingCost' | translate }}</th><th>{{ 'inventory.status' | translate }}</th></tr></thead><tbody>@for (batch of batches(); track batch.id) { <tr><td>{{ batch.sequence }}</td><td>{{ batch.created_at | date: 'mediumDate' }}</td><td>{{ 'inventory.sources.' + batch.source_type | translate }}</td><td>{{ batch.original_quantity }}</td><td>{{ batch.remaining_quantity }}</td><td><app-money-display [cents]="batch.original_total_cost" /></td><td><app-money-display [cents]="batch.remaining_total_cost" /></td><td>{{ (batch.remaining_quantity > 0 ? 'inventory.batches.active' : 'inventory.batches.depleted') | translate }}</td></tr> }</tbody></table></div> } @else { <p>{{ 'inventory.batches.empty' | translate }}</p> }</section>
+<section class="inventory-section">
+  <h2>{{ "inventory.batches.title" | translate }}</h2>
+  @if (batches().length) {
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ "inventory.date" | translate }}</th>
+            <th>{{ "inventory.source" | translate }}</th>
+            <th>{{ "inventory.originalQuantity" | translate }}</th>
+            <th>{{ "inventory.remainingQuantity" | translate }}</th>
+            <th>{{ "inventory.originalCost" | translate }}</th>
+            <th>{{ "inventory.remainingCost" | translate }}</th>
+            <th>{{ "inventory.status" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (batch of batches(); track batch.id) {
+            <tr>
+              <td>{{ batch.sequence }}</td>
+              <td>{{ batch.created_at | date: "mediumDate" }}</td>
+              <td>{{ "inventory.sources." + batch.source_type | translate }}</td>
+              <td>{{ batch.original_quantity }}</td>
+              <td>{{ batch.remaining_quantity }}</td>
+              <td><app-money-display [cents]="batch.original_total_cost" /></td>
+              <td><app-money-display [cents]="batch.remaining_total_cost" /></td>
+              <td>{{ (batch.remaining_quantity > 0 ? "inventory.batches.active" : "inventory.batches.depleted") | translate }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p>{{ "inventory.batches.empty" | translate }}</p>
+  }
+</section>

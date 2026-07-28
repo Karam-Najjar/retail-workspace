@@ -1,4 +1,4 @@
-import { Category } from '../models/category.model';
+import { Category } from "../models/category.model";
 
 export interface CategoryRepository {
   list(): Promise<readonly Category[]>;

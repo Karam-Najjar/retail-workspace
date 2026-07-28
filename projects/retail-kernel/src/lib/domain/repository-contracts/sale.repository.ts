@@ -1,8 +1,8 @@
-import { DraftCartItem } from '../models/draft-cart-item.model';
-import { SaleCurrencySnapshot } from '../models/sale-currency-snapshot.model';
-import { SaleItemBatchAllocation } from '../models/sale-item-batch-allocation.model';
-import { SaleItem } from '../models/sale-item.model';
-import { Sale } from '../models/sale.model';
+import { DraftCartItem } from "../models/draft-cart-item.model";
+import { SaleCurrencySnapshot } from "../models/sale-currency-snapshot.model";
+import { SaleItemBatchAllocation } from "../models/sale-item-batch-allocation.model";
+import { SaleItem } from "../models/sale-item.model";
+import { Sale } from "../models/sale.model";
 
 export interface SaleListFilter {
   readonly from?: Date;
@@ -20,10 +20,7 @@ export interface SaleDetail {
   readonly allocations: readonly SaleItemBatchAllocation[];
 }
 
-export type SaleCurrencySnapshotFactory = (
-  totalAmount: number,
-  totalCost: number,
-) => SaleCurrencySnapshot;
+export type SaleCurrencySnapshotFactory = (totalAmount: number, totalCost: number) => SaleCurrencySnapshot;
 
 export interface SaleCheckoutRequest {
   readonly idempotencyKey: string;

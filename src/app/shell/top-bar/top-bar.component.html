@@ -4,17 +4,16 @@
     type="button"
     class="navigation-toggle"
     [attr.aria-label]="'shell.toggleNavigation' | translate"
-    (click)="navigationToggle.emit()"
-  >
+    (click)="navigationToggle.emit()">
     <mat-icon>menu</mat-icon>
   </button>
 
-  <span class="app-title">{{ 'app.title' | translate }}</span>
+  <span class="app-title">{{ "app.title" | translate }}</span>
   <span class="spacer"></span>
 
   <button mat-button type="button" [matMenuTriggerFor]="operatorMenu">
     <mat-icon>person</mat-icon>
-    {{ activeOperator.activeOperator()?.display_name ?? ('operators.loading' | translate) }}
+    {{ activeOperator.activeOperator()?.display_name ?? ("operators.loading" | translate) }}
   </button>
   <mat-menu #operatorMenu="matMenu">
     @for (operator of activeOperator.operators(); track operator.id) {
@@ -25,6 +24,6 @@
   </mat-menu>
 
   <button mat-button type="button" (click)="translation.toggleLanguage()">
-    {{ translation.activeLanguage() === 'en' ? ('languages.arabic' | translate) : ('languages.english' | translate) }}
+    {{ translation.activeLanguage() === "en" ? ("languages.arabic" | translate) : ("languages.english" | translate) }}
   </button>
 </mat-toolbar>

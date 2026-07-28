@@ -1,1 +1,3 @@
-<button mat-stroked-button type="button" [disabled]="busy()" (click)="export.emit()">{{ (busy() ? 'reports.exporting' : 'reports.export') | translate }}</button>
+<button mat-stroked-button type="button" [disabled]="busy()" (click)="export.emit()">
+  {{ (busy() ? "reports.exporting" : "reports.export") | translate }}
+</button>

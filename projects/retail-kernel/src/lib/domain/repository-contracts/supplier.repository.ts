@@ -1,4 +1,4 @@
-import { Supplier } from '../models/supplier.model';
+import { Supplier } from "../models/supplier.model";
 
 export interface SupplierRepository {
   list(): Promise<readonly Supplier[]>;

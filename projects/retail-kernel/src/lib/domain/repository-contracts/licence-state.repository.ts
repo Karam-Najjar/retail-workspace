@@ -1,4 +1,4 @@
-import { LicenceState } from '../models/licence-state.model';
+import { LicenceState } from "../models/licence-state.model";
 
 export interface LicenceStateRepository {
   getActive(): Promise<LicenceState | undefined>;

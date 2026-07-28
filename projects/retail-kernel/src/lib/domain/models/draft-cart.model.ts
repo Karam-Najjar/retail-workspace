@@ -1,7 +1,7 @@
-import { DraftCartItem } from './draft-cart-item.model';
+import { DraftCartItem } from "./draft-cart-item.model";
 
 export interface DraftCart {
-  readonly id: 'active';
+  readonly id: "active";
   readonly items: readonly DraftCartItem[];
   readonly checkout_idempotency_key: string | null;
   readonly created_at: Date;

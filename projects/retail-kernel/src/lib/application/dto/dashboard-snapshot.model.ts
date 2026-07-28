@@ -1,4 +1,4 @@
-import { ActivityLog } from '../../domain/models/activity-log.model';
+import { ActivityLog } from "../../domain/models/activity-log.model";
 
 export interface DashboardTopProduct {
   readonly product_id: string;

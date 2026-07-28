@@ -1,2 +1,25 @@
-.settings { display: grid; gap: 1rem; } h1, h2, p { margin: 0; } mat-card { display: grid; gap: 1rem; padding: 1rem; } .form { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
-.danger { border: 1px solid #ba1a1a; } .warning { color: #8a5200; }
+.settings {
+  display: grid;
+  gap: 1rem;
+}
+h1,
+h2,
+p {
+  margin: 0;
+}
+mat-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+.form {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+.danger {
+  border: 1px solid #ba1a1a;
+}
+.warning {
+  color: #8a5200;
+}

@@ -1,4 +1,4 @@
-import { SupplyCurrencySnapshot } from './supply-currency-snapshot.model';
+import { SupplyCurrencySnapshot } from "./supply-currency-snapshot.model";
 
 export interface Supply {
   readonly id: string;

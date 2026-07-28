@@ -1,6 +1,13 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { DeleteSupplierUseCase, GetSupplierDetailUseCase, ListSuppliersUseCase, SaveSupplierInput, SaveSupplierUseCase, Supplier } from '@retail/kernel';
-import { DexieSupplierRepository } from '@retail/kernel';
+import { inject, Injectable, signal } from "@angular/core";
+import {
+  DeleteSupplierUseCase,
+  GetSupplierDetailUseCase,
+  ListSuppliersUseCase,
+  SaveSupplierInput,
+  SaveSupplierUseCase,
+  Supplier,
+} from "@retail/kernel";
+import { DexieSupplierRepository } from "@retail/kernel";
 
 @Injectable()
 export class SuppliersFacade {
@@ -14,19 +21,40 @@ export class SuppliersFacade {
   readonly error = signal<string | null>(null);
 
   async load(): Promise<void> {
-    this.loading.set(true); this.error.set(null);
-    try { this.suppliers.set(await this.listUseCase.execute()); }
-    catch { this.error.set('suppliers.errors.load'); }
-    finally { this.loading.set(false); }
+    this.loading.set(true);
+    this.error.set(null);
+    try {
+      this.suppliers.set(await this.listUseCase.execute());
+    } catch {
+      this.error.set("suppliers.errors.load");
+    } finally {
+      this.loading.set(false);
+    }
   }
-  get(id: string): Promise<Supplier | undefined> { return this.getUseCase.execute(id); }
+  get(id: string): Promise<Supplier | undefined> {
+    return this.getUseCase.execute(id);
+  }
   async save(input: SaveSupplierInput): Promise<Supplier | null> {
-    try { const result = await this.saveUseCase.execute(input); await this.load(); return result; }
-    catch (error: unknown) { this.error.set(error instanceof Error ? error.message : 'suppliers.errors.save'); return null; }
+    try {
+      const result = await this.saveUseCase.execute(input);
+      await this.load();
+      return result;
+    } catch (error: unknown) {
+      this.error.set(error instanceof Error ? error.message : "suppliers.errors.save");
+      return null;
+    }
   }
   async delete(supplier: Supplier): Promise<number | null> {
-    try { const result = await this.deleteUseCase.execute(supplier); await this.load(); return result; }
-    catch (error: unknown) { this.error.set(error instanceof Error ? error.message : 'suppliers.errors.delete'); return null; }
+    try {
+      const result = await this.deleteUseCase.execute(supplier);
+      await this.load();
+      return result;
+    } catch (error: unknown) {
+      this.error.set(error instanceof Error ? error.message : "suppliers.errors.delete");
+      return null;
+    }
   }
-  countAffectedSupplies(id: string): Promise<number> { return this.repository.countAffectedSupplies(id); }
+  countAffectedSupplies(id: string): Promise<number> {
+    return this.repository.countAffectedSupplies(id);
+  }
 }

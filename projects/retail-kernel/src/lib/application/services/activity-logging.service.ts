@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
-import { ActivityLog } from '../../domain/models/activity-log.model';
-import { DexieActivityLogRepository } from '../../data-access/repositories/dexie-activity-log.repository';
-import { ActiveOperatorService } from './active-operator.service';
+import { inject, Injectable } from "@angular/core";
+import { ActivityLog } from "../../domain/models/activity-log.model";
+import { DexieActivityLogRepository } from "../../data-access/repositories/dexie-activity-log.repository";
+import { ActiveOperatorService } from "./active-operator.service";
 
 export interface ActivityLogInput<TPayload> {
   readonly event_code: string;
@@ -13,7 +13,7 @@ export interface ActivityLogInput<TPayload> {
   readonly related_supply_id?: string | null;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ActivityLoggingService {
   private readonly repository = inject(DexieActivityLogRepository);
   private readonly activeOperatorService = inject(ActiveOperatorService);
@@ -21,7 +21,7 @@ export class ActivityLoggingService {
   async log<TPayload>(input: ActivityLogInput<TPayload>): Promise<void> {
     const operator = this.activeOperatorService.activeOperator();
     if (!operator) {
-      throw new Error('An active operator is required to log activity.');
+      throw new Error("An active operator is required to log activity.");
     }
 
     const entry: ActivityLog<TPayload> = {

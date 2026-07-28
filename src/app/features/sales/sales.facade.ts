@@ -1,5 +1,13 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
-import { DexieSaleRepository, ExcelExportService, SaleDetail, SaleListEntry, SaleListFilter, SalesReportingService, SalesWorkbookMapper } from '@retail/kernel';
+import { computed, inject, Injectable, signal } from "@angular/core";
+import {
+  DexieSaleRepository,
+  ExcelExportService,
+  SaleDetail,
+  SaleListEntry,
+  SaleListFilter,
+  SalesReportingService,
+  SalesWorkbookMapper,
+} from "@retail/kernel";
 
 export interface SalesSummary {
   readonly totalRevenue: number;
@@ -18,12 +26,17 @@ export class SalesFacade {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly exporting = signal(false);
-  readonly summary = computed<SalesSummary>(() => this.sales().reduce<SalesSummary>((summary, entry) => ({
-    totalRevenue: summary.totalRevenue + entry.sale.total_amount,
-    totalCost: summary.totalCost + entry.sale.total_cost,
-    totalProfit: summary.totalProfit + entry.sale.total_profit,
-    totalItemsSold: summary.totalItemsSold + entry.totalItemsSold,
-  }), { totalRevenue: 0, totalCost: 0, totalProfit: 0, totalItemsSold: 0 }));
+  readonly summary = computed<SalesSummary>(() =>
+    this.sales().reduce<SalesSummary>(
+      (summary, entry) => ({
+        totalRevenue: summary.totalRevenue + entry.sale.total_amount,
+        totalCost: summary.totalCost + entry.sale.total_cost,
+        totalProfit: summary.totalProfit + entry.sale.total_profit,
+        totalItemsSold: summary.totalItemsSold + entry.totalItemsSold,
+      }),
+      { totalRevenue: 0, totalCost: 0, totalProfit: 0, totalItemsSold: 0 }
+    )
+  );
 
   async load(filter: SaleListFilter = {}): Promise<void> {
     this.loading.set(true);
@@ -33,7 +46,7 @@ export class SalesFacade {
       this.sales.set(await this.repository.list(filter));
     } catch {
       this.sales.set([]);
-      this.error.set('sales.errors.load');
+      this.error.set("sales.errors.load");
     } finally {
       this.loading.set(false);
     }

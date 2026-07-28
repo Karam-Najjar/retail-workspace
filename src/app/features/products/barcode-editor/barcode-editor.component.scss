@@ -1,1 +1,21 @@
-.barcode-rows { display: grid; gap: .5rem; } .barcode-row { display: grid; grid-template-columns: minmax(10rem, 1fr) minmax(7rem, .75fr) 6rem auto; gap: .5rem; align-items: center; } .form-error { color: var(--retail-error); } @media (max-width: 42rem) { .barcode-row { grid-template-columns: 1fr 1fr auto; } .barcode-row app-barcode-input { grid-column: 1 / -1; } }
+.barcode-rows {
+  display: grid;
+  gap: 0.5rem;
+}
+.barcode-row {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) minmax(7rem, 0.75fr) 6rem auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+.form-error {
+  color: var(--retail-error);
+}
+@media (max-width: 42rem) {
+  .barcode-row {
+    grid-template-columns: 1fr 1fr auto;
+  }
+  .barcode-row app-barcode-input {
+    grid-column: 1 / -1;
+  }
+}

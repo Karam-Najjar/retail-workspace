@@ -1,1 +1,33 @@
-<section class="inventory-section"><h2>{{ 'inventory.movements.title' | translate }}</h2>@if (movements().length) { <div class="table-scroll"><table><thead><tr><th>{{ 'inventory.date' | translate }}</th><th>{{ 'inventory.adjustment.type' | translate }}</th><th>{{ 'inventory.quantityChange' | translate }}</th><th>{{ 'inventory.batch' | translate }}</th><th>{{ 'inventory.operator' | translate }}</th><th>{{ 'inventory.reason' | translate }}</th></tr></thead><tbody>@for (movement of movements(); track movement.id) { <tr><td>{{ movement.created_at | date: 'medium' }}</td><td>{{ 'inventory.types.' + movement.type | translate }}</td><td [class.negative]="movement.quantity_change < 0">{{ movement.quantity_change > 0 ? '+' : '' }}{{ movement.quantity_change }}</td><td>{{ movement.batch_id || '—' }}</td><td>{{ movement.operator_name }}</td><td>{{ movement.reason || '—' }}</td></tr> }</tbody></table></div> } @else { <p>{{ 'inventory.movements.empty' | translate }}</p> }</section>
+<section class="inventory-section">
+  <h2>{{ "inventory.movements.title" | translate }}</h2>
+  @if (movements().length) {
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ "inventory.date" | translate }}</th>
+            <th>{{ "inventory.adjustment.type" | translate }}</th>
+            <th>{{ "inventory.quantityChange" | translate }}</th>
+            <th>{{ "inventory.batch" | translate }}</th>
+            <th>{{ "inventory.operator" | translate }}</th>
+            <th>{{ "inventory.reason" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (movement of movements(); track movement.id) {
+            <tr>
+              <td>{{ movement.created_at | date: "medium" }}</td>
+              <td>{{ "inventory.types." + movement.type | translate }}</td>
+              <td [class.negative]="movement.quantity_change < 0">{{ movement.quantity_change > 0 ? "+" : "" }}{{ movement.quantity_change }}</td>
+              <td>{{ movement.batch_id || "—" }}</td>
+              <td>{{ movement.operator_name }}</td>
+              <td>{{ movement.reason || "—" }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p>{{ "inventory.movements.empty" | translate }}</p>
+  }
+</section>

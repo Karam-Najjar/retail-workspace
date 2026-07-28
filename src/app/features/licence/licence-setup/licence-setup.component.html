@@ -1,18 +1,13 @@
 <main class="licence-setup">
   <mat-card appearance="outlined">
     <mat-card-header>
-      <mat-card-title>{{ 'licenceSetup.title' | translate }}</mat-card-title>
-      <mat-card-subtitle>{{ 'licenceSetup.description' | translate }}</mat-card-subtitle>
+      <mat-card-title>{{ "licenceSetup.title" | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ "licenceSetup.description" | translate }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <mat-form-field appearance="outline" class="licence-field">
-        <mat-label>{{ 'licenceSetup.licenceLabel' | translate }}</mat-label>
-        <textarea
-          matInput
-          rows="7"
-          [(ngModel)]="licence"
-          [disabled]="isVerifying()"
-        ></textarea>
+        <mat-label>{{ "licenceSetup.licenceLabel" | translate }}</mat-label>
+        <textarea matInput rows="7" [(ngModel)]="licence" [disabled]="isVerifying()"></textarea>
       </mat-form-field>
 
       @if (error(); as errorMessage) {
@@ -21,7 +16,7 @@
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-flat-button color="primary" type="button" [disabled]="isVerifying()" (click)="verifyAndActivate()">
-        {{ 'licenceSetup.verifyAndActivate' | translate }}
+        {{ "licenceSetup.verifyAndActivate" | translate }}
       </button>
     </mat-card-actions>
   </mat-card>

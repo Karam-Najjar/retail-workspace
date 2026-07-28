@@ -1,9 +1,9 @@
-import { ActivityLog } from '../models/activity-log.model';
-import { InventoryBatch } from '../models/inventory-batch.model';
-import { InventoryMovement } from '../models/inventory-movement.model';
-import { Product } from '../models/product.model';
-import { SupplyItem } from '../models/supply-item.model';
-import { Supply } from '../models/supply.model';
+import { ActivityLog } from "../models/activity-log.model";
+import { InventoryBatch } from "../models/inventory-batch.model";
+import { InventoryMovement } from "../models/inventory-movement.model";
+import { Product } from "../models/product.model";
+import { SupplyItem } from "../models/supply-item.model";
+import { Supply } from "../models/supply.model";
 
 export interface SupplyListFilter {
   readonly supplierId?: string;
@@ -14,7 +14,7 @@ export interface SupplyListFilter {
 export interface SupplyReceiptEntry {
   readonly product: Product;
   readonly item: SupplyItem;
-  readonly batch: Omit<InventoryBatch, 'sequence'>;
+  readonly batch: Omit<InventoryBatch, "sequence">;
   readonly movement: InventoryMovement;
 }
 

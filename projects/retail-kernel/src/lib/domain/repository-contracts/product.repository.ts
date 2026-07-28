@@ -1,5 +1,5 @@
-import { ProductBarcode } from '../models/product-barcode.model';
-import { Product } from '../models/product.model';
+import { ProductBarcode } from "../models/product-barcode.model";
+import { Product } from "../models/product.model";
 
 export interface ProductRepository {
   list(search?: string, categoryId?: string): Promise<readonly Product[]>;

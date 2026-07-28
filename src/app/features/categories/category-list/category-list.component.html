@@ -1,14 +1,20 @@
 <section class="category-list">
   <header class="page-header">
     <div>
-      <h1>{{ 'categories.title' | translate }}</h1>
-      <p>{{ 'categories.description' | translate }}</p>
+      <h1>{{ "categories.title" | translate }}</h1>
+      <p>{{ "categories.description" | translate }}</p>
     </div>
-    <button mat-flat-button color="primary" type="button" (click)="openCreate()">{{ 'categories.add' | translate }}</button>
+    <button mat-flat-button color="primary" type="button" (click)="openCreate()">{{ "categories.add" | translate }}</button>
   </header>
 
   @if (facade.hasCategories()) {
-    <app-data-table [columns]="columns" [rows]="rows()" [showActions]="true" (rowClick)="openDetail($event)" (editCallback)="edit($event)" (deleteCallback)="prepareDelete($event)" />
+    <app-data-table
+      [columns]="columns"
+      [rows]="rows()"
+      [showActions]="true"
+      (rowClick)="openDetail($event)"
+      (editCallback)="edit($event)"
+      (deleteCallback)="prepareDelete($event)" />
   } @else if (!facade.loading()) {
     <app-empty-state titleKey="categories.emptyTitle" messageKey="categories.emptyMessage" />
   }

@@ -1,12 +1,14 @@
 <div class="product-picker">
   <mat-form-field appearance="outline">
-    <mat-label>{{ 'supplies.searchProducts' | translate }}</mat-label>
+    <mat-label>{{ "supplies.searchProducts" | translate }}</mat-label>
     <input matInput [ngModel]="search()" (ngModelChange)="search.set($event)" />
   </mat-form-field>
   <mat-form-field appearance="outline">
-    <mat-label>{{ 'supplies.product' | translate }}</mat-label>
+    <mat-label>{{ "supplies.product" | translate }}</mat-label>
     <mat-select required [ngModel]="selectedId()" (ngModelChange)="selectedIdChange.emit($event)">
-      @for (product of filteredProducts(); track product.id) { <mat-option [value]="product.id">{{ product.name }}</mat-option> }
+      @for (product of filteredProducts(); track product.id) {
+        <mat-option [value]="product.id">{{ product.name }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 </div>

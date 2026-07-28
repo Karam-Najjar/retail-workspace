@@ -1,5 +1,5 @@
-@use '@fontsource/noto-sans';
-@use '@fontsource/noto-sans-arabic';
+@use "@fontsource/noto-sans";
+@use "@fontsource/noto-sans-arabic";
 
 html,
 body {
@@ -10,7 +10,7 @@ body {
   margin: 0;
   background: var(--retail-surface);
   color: var(--retail-on-surface);
-  font-family: 'Noto Sans', 'Noto Sans Arabic', sans-serif;
+  font-family: "Noto Sans", "Noto Sans Arabic", sans-serif;
 }
 
 button,

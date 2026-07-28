@@ -1,4 +1,4 @@
-export type DateRangePreset = 'today' | 'week' | 'month' | 'custom';
+export type DateRangePreset = "today" | "week" | "month" | "custom";
 
 export interface DateRange {
   readonly from: Date;

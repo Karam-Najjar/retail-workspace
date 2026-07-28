@@ -1,5 +1,26 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { CurrencyService, DexieInventoryBatchRepository, ExcelExportService, GetSupplyDetailUseCase, ListProductsUseCase, ListSuppliersUseCase, ListSuppliesUseCase, Product, ReceiveSupplyInput, ReceiveSupplyUseCase, StorePackageType, StoreProfileService, Supplier, Supply, SupplyDetail, SupplyListEntry, SupplyListFilter, SupplyReportingService, SuppliesWorkbookMapper, SupplySummary } from '@retail/kernel';
+import { inject, Injectable, signal } from "@angular/core";
+import {
+  CurrencyService,
+  DexieInventoryBatchRepository,
+  ExcelExportService,
+  GetSupplyDetailUseCase,
+  ListProductsUseCase,
+  ListSuppliersUseCase,
+  ListSuppliesUseCase,
+  Product,
+  ReceiveSupplyInput,
+  ReceiveSupplyUseCase,
+  StorePackageType,
+  StoreProfileService,
+  Supplier,
+  Supply,
+  SupplyDetail,
+  SupplyListEntry,
+  SupplyListFilter,
+  SupplyReportingService,
+  SuppliesWorkbookMapper,
+  SupplySummary,
+} from "@retail/kernel";
 
 @Injectable()
 export class SuppliesFacade {
@@ -23,30 +44,59 @@ export class SuppliesFacade {
   readonly packageTypes: readonly StorePackageType[] = this.profile.profile.package_types;
 
   async load(filter: SupplyListFilter = {}): Promise<void> {
-    this.loading.set(true); this.error.set(null);
+    this.loading.set(true);
+    this.error.set(null);
     try {
-      const [supplies, suppliers, report] = await Promise.all([this.listSupplies.execute(filter), this.listSuppliers.execute(), this.reporting.getReport(filter)]);
-      this.supplies.set(supplies); this.suppliers.set(suppliers);
+      const [supplies, suppliers, report] = await Promise.all([
+        this.listSupplies.execute(filter),
+        this.listSuppliers.execute(),
+        this.reporting.getReport(filter),
+      ]);
+      this.supplies.set(supplies);
+      this.suppliers.set(suppliers);
       this.summary.set(report.summary);
-    } catch { this.error.set('supplies.errors.load'); }
-    finally { this.loading.set(false); }
+    } catch {
+      this.error.set("supplies.errors.load");
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   async loadFormData(): Promise<string> {
-    const [products, suppliers, exchangeRate] = await Promise.all([this.listProducts.execute(), this.listSuppliers.execute(), this.currency.currentExchangeRate()]);
-    this.products.set(products); this.suppliers.set(suppliers); return exchangeRate;
+    const [products, suppliers, exchangeRate] = await Promise.all([
+      this.listProducts.execute(),
+      this.listSuppliers.execute(),
+      this.currency.currentExchangeRate(),
+    ]);
+    this.products.set(products);
+    this.suppliers.set(suppliers);
+    return exchangeRate;
   }
 
   async receive(input: ReceiveSupplyInput): Promise<Supply | null> {
     this.error.set(null);
-    try { return await this.receiveSupply.execute(input); }
-    catch (error: unknown) { this.error.set(error instanceof Error ? error.message : 'supplies.errors.receive'); return null; }
+    try {
+      return await this.receiveSupply.execute(input);
+    } catch (error: unknown) {
+      this.error.set(error instanceof Error ? error.message : "supplies.errors.receive");
+      return null;
+    }
   }
 
-  get(id: string): Promise<SupplyDetail | undefined> { return this.getSupply.execute(id); }
-  recentForSupplier(id: string, limit = 10): Promise<readonly Supply[]> { return this.listSupplies.listRecentBySupplier(id, limit); }
-  async latestBaseUnitCost(productId: string): Promise<string | null> { return (await this.batches.listByProduct(productId)).at(-1)?.unit_cost_display ?? null; }
-  addSupplier(supplier: Supplier): void { this.suppliers.update((current) => [...current.filter((item) => item.id !== supplier.id), supplier].sort((left, right) => left.name.localeCompare(right.name))); }
+  get(id: string): Promise<SupplyDetail | undefined> {
+    return this.getSupply.execute(id);
+  }
+  recentForSupplier(id: string, limit = 10): Promise<readonly Supply[]> {
+    return this.listSupplies.listRecentBySupplier(id, limit);
+  }
+  async latestBaseUnitCost(productId: string): Promise<string | null> {
+    return (await this.batches.listByProduct(productId)).at(-1)?.unit_cost_display ?? null;
+  }
+  addSupplier(supplier: Supplier): void {
+    this.suppliers.update(current =>
+      [...current.filter(item => item.id !== supplier.id), supplier].sort((left, right) => left.name.localeCompare(right.name))
+    );
+  }
 
   async export(filter: SupplyListFilter, fileName: string, rtl: boolean): Promise<void> {
     this.exporting.set(true);

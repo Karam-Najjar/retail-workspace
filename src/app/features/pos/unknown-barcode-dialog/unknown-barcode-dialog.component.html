@@ -1,10 +1,10 @@
-<h2 mat-dialog-title>{{ 'pos.productNotFound' | translate }}</h2>
+<h2 mat-dialog-title>{{ "pos.productNotFound" | translate }}</h2>
 <mat-dialog-content>
-  <p>{{ 'pos.productNotFoundMessage' | translate: { barcode: data.barcode } }}</p>
+  <p>{{ "pos.productNotFoundMessage" | translate: { barcode: data.barcode } }}</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button type="button" (click)="close()">{{ 'common.cancel' | translate }}</button>
+  <button mat-button type="button" (click)="close()">{{ "common.cancel" | translate }}</button>
   <button mat-flat-button color="primary" type="button" (click)="createProduct()">
-    {{ 'pos.createProduct' | translate }}
+    {{ "pos.createProduct" | translate }}
   </button>
 </mat-dialog-actions>

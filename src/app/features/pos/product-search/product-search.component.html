@@ -1,1 +1,10 @@
-<mat-form-field appearance="outline" class="product-search"><mat-label>{{ 'pos.searchProducts' | translate }}</mat-label><input matInput [ngModel]="query()" (ngModelChange)="query.set($event)" [matAutocomplete]="productsMenu" /><mat-autocomplete #productsMenu="matAutocomplete" (optionSelected)="select($event.option.value)">@for (product of matches(); track product.id) { <mat-option [value]="product.id">{{ product.name }}</mat-option> }</mat-autocomplete></mat-form-field>
+<mat-form-field appearance="outline" class="product-search"
+  ><mat-label>{{ "pos.searchProducts" | translate }}</mat-label
+  ><input matInput [ngModel]="query()" (ngModelChange)="query.set($event)" [matAutocomplete]="productsMenu" /><mat-autocomplete
+    #productsMenu="matAutocomplete"
+    (optionSelected)="select($event.option.value)">
+    @for (product of matches(); track product.id) {
+      <mat-option [value]="product.id">{{ product.name }}</mat-option>
+    }
+  </mat-autocomplete></mat-form-field
+>

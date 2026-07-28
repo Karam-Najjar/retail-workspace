@@ -1,7 +1,21 @@
 <app-modal-form-shell titleKey="suppliers.formTitle" (cancel)="close()" (submit)="save()">
-  <mat-form-field appearance="outline" class="field"><mat-label>{{ 'suppliers.name' | translate }}</mat-label><input matInput maxlength="100" required [(ngModel)]="name" /><mat-hint align="end">{{ name.length }}/100</mat-hint></mat-form-field>
-  <mat-form-field appearance="outline" class="field"><mat-label>{{ 'suppliers.phone' | translate }}</mat-label><input matInput maxlength="20" [(ngModel)]="phone" /></mat-form-field>
-  <mat-form-field appearance="outline" class="field"><mat-label>{{ 'suppliers.address' | translate }}</mat-label><input matInput maxlength="200" [(ngModel)]="address" /></mat-form-field>
-  <mat-form-field appearance="outline" class="field"><mat-label>{{ 'suppliers.notes' | translate }}</mat-label><textarea matInput rows="4" maxlength="500" [(ngModel)]="notes"></textarea></mat-form-field>
-  @if (error) { <p class="form-error">{{ error | translate }}</p> }
+  <mat-form-field appearance="outline" class="field"
+    ><mat-label>{{ "suppliers.name" | translate }}</mat-label
+    ><input matInput maxlength="100" required [(ngModel)]="name" /><mat-hint align="end">{{ name.length }}/100</mat-hint></mat-form-field
+  >
+  <mat-form-field appearance="outline" class="field"
+    ><mat-label>{{ "suppliers.phone" | translate }}</mat-label
+    ><input matInput maxlength="20" [(ngModel)]="phone"
+  /></mat-form-field>
+  <mat-form-field appearance="outline" class="field"
+    ><mat-label>{{ "suppliers.address" | translate }}</mat-label
+    ><input matInput maxlength="200" [(ngModel)]="address"
+  /></mat-form-field>
+  <mat-form-field appearance="outline" class="field"
+    ><mat-label>{{ "suppliers.notes" | translate }}</mat-label
+    ><textarea matInput rows="4" maxlength="500" [(ngModel)]="notes"></textarea>
+  </mat-form-field>
+  @if (error) {
+    <p class="form-error">{{ error | translate }}</p>
+  }
 </app-modal-form-shell>

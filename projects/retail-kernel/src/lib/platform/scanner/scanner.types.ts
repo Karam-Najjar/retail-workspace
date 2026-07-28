@@ -1,6 +1,6 @@
-import { InjectionToken, Signal } from '@angular/core';
+import { InjectionToken, Signal } from "@angular/core";
 
-export type ScannerStatus = 'inactive' | 'ready';
+export type ScannerStatus = "inactive" | "ready";
 
 export interface ScannerGateway {
   readonly status: Signal<ScannerStatus>;
@@ -8,4 +8,4 @@ export interface ScannerGateway {
   deactivate(): void;
 }
 
-export const SCANNER_GATEWAY = new InjectionToken<ScannerGateway>('SCANNER_GATEWAY');
+export const SCANNER_GATEWAY = new InjectionToken<ScannerGateway>("SCANNER_GATEWAY");

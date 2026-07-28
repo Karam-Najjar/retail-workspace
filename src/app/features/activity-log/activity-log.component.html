@@ -1,2 +1,25 @@
-<section class="activity-log"><header><h1>{{ 'activityLog.title' | translate }}</h1><p>{{ 'activityLog.description' | translate }}</p></header><div class="filters"><app-date-range-filter (rangeChange)="rangeChanged($event)" /><mat-form-field appearance="outline"><mat-label>{{ 'activityLog.type' | translate }}</mat-label><mat-select [(ngModel)]="activityType" (selectionChange)="load()"><mat-option value="">{{ 'activityLog.allTypes' | translate }}</mat-option>@for (type of activityTypes; track type) { <mat-option [value]="type">{{ ('activityLog.types.' + type) | translate }}</mat-option> }</mat-select></mat-form-field><app-export-button [busy]="facade.exporting()" (export)="export()" /></div>@if (facade.error()) { <p class="error">{{ facade.error() | translate }}</p> } @if (facade.entries().length) { <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openEntry($event)" /> } @else if (!facade.loading()) { <app-empty-state titleKey="activityLog.emptyTitle" messageKey="activityLog.emptyMessage" /> }</section>
-
+<section class="activity-log">
+  <header>
+    <h1>{{ "activityLog.title" | translate }}</h1>
+    <p>{{ "activityLog.description" | translate }}</p>
+  </header>
+  <div class="filters">
+    <app-date-range-filter (rangeChange)="rangeChanged($event)" /><mat-form-field appearance="outline"
+      ><mat-label>{{ "activityLog.type" | translate }}</mat-label
+      ><mat-select [(ngModel)]="activityType" (selectionChange)="load()"
+        ><mat-option value="">{{ "activityLog.allTypes" | translate }}</mat-option>
+        @for (type of activityTypes; track type) {
+          <mat-option [value]="type">{{ "activityLog.types." + type | translate }}</mat-option>
+        }
+      </mat-select></mat-form-field
+    ><app-export-button [busy]="facade.exporting()" (export)="export()" />
+  </div>
+  @if (facade.error()) {
+    <p class="error">{{ facade.error() | translate }}</p>
+  }
+  @if (facade.entries().length) {
+    <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openEntry($event)" />
+  } @else if (!facade.loading()) {
+    <app-empty-state titleKey="activityLog.emptyTitle" messageKey="activityLog.emptyMessage" />
+  }
+</section>
