@@ -1,53 +1,121 @@
 <section class="dashboard">
-  <header>
-    <h1>{{ "dashboard.title" | translate }}</h1>
-    <div class="actions">
+  <header class="dashboard-header">
+    <div class="dashboard-heading">
+      <h1>{{ "dashboard.title" | translate }}</h1>
+      <p>{{ "dashboard.description" | translate }}</p>
+    </div>
+    <div class="dashboard-actions">
       <a mat-flat-button routerLink="/pos">{{ "dashboard.newSale" | translate }}</a>
       <a mat-stroked-button [routerLink]="['/pos']" [queryParams]="{ autofocus: true }">{{ "dashboard.newScan" | translate }}</a>
     </div>
   </header>
+
   @if (facade.snapshot(); as data) {
-    <div class="cards">
-      <mat-card>
-        <span>{{ "dashboard.todaySales" | translate }}</span>
-        <strong>${{ money(data.today_sales_usd) }}</strong>
-        <small>{{ data.today_sales_syp }} SYP</small>
+    <div class="dashboard-grid">
+      <mat-card class="dashboard-card stat-card stat-card--products grid-span-4">
+        <span class="stat-label">{{ "dashboard.totalProducts" | translate }}</span>
+        <strong class="stat-value">{{ data.total_products }}</strong>
+        <span class="stat-support">{{ "dashboard.activeProducts" | translate: { count: data.active_products } }}</span>
       </mat-card>
-      <mat-card>
-        <span>{{ "dashboard.monthSales" | translate }}</span>
-        <strong>${{ money(data.month_sales_usd) }}</strong>
-        <small>{{ data.month_sales_syp }} SYP</small>
-      </mat-card>
-      <mat-card>
-        <span>{{ "dashboard.monthProfit" | translate }}</span>
-        <strong>${{ money(data.month_profit_usd) }}</strong>
-        <small>{{ data.month_profit_syp }} SYP</small>
-      </mat-card>
-      <mat-card>
-        <span>{{ "dashboard.lowStock" | translate }}</span>
-        <strong>{{ data.low_stock_products.length }}</strong>
-      </mat-card>
-    </div>
-    <div class="grid">
-      <mat-card>
-        <h2>{{ "dashboard.recentActivity" | translate }}</h2>
-        @for (entry of data.recent_activity; track entry.id) {
-          <div class="activity-item">
-            <span class="activity-dot" [class]="'activity-dot dot-' + entry.entity_type"></span>
-            <span>{{ entry.event_code }} — {{ entry.operator_name }}</span>
+
+      <mat-card class="dashboard-card stat-card stat-card--hero grid-span-4">
+        <span class="stat-label">{{ "dashboard.todaySales" | translate }}</span>
+        <strong class="stat-value">{{ primaryMoney(data.today_sales_usd) }}</strong>
+        <span class="hero-secondary-currency">{{ secondaryMoney(data.today_sales_syp) }}</span>
+        <div class="hero-breakdown">
+          <div>
+            <span>{{ "dashboard.monthRevenue" | translate }}</span>
+            <strong>{{ primaryMoney(data.month_sales_usd) }}</strong>
+            <small>{{ secondaryMoney(data.month_sales_syp) }}</small>
           </div>
+          <div class="hero-profit">
+            <span>{{ "dashboard.monthProfit" | translate }}</span>
+            <strong>{{ primaryMoney(data.month_profit_usd) }}</strong>
+            <small>{{ secondaryMoney(data.month_profit_syp) }}</small>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="dashboard-card stat-card stat-card--alerts grid-span-4">
+        <span class="stat-label">{{ "dashboard.inventoryAlerts" | translate }}</span>
+        <strong class="stat-value">{{ data.low_stock_products.length }}</strong>
+        <span class="status-pill" [class]="'status-pill status-pill--' + alertTone()">{{ alertStatusKey() | translate }}</span>
+      </mat-card>
+
+      <mat-card class="dashboard-card widget-card weekly-sales grid-span-8">
+        <div class="widget-heading">
+          <h2>{{ "dashboard.salesThisWeek" | translate }}</h2>
+        </div>
+        <app-bar-chart [bars]="weeklyBars()" />
+        <p class="chart-note"><span class="hatch-swatch" aria-hidden="true"></span>{{ "dashboard.futureDaysHint" | translate }}</p>
+      </mat-card>
+
+      <mat-card class="dashboard-card widget-card low-stock grid-span-4">
+        <div class="widget-heading">
+          <h2>{{ "dashboard.lowStock" | translate }}</h2>
+        </div>
+        @if (data.low_stock_products.length) {
+          <div class="low-stock-list" role="list">
+            @for (product of data.low_stock_products; track product.id) {
+              <a class="low-stock-item" role="listitem" [routerLink]="['/products', product.id]">
+                <span class="low-stock-name">{{ product.name }}</span>
+                <span class="quantity-pill" [class]="'quantity-pill quantity-pill--' + lowStockTone(product.quantity)">{{ product.quantity }}</span>
+              </a>
+            }
+          </div>
+        } @else {
+          <app-empty-state titleKey="dashboard.empty.lowStockTitle" messageKey="dashboard.empty.lowStockMessage" />
         }
       </mat-card>
-      <mat-card>
-        <h2>{{ "dashboard.topProducts" | translate }}</h2>
-        @for (product of data.top_products; track product.product_id; let i = $index) {
-          <div class="product-item">
-            <span class="product-rank">#{{ i + 1 }}</span>
-            <span>{{ product.product_name }}</span>
-            <span class="product-qty">{{ product.quantity_base_units }}</span>
-          </div>
+
+      <mat-card class="dashboard-card widget-card grid-span-4">
+        <div class="widget-heading">
+          <h2>{{ "dashboard.inventoryHealth" | translate }}</h2>
+        </div>
+        <app-circular-chart
+          [segments]="inventorySegments()"
+          [centerText]="inventoryHealthPercentage()"
+          [centerLabel]="'products.stock.in' | translate" />
+      </mat-card>
+
+      <mat-card class="dashboard-card widget-card grid-span-4">
+        <div class="widget-heading widget-heading--with-support">
+          <h2>{{ "dashboard.topProductsThisMonth" | translate }}</h2>
+          <span>{{ "dashboard.baseUnitsSold" | translate }}</span>
+        </div>
+        @if (data.top_products.length) {
+          <app-linear-chart [bars]="topProductBars()" />
+        } @else {
+          <app-empty-state titleKey="dashboard.empty.topProductsTitle" messageKey="dashboard.empty.topProductsMessage" />
+        }
+      </mat-card>
+
+      <mat-card class="dashboard-card widget-card grid-span-4">
+        <div class="widget-heading">
+          <h2>{{ "dashboard.recentActivity" | translate }}</h2>
+        </div>
+        @if (data.recent_activity.length) {
+          <ul class="activity-list">
+            @for (entry of data.recent_activity; track entry.id) {
+              <li class="activity-item">
+                <span class="activity-dot" [class]="'activity-dot activity-dot--' + activityTone(entry)" aria-hidden="true"></span>
+                <div class="activity-content">
+                  <span class="activity-description">{{ activityDescription(entry) }}</span>
+                  <span class="activity-meta">
+                    <span>{{ entry.operator_name }}</span>
+                    <span aria-hidden="true">&middot;</span>
+                    <time [attr.datetime]="entry.created_at.toISOString()">{{ activityTimestamp(entry.created_at) }}</time>
+                  </span>
+                </div>
+              </li>
+            }
+          </ul>
+        } @else {
+          <app-empty-state titleKey="dashboard.empty.recentActivityTitle" messageKey="dashboard.empty.recentActivityMessage" />
         }
       </mat-card>
     </div>
+  } @else if (facade.loading()) {
+    <div class="dashboard-loading" role="status">{{ "dashboard.loading" | translate }}</div>
   }
 </section>

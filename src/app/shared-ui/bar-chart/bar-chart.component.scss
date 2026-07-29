@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.bar-chart {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  overflow: visible;
+}
+
+.bar-chart__track--plain {
+  opacity: 0.16;
+}
+
+.bar-chart__track--hatched {
+  opacity: 0.9;
+}
+
+.bar-chart__hatch-background {
+  fill: var(--retail-outline-variant);
+  opacity: 0.18;
+}
+
+.bar-chart__hatch-line {
+  stroke: var(--retail-on-surface-muted);
+  stroke-width: 3;
+  opacity: 0.55;
+}
+
+.bar-chart__value {
+  transition: opacity 150ms ease;
+}
+
+.bar-chart__label {
+  fill: var(--retail-on-surface-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@media (max-width: 48rem) {
+  .bar-chart__label {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-chart__value {
+    transition: none;
+  }
+}

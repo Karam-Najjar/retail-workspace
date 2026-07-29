@@ -1,0 +1,49 @@
+<svg class="bar-chart" viewBox="0 0 700 300" preserveAspectRatio="xMidYMid meet" role="img" focusable="false" [attr.aria-label]="accessibleLabel()">
+  <title>{{ accessibleLabel() }}</title>
+
+  <defs>
+    <pattern [attr.id]="hatchPatternId" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect class="bar-chart__hatch-background" width="8" height="8" />
+      <line class="bar-chart__hatch-line" x1="0" y1="0" x2="0" y2="8" />
+    </pattern>
+  </defs>
+
+  @for (bar of renderedBars(); track bar.index) {
+    <g>
+      <title>{{ bar.title }}</title>
+
+      @if (bar.hatched) {
+        <rect
+          class="bar-chart__track bar-chart__track--hatched"
+          [attr.x]="bar.x"
+          [attr.y]="plotTop"
+          [attr.width]="bar.width"
+          [attr.height]="plotHeight"
+          [attr.rx]="bar.radius"
+          [attr.fill]="hatchPatternFill" />
+      } @else {
+        <rect
+          class="bar-chart__track bar-chart__track--plain"
+          [attr.x]="bar.x"
+          [attr.y]="plotTop"
+          [attr.width]="bar.width"
+          [attr.height]="plotHeight"
+          [attr.rx]="bar.radius"
+          [attr.fill]="bar.color" />
+      }
+
+      @if (bar.valueHeight > 0) {
+        <rect
+          class="bar-chart__value"
+          [attr.x]="bar.x"
+          [attr.y]="bar.valueY"
+          [attr.width]="bar.width"
+          [attr.height]="bar.valueHeight"
+          [attr.rx]="bar.radius"
+          [attr.fill]="bar.color" />
+      }
+
+      <text class="bar-chart__label" text-anchor="middle" [attr.x]="bar.centerX" [attr.y]="labelY">{{ bar.label }}</text>
+    </g>
+  }
+</svg>

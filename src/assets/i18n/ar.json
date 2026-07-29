@@ -268,6 +268,10 @@
     "emptyMessage": "لا يوجد نشاط يطابق عوامل التصفية المحددة.",
     "errors": { "load": "تعذر تحميل سجل النشاط." },
     "eventDetails": {
+            "settingsUpdated": "تم تحديث الإعدادات",
+      "backupImported": "تم استيراد النسخة الاحتياطية",
+      "dataCleared": "تم مسح جميع بيانات المتجر",
+      "unknown": "نشاط: {{ code }}",
       "saleCompleted": "بيع مكتمل: {{ items }} قطع، الإجمالي {{ total }}",
       "openingBalance": "رصيد افتتاحي: {{ quantity }} وحدة بتكلفة {{ unitCost }}/وحدة",
       "stockAdded": "إضافة مخزون: {{ quantity }} وحدة بتكلفة {{ unitCost }}/وحدة",
@@ -312,6 +316,29 @@
     "leaveMessage": "السلة غير فارغة. هل تريد تفريغها ومغادرة نقطة البيع؟"
   },
   "dashboard": {
+        "totalProducts": "إجمالي المنتجات",
+    "activeProducts": "نشط: {{ count }}",
+    "monthRevenue": "إيرادات هذا الشهر",
+    "inventoryAlerts": "تنبيهات المخزون",
+    "alertStatus": {
+      "clear": "الكل بخير",
+      "low": "مخزون منخفض",
+      "out": "نفذ المخزون"
+    },
+    "salesThisWeek": "مبيعات هذا الأسبوع",
+    "futureDaysHint": "الأشرطة المخططة تشير إلى الأيام القادمة.",
+    "inventoryHealth": "صحة المخزون",
+    "topProductsThisMonth": "أفضل المنتجات هذا الشهر",
+    "baseUnitsSold": "الوحدات المباعة",
+    "loading": "جارٍ تحميل لوحة التحكم...",
+    "empty": {
+      "lowStockTitle": "المخزون سليم",
+      "lowStockMessage": "لا توجد منتجات عند حد المخزون المنخفض أو أقل.",
+      "topProductsTitle": "لا توجد مبيعات شهرية بعد",
+      "topProductsMessage": "ستظهر أفضل المنتجات بعد أول عملية بيع هذا الشهر.",
+      "recentActivityTitle": "لا يوجد نشاط حديث",
+      "recentActivityMessage": "سيظهر نشاط المتجر المسجل هنا."
+    },
     "title": "لوحة التحكم",
     "description": "نظرة عامة على العمليات",
     "todaySales": "مبيعات اليوم",

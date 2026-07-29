@@ -1,0 +1,27 @@
+<ol class="linear-chart">
+  @for (bar of renderedBars(); track $index; let rank = $index) {
+    <li>
+      <span class="linear-chart__rank" aria-hidden="true">#{{ rank + 1 }}</span>
+      <span class="linear-chart__label">{{ bar.label }}</span>
+      <strong class="linear-chart__value">{{ bar.value }}</strong>
+      <svg
+        class="linear-chart__bar"
+        viewBox="0 0 100 8"
+        preserveAspectRatio="none"
+        role="img"
+        focusable="false"
+        [attr.aria-label]="bar.accessibleLabel">
+        <title>{{ bar.accessibleLabel }}</title>
+        <rect class="linear-chart__track" x="0" y="0.75" width="100" height="6.5" rx="3.25" />
+        <rect
+          class="linear-chart__fill"
+          y="0.75"
+          height="6.5"
+          rx="3.25"
+          [attr.x]="bar.fillStart"
+          [attr.width]="bar.fillWidth"
+          [attr.fill]="bar.color" />
+      </svg>
+    </li>
+  }
+</ol>

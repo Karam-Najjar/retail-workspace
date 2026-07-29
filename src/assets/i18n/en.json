@@ -268,6 +268,10 @@
     "emptyMessage": "No activity matches the selected filters.",
     "errors": { "load": "Activity could not be loaded." },
     "eventDetails": {
+      "settingsUpdated": "Settings updated",
+      "backupImported": "Backup imported",
+      "dataCleared": "All retail data cleared",
+      "unknown": "Activity: {{ code }}",
       "saleCompleted": "Sale completed: {{ items }} items, {{ total }} total",
       "openingBalance": "Opening balance: {{ quantity }} units at {{ unitCost }}/unit",
       "stockAdded": "Stock added: {{ quantity }} units at {{ unitCost }}/unit",
@@ -312,6 +316,29 @@
     "leaveMessage": "Cart not empty. Clear it and leave POS?"
   },
   "dashboard": {
+    "totalProducts": "Total Products",
+    "activeProducts": "Active: {{ count }}",
+    "monthRevenue": "This Month's Revenue",
+    "inventoryAlerts": "Inventory Alerts",
+    "alertStatus": {
+      "clear": "All clear",
+      "low": "Low stock",
+      "out": "Out of stock"
+    },
+    "salesThisWeek": "Sales This Week",
+    "futureDaysHint": "Striped bars indicate upcoming days.",
+    "inventoryHealth": "Inventory Health",
+    "topProductsThisMonth": "Top Products This Month",
+    "baseUnitsSold": "Base units sold",
+    "loading": "Loading dashboard...",
+    "empty": {
+      "lowStockTitle": "Inventory is healthy",
+      "lowStockMessage": "No products are at or below the low-stock threshold.",
+      "topProductsTitle": "No monthly sales yet",
+      "topProductsMessage": "Top products will appear after this month's first sale.",
+      "recentActivityTitle": "No recent activity",
+      "recentActivityMessage": "Recorded store activity will appear here."
+    },
     "title": "Dashboard",
     "description": "Operational overview",
     "todaySales": "Sales Today",

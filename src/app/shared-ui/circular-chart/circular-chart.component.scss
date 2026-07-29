@@ -1,0 +1,97 @@
+:host {
+  display: block;
+}
+
+.circular-chart {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+}
+
+.circular-chart__visual {
+  position: relative;
+  inline-size: min(100%, 12rem);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  transform: rotate(-90deg);
+}
+
+circle {
+  fill: none;
+  stroke-width: 12;
+}
+
+.circular-chart__track {
+  stroke: var(--retail-outline-variant);
+}
+
+.circular-chart__segment {
+  stroke-linecap: butt;
+}
+
+.circular-chart__center {
+  position: absolute;
+  inset: 22%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 0;
+  text-align: center;
+}
+
+.circular-chart__center strong {
+  color: var(--retail-on-surface);
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.circular-chart__center span {
+  color: var(--retail-on-surface-muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.circular-chart__legend {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.circular-chart__legend li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+}
+
+.circular-chart__swatch {
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  border-radius: 50%;
+}
+
+.circular-chart__label {
+  overflow: hidden;
+  color: var(--retail-on-surface-muted);
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.circular-chart__value {
+  color: var(--retail-on-surface);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
