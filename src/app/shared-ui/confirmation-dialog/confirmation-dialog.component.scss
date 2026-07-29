@@ -1,6 +1,31 @@
 .confirmation-dialog {
-  inline-size: min(100%, 30rem);
-  margin: 2rem auto;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+
+  mat-card-header {
+    padding: 1.5rem 1.5rem 0;
+  }
+
+  mat-card-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--retail-on-surface);
+  }
+
+  mat-card-content {
+    padding: 1rem 1.5rem;
+    color: var(--retail-on-surface-muted);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  mat-card-actions {
+    padding: 0.75rem 1.5rem 1.25rem;
+    gap: 0.5rem;
+  }
 }
 
 p {

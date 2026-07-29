@@ -1,3 +1,5 @@
+<app-top-bar (navigationToggle)="toggleNavigation()" />
+
 <mat-sidenav-container class="shell-container">
   <mat-sidenav #navigation class="shell-navigation" mode="side" opened>
     <app-side-nav (navigate)="closeNavigation()" />
@@ -12,8 +14,7 @@
         }
       </div>
     }
-    <app-top-bar (navigationToggle)="toggleNavigation()" />
-    <main class="shell-main">
+    <main class="shell-main" [class.shell-main--no-padding]="isDetailRoute()">
       <router-outlet />
     </main>
   </mat-sidenav-content>

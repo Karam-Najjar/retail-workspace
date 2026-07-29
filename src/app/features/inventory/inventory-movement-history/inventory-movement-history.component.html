@@ -17,7 +17,11 @@
           @for (movement of movements(); track movement.id) {
             <tr>
               <td>{{ movement.created_at | date: "medium" }}</td>
-              <td>{{ "inventory.types." + movement.type | translate }}</td>
+              <td>
+                <span class="movement-type" [class]="'movement-type type-' + movement.type">
+                  {{ "inventory.types." + movement.type | translate }}
+                </span>
+              </td>
               <td [class.negative]="movement.quantity_change < 0">{{ movement.quantity_change > 0 ? "+" : "" }}{{ movement.quantity_change }}</td>
               <td>{{ movement.batch_id || "—" }}</td>
               <td>{{ movement.operator_name }}</td>

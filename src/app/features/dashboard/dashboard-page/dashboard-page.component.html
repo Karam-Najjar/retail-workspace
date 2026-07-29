@@ -2,39 +2,50 @@
   <header>
     <h1>{{ "dashboard.title" | translate }}</h1>
     <div class="actions">
-      <a mat-flat-button routerLink="/pos">{{ "dashboard.newSale" | translate }}</a
-      ><a mat-stroked-button [routerLink]="['/pos']" [queryParams]="{ autofocus: true }">{{ "dashboard.newScan" | translate }}</a>
+      <a mat-flat-button routerLink="/pos">{{ "dashboard.newSale" | translate }}</a>
+      <a mat-stroked-button [routerLink]="['/pos']" [queryParams]="{ autofocus: true }">{{ "dashboard.newScan" | translate }}</a>
     </div>
   </header>
   @if (facade.snapshot(); as data) {
     <div class="cards">
-      <mat-card
-        ><span>{{ "dashboard.todaySales" | translate }}</span
-        ><strong>${{ money(data.today_sales_usd) }}</strong
-        ><small>{{ data.today_sales_syp }} SYP</small></mat-card
-      ><mat-card
-        ><span>{{ "dashboard.monthSales" | translate }}</span
-        ><strong>${{ money(data.month_sales_usd) }}</strong
-        ><small>{{ data.month_sales_syp }} SYP</small></mat-card
-      ><mat-card
-        ><span>{{ "dashboard.monthProfit" | translate }}</span
-        ><strong>${{ money(data.month_profit_usd) }}</strong
-        ><small>{{ data.month_profit_syp }} SYP</small></mat-card
-      ><mat-card
-        ><span>{{ "dashboard.lowStock" | translate }}</span
-        ><strong>{{ data.low_stock_products.length }}</strong></mat-card
-      >
+      <mat-card>
+        <span>{{ "dashboard.todaySales" | translate }}</span>
+        <strong>${{ money(data.today_sales_usd) }}</strong>
+        <small>{{ data.today_sales_syp }} SYP</small>
+      </mat-card>
+      <mat-card>
+        <span>{{ "dashboard.monthSales" | translate }}</span>
+        <strong>${{ money(data.month_sales_usd) }}</strong>
+        <small>{{ data.month_sales_syp }} SYP</small>
+      </mat-card>
+      <mat-card>
+        <span>{{ "dashboard.monthProfit" | translate }}</span>
+        <strong>${{ money(data.month_profit_usd) }}</strong>
+        <small>{{ data.month_profit_syp }} SYP</small>
+      </mat-card>
+      <mat-card>
+        <span>{{ "dashboard.lowStock" | translate }}</span>
+        <strong>{{ data.low_stock_products.length }}</strong>
+      </mat-card>
     </div>
     <div class="grid">
-      <mat-card
-        ><h2>{{ "dashboard.recentActivity" | translate }}</h2>
+      <mat-card>
+        <h2>{{ "dashboard.recentActivity" | translate }}</h2>
         @for (entry of data.recent_activity; track entry.id) {
-          <p>{{ entry.event_code }} — {{ entry.operator_name }}</p>
-        }</mat-card
-      ><mat-card
-        ><h2>{{ "dashboard.topProducts" | translate }}</h2>
-        @for (product of data.top_products; track product.product_id) {
-          <p>{{ product.product_name }} — {{ product.quantity_base_units }}</p>
+          <div class="activity-item">
+            <span class="activity-dot" [class]="'activity-dot dot-' + entry.entity_type"></span>
+            <span>{{ entry.event_code }} — {{ entry.operator_name }}</span>
+          </div>
+        }
+      </mat-card>
+      <mat-card>
+        <h2>{{ "dashboard.topProducts" | translate }}</h2>
+        @for (product of data.top_products; track product.product_id; let i = $index) {
+          <div class="product-item">
+            <span class="product-rank">#{{ i + 1 }}</span>
+            <span>{{ product.product_name }}</span>
+            <span class="product-qty">{{ product.quantity_base_units }}</span>
+          </div>
         }
       </mat-card>
     </div>

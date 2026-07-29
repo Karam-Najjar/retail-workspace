@@ -1,57 +1,71 @@
 @if (product(); as currentProduct) {
-  <app-detail-page-header [title]="currentProduct.name" (back)="goBack()" />
-  <mat-card appearance="outlined" class="product-detail">
-    <mat-card-content>
-      <dl>
-        <dt>{{ "products.category" | translate }}</dt>
-        <dd>{{ currentProduct.category_id }}</dd>
-        <dt>{{ "products.sellingPrice" | translate }}</dt>
-        <dd><app-money-display [cents]="currentProduct.selling_price" /></dd>
-        <dt>{{ "products.quantity" | translate }}</dt>
-        <dd>{{ currentProduct.quantity }} <app-stock-status-badge [quantity]="currentProduct.quantity" /></dd>
-        <dt>{{ "common.createdBy" | translate }}</dt>
-        <dd>{{ operatorName(currentProduct.created_by_operator_id) }}</dd>
-        <dt>{{ "common.createdAt" | translate }}</dt>
-        <dd>{{ currentProduct.created_at | date: "medium" }}</dd>
-        <dt>{{ "common.lastModifiedBy" | translate }}</dt>
-        <dd>{{ operatorName(currentProduct.last_modified_by_operator_id) }}</dd>
-      </dl>
+  <div class="detail-layout">
+    <div class="detail-layout__top">
+      <app-detail-page-header [title]="currentProduct.name" (back)="goBack()" />
       <div class="actions">
         <button mat-button type="button" (click)="edit()">{{ "common.edit" | translate }}</button>
         <button mat-button type="button" (click)="editBarcodes()">{{ "products.manageBarcodes" | translate }}</button>
         <button mat-flat-button color="primary" type="button" (click)="adjustStock()">{{ "inventory.adjustStock" | translate }}</button>
         <button mat-button color="warn" type="button" (click)="requestDelete()">{{ "common.delete" | translate }}</button>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </div>
 
-  <mat-card appearance="outlined" class="barcodes">
-    <mat-card-header
-      ><mat-card-title>{{ "products.barcodesTitle" | translate }}</mat-card-title></mat-card-header
-    >
-    <mat-card-content>
-      @if (barcodes().length) {
-        <ul>
-          @for (barcode of barcodes(); track barcode.id) {
-            <li>{{ barcode.barcode }} — {{ "packages." + barcode.package_type_code | translate }} ×{{ barcode.multiplier }}</li>
+    <div class="detail-layout__body">
+      <mat-card appearance="outlined" class="product-detail">
+        <mat-card-content>
+          <dl>
+            <dt>{{ "products.category" | translate }}</dt>
+            <dd>{{ currentProduct.category_id }}</dd>
+            <dt>{{ "products.sellingPrice" | translate }}</dt>
+            <dd><app-money-display [cents]="currentProduct.selling_price" /></dd>
+            <dt>{{ "products.quantity" | translate }}</dt>
+            <dd>{{ currentProduct.quantity }} <app-stock-status-badge [quantity]="currentProduct.quantity" /></dd>
+            <dt>{{ "common.createdBy" | translate }}</dt>
+            <dd>{{ operatorName(currentProduct.created_by_operator_id) }}</dd>
+            <dt>{{ "common.createdAt" | translate }}</dt>
+            <dd>{{ currentProduct.created_at | date: "medium" }}</dd>
+            <dt>{{ "common.lastModifiedBy" | translate }}</dt>
+            <dd>{{ operatorName(currentProduct.last_modified_by_operator_id) }}</dd>
+          </dl>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="barcodes">
+        <mat-card-header>
+          <mat-card-title>{{ "products.barcodesTitle" | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (barcodes().length) {
+            <ul>
+              @for (barcode of barcodes(); track barcode.id) {
+                <li>
+                  <span class="barcode-value">{{ barcode.barcode }}</span>
+                  <span class="barcode-separator">·</span>
+                  <span class="barcode-label">{{ "packages." + barcode.package_type_code | translate }}</span>
+                  <span class="barcode-multiplier">×{{ barcode.multiplier }}</span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p>{{ "products.noBarcodes" | translate }}</p>
           }
-        </ul>
-      } @else {
-        <p>{{ "products.noBarcodes" | translate }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="inventory-card">
+        <mat-card-content><app-inventory-batch-status [batches]="batches()" /></mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="inventory-card">
+        <mat-card-content><app-inventory-movement-history [movements]="movements()" /></mat-card-content>
+      </mat-card>
+
+      @if (error) {
+        <p class="form-error">{{ error | translate }}</p>
       }
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
 
-  <mat-card appearance="outlined" class="inventory-card"
-    ><mat-card-content><app-inventory-batch-status [batches]="batches()" /></mat-card-content
-  ></mat-card>
-  <mat-card appearance="outlined" class="inventory-card"
-    ><mat-card-content><app-inventory-movement-history [movements]="movements()" /></mat-card-content
-  ></mat-card>
-
-  @if (error) {
-    <p class="form-error">{{ error | translate }}</p>
-  }
   @if (confirmDelete()) {
     <app-confirmation-dialog
       titleKey="products.deleteTitle"

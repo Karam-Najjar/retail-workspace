@@ -1,27 +1,122 @@
-.category-detail {
-  max-inline-size: 50rem;
-}
-
-dl {
+.detail-layout {
   display: grid;
-  gap: 0.75rem 1.5rem;
-  grid-template-columns: max-content 1fr;
+  grid-template-rows: auto 1fr;
+  block-size: 100%;
+  overflow: hidden;
 }
 
-dt {
-  color: var(--retail-on-surface-muted);
-}
+// ---- Fixed Top Bar ----
+.detail-layout__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.5rem 1.5rem 1rem;
+  flex-shrink: 0;
 
-dd {
-  margin: 0;
+  app-detail-page-header {
+    flex: 1;
+    min-inline-size: 0;
+  }
 }
 
 .actions {
   display: flex;
   gap: 0.5rem;
-  margin-block-start: 1.5rem;
+  flex-shrink: 0;
+
+  button[mat-button] {
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background 150ms ease;
+
+    &:hover {
+      background: var(--retail-primary-container);
+    }
+  }
+
+  button[mat-button][color="warn"] {
+    &:hover {
+      background: #ffe0e0;
+    }
+  }
 }
 
-.protected-note {
+// ---- Scrollable Body ----
+.detail-layout__body {
+  overflow-y: auto;
+  display: grid;
+  gap: 1rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+// ---- Card ----
+.category-detail {
+  border: 1px solid var(--retail-outline-variant);
+  border-radius: 0.75rem;
+  box-shadow: none;
+
+  mat-card-content {
+    padding: 1.5rem;
+  }
+}
+
+// ---- Definition List ----
+dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.75rem 2rem;
+  margin: 0;
+}
+
+dt {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--retail-on-surface-muted);
+}
+
+dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--retail-on-surface);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// ---- Type Badges ----
+.type-badge {
+  display: inline-block;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  &--system {
+    background: #e8e0f0;
+    color: #5b21b6;
+  }
+
+  &--custom {
+    background: #d9f5df;
+    color: #125c26;
+  }
+}
+
+// ---- Protected Note ----
+.protected-note {
+  margin: 1rem 0 0;
+  padding: 0.625rem 0.875rem;
+  background: #fff8e6;
+  border: 1px solid #f0d78c;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  color: #765300;
 }

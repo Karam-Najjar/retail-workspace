@@ -2,13 +2,29 @@
   display: grid;
   gap: 1rem;
 }
+
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
 }
+
 h2 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--retail-on-surface);
+}
+
+button[mat-stroked-button] {
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 150ms ease, border-color 150ms ease;
+
+  &:not([disabled]):hover {
+    background: var(--retail-primary-container);
+    border-color: var(--retail-primary);
+  }
 }

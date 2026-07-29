@@ -1,26 +1,49 @@
 .supply-line {
-  border: 1px solid var(--retail-outline, #d0d0d0);
+  border: 1px solid var(--retail-outline-variant);
   border-radius: 0.75rem;
   display: grid;
-  gap: 0.75rem;
-  padding: 1rem;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #fafbfb;
+  transition: border-color 150ms ease;
+
+  &:hover {
+    border-color: #bcc4c7;
+  }
 }
+
 .line-fields {
   align-items: start;
   display: grid;
   gap: 0.75rem;
   grid-template-columns: minmax(9rem, 1fr) minmax(8rem, 1fr) minmax(18rem, 2fr) auto;
 }
+
 .calculation {
   color: var(--retail-on-surface-muted);
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.9rem;
+  gap: 1rem 1.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding-block-start: 0.25rem;
+  border-top: 1px solid var(--retail-outline-variant);
 }
+
 mat-form-field {
   inline-size: 100%;
 }
+
+button[mat-icon-button][color="warn"] {
+  margin-block-start: 0.25rem;
+  border-radius: 0.5rem;
+  transition: background 150ms ease;
+
+  &:hover {
+    background: #ffe0e0;
+  }
+}
+
 @media (max-width: 60rem) {
   .line-fields {
     grid-template-columns: 1fr;

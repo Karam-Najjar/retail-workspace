@@ -1,20 +1,53 @@
 .cart {
-  background: var(--retail-surface-container, #fafafa);
+  background: #f8f9f9;
+  border: 1px solid var(--retail-outline-variant);
   border-radius: 0.75rem;
   display: grid;
-  gap: 0.5rem;
-  padding: 1rem;
+  gap: 0;
+  overflow: hidden;
 }
+
 header {
-  align-items: center;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--retail-outline-variant);
+
+  h2 {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--retail-on-surface);
+  }
+
+  button[mat-button][color="warn"] {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: background 150ms ease;
+
+    &:not([disabled]):hover {
+      background: #ffe0e0;
+    }
+  }
 }
-h2 {
-  margin: 0;
-  font-size: 1.15rem;
+
+// Items area
+::ng-deep app-cart-item {
+  border-bottom: 1px solid var(--retail-outline-variant);
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
+
+// Empty state
 p {
+  padding: 2rem 1.25rem;
+  text-align: center;
   color: var(--retail-on-surface-muted);
+  font-size: 0.9375rem;
+  margin: 0;
 }

@@ -1,38 +1,129 @@
-.supplier-detail {
-  max-inline-size: 52rem;
+.detail-layout {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  block-size: 100%;
+  overflow: hidden;
 }
+
+// ---- Fixed Top Bar ----
+.detail-layout__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.5rem 1.5rem 1rem;
+  flex-shrink: 0;
+
+  app-detail-page-header {
+    flex: 1;
+    min-inline-size: 0;
+  }
+}
+
+// ---- Scrollable Body ----
+.detail-layout__body {
+  overflow-y: auto;
+  display: grid;
+  gap: 1rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+// ---- Info Card ----
+.supplier-detail {
+  border: 1px solid var(--retail-outline-variant);
+  border-radius: 0.75rem;
+  box-shadow: none;
+  align-self: start;
+
+  mat-card-content {
+    padding: 1.5rem;
+  }
+}
+
 dl {
   display: grid;
-  gap: 0.75rem 1.5rem;
   grid-template-columns: max-content 1fr;
-}
-dt {
-  color: var(--retail-on-surface-muted);
-}
-dd {
+  gap: 0.75rem 2rem;
   margin: 0;
 }
-.actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-block-start: 1.5rem;
+
+dt {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--retail-on-surface-muted);
 }
-.recent-supplies {
-  margin-block-start: 1.5rem;
+
+dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--retail-on-surface);
 }
+
+// ---- Recent Supplies Card ----
+.recent-supplies-card {
+  border: 1px solid var(--retail-outline-variant);
+  border-radius: 0.75rem;
+  box-shadow: none;
+  align-self: start;
+
+  mat-card-header {
+    padding: 1.25rem 1.5rem 0;
+  }
+
+  mat-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--retail-on-surface);
+  }
+
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+// ---- Table ----
 .table-scroll {
   overflow-x: auto;
 }
+
 table {
   border-collapse: collapse;
   inline-size: 100%;
 }
-th,
-td {
-  border-block-end: 1px solid var(--retail-outline, #ddd);
-  padding: 0.75rem;
+
+th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--retail-on-surface-muted);
+  background: #f8f9f9;
+  padding: 0.625rem 0.75rem;
   text-align: start;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--retail-outline-variant);
 }
+
+td {
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--retail-on-surface);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--retail-outline-variant);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
 tbody tr {
   cursor: pointer;
+
+  &:hover td {
+    background: #fafbfb;
+  }
 }

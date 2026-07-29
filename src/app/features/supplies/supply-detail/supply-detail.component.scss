@@ -1,36 +1,176 @@
-:host {
+.detail-layout {
   display: grid;
-  gap: 1.25rem;
+  grid-template-rows: auto 1fr;
+  block-size: 100%;
+  overflow: hidden;
 }
-mat-card {
-  max-inline-size: 52rem;
+
+// ---- Fixed Header ----
+.detail-layout__top {
+  padding: 1.5rem 1.5rem 1rem;
+  flex-shrink: 0;
 }
+
+// ---- Scrollable Body ----
+.detail-layout__body {
+  overflow-y: auto;
+  display: grid;
+  gap: 1rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+// ---- Metadata Card ----
+.metadata-card {
+  border: 1px solid var(--retail-outline-variant);
+  border-radius: 0.75rem;
+  box-shadow: none;
+  align-self: start;
+
+  mat-card-content {
+    padding: 1.5rem;
+  }
+}
+
 dl {
   display: grid;
-  gap: 0.75rem 1.5rem;
   grid-template-columns: max-content 1fr;
-}
-dt {
-  color: var(--retail-on-surface-muted);
-}
-dd {
+  gap: 0.75rem 2rem;
   margin: 0;
 }
+
+dt {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--retail-on-surface-muted);
+}
+
+dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--retail-on-surface);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// ---- Items Table Card ----
+.items-card {
+  border: 1px solid var(--retail-outline-variant);
+  border-radius: 0.75rem;
+  box-shadow: none;
+  align-self: start;
+
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+// ---- Table ----
 .table-scroll {
   overflow-x: auto;
 }
+
 table {
   border-collapse: collapse;
   inline-size: 100%;
 }
-th,
-td {
-  border-block-end: 1px solid var(--retail-outline, #ddd);
-  padding: 0.75rem;
+
+th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--retail-on-surface-muted);
+  background: #f8f9f9;
+  padding: 0.625rem 0.75rem;
   text-align: start;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--retail-outline-variant);
 }
+
+td {
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--retail-on-surface);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--retail-outline-variant);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: #fafbfb;
+}
+
+.subtotal-cell {
+  font-weight: 600;
+  color: var(--retail-primary);
+}
+
+// ---- Badges ----
+.badge {
+  display: inline-block;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  &--package {
+    background: var(--retail-primary-container);
+    color: var(--retail-on-primary-container);
+  }
+}
+
+// ---- Totals ----
 .totals {
   display: flex;
-  justify-content: flex-end;
-  gap: 2rem;
+  justify-content: center;
+}
+
+.total-card {
+  border: 1px solid var(--retail-outline-variant);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-inline-size: 16rem;
+  align-self: start;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    block-size: 3px;
+    background: var(--retail-primary);
+  }
+
+  span {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--retail-on-surface-muted);
+  }
+
+  strong {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--retail-primary);
+    line-height: 1.2;
+  }
+
+  small {
+    font-size: 0.8125rem;
+    color: var(--retail-on-surface-muted);
+  }
 }

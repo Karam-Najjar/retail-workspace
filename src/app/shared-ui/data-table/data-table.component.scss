@@ -1,16 +1,59 @@
 .data-table {
   inline-size: 100%;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--retail-outline-variant);
 }
 
+// ---- Header Row ----
+tr[mat-header-row] {
+  background: #f8f9f9;
+  block-size: 3rem;
+}
+
+th[mat-header-cell] {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--retail-on-surface-muted);
+  padding-inline: 1rem;
+  border-bottom: 1px solid var(--retail-outline-variant);
+}
+
+// ---- Data Rows ----
 tr[mat-row] {
+  block-size: 3.25rem;
   cursor: pointer;
+  transition: background 120ms ease;
+}
+
+td[mat-cell] {
+  font-size: 0.9375rem;
+  color: var(--retail-on-surface);
+  padding-inline: 1rem;
+  border-bottom: 1px solid var(--retail-outline-variant);
+}
+
+tr[mat-row]:last-child td[mat-cell] {
+  border-bottom: none;
 }
 
 tr[mat-row]:hover {
-  background: var(--retail-primary-container);
+  background: #eef2f3;
 }
 
+// ---- Actions Cell ----
 .actions-cell {
   text-align: end;
   white-space: nowrap;
+  padding-inline-end: 0.5rem;
+
+  button[mat-icon-button] {
+    transition: background 120ms ease;
+
+    &:hover {
+      background: var(--retail-primary-container);
+    }
+  }
 }

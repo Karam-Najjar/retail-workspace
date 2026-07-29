@@ -1,31 +1,46 @@
 @if (category(); as currentCategory) {
-  <app-detail-page-header
-    [title]="currentCategory.system_code ? ('categories.system.' + currentCategory.system_code | translate) : currentCategory.name"
-    (back)="goBack()" />
-  <mat-card appearance="outlined" class="category-detail">
-    <mat-card-content>
-      <dl>
-        <dt>{{ "categories.name" | translate }}</dt>
-        <dd>{{ currentCategory.system_code ? ("categories.system." + currentCategory.system_code | translate) : currentCategory.name }}</dd>
-        <dt>{{ "categories.type" | translate }}</dt>
-        <dd>{{ currentCategory.system_code ? ("categories.systemLabel" | translate) : ("categories.customLabel" | translate) }}</dd>
-        <dt>{{ "common.createdBy" | translate }}</dt>
-        <dd>{{ operatorName(currentCategory.created_by_operator_id) }}</dd>
-        <dt>{{ "common.createdAt" | translate }}</dt>
-        <dd>{{ currentCategory.created_at | date: "medium" }}</dd>
-        <dt>{{ "common.lastModifiedBy" | translate }}</dt>
-        <dd>{{ operatorName(currentCategory.last_modified_by_operator_id) }}</dd>
-      </dl>
-      @if (currentCategory.system_code) {
-        <p class="protected-note">{{ "categories.systemProtected" | translate }}</p>
-      } @else {
+  <div class="detail-layout">
+    <div class="detail-layout__top">
+      <app-detail-page-header
+        [title]="currentCategory.system_code ? ('categories.system.' + currentCategory.system_code | translate) : currentCategory.name"
+        (back)="goBack()" />
+      @if (!currentCategory.system_code) {
         <div class="actions">
           <button mat-button type="button" (click)="edit()">{{ "common.edit" | translate }}</button>
           <button mat-button color="warn" type="button" (click)="prepareDelete()">{{ "common.delete" | translate }}</button>
         </div>
       }
-    </mat-card-content>
-  </mat-card>
+    </div>
+
+    <div class="detail-layout__body">
+      <mat-card appearance="outlined" class="category-detail">
+        <mat-card-content>
+          <dl>
+            <dt>{{ "categories.name" | translate }}</dt>
+            <dd>{{ currentCategory.system_code ? ("categories.system." + currentCategory.system_code | translate) : currentCategory.name }}</dd>
+            <dt>{{ "categories.type" | translate }}</dt>
+            <dd>
+              @if (currentCategory.system_code) {
+                <span class="type-badge type-badge--system">{{ "categories.systemLabel" | translate }}</span>
+              } @else {
+                <span class="type-badge type-badge--custom">{{ "categories.customLabel" | translate }}</span>
+              }
+            </dd>
+            <dt>{{ "common.createdBy" | translate }}</dt>
+            <dd>{{ operatorName(currentCategory.created_by_operator_id) }}</dd>
+            <dt>{{ "common.createdAt" | translate }}</dt>
+            <dd>{{ currentCategory.created_at | date: "medium" }}</dd>
+            <dt>{{ "common.lastModifiedBy" | translate }}</dt>
+            <dd>{{ operatorName(currentCategory.last_modified_by_operator_id) }}</dd>
+          </dl>
+          @if (currentCategory.system_code) {
+            <p class="protected-note">{{ "categories.systemProtected" | translate }}</p>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
   @if (confirmDelete()) {
     <app-confirmation-dialog
       titleKey="categories.deleteTitle"

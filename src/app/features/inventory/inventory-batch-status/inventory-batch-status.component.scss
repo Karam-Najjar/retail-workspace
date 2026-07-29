@@ -1,23 +1,56 @@
 .inventory-section {
-  margin-block: 1rem;
+  padding: 1.5rem;
 }
+
 h2 {
-  font-size: 1.1rem;
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--retail-on-surface);
 }
+
 .table-scroll {
   overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid var(--retail-outline-variant);
 }
+
 table {
   border-collapse: collapse;
   inline-size: 100%;
 }
-th,
-td {
-  border-block-end: 1px solid var(--retail-outline-variant);
-  padding: 0.65rem;
+
+th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--retail-on-surface-muted);
+  background: #f8f9f9;
+  padding: 0.625rem 0.75rem;
   text-align: start;
   white-space: nowrap;
+  border-bottom: 1px solid var(--retail-outline-variant);
 }
-th {
-  font-weight: 600;
+
+td {
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--retail-on-surface);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--retail-outline-variant);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: #fafbfb;
+}
+
+p {
+  margin: 0;
+  color: var(--retail-on-surface-muted);
+  font-size: 0.9375rem;
 }

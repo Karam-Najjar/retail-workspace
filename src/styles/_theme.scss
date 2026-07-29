@@ -1,16 +1,41 @@
 @use "@angular/material" as mat;
 
+$retail-primary: mat.m2-define-palette(mat.$m2-cyan-palette, 800, 700, 900);
+$retail-accent: mat.m2-define-palette(mat.$m2-blue-grey-palette, 400, 300, 600);
+
 html {
   @include mat.all-component-themes(
     mat.m2-define-light-theme(
       (
         color: (
-          primary: mat.m2-define-palette(mat.$m2-indigo-palette),
-          accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400),
+          primary: $retail-primary,
+          accent: $retail-accent,
         ),
         typography: mat.m2-define-typography-config(),
         density: 0,
       )
     )
   );
+}
+
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: 1rem;
+}
+
+.mdc-dialog__surface {
+  border-radius: 1rem !important;
+  overflow: hidden;
+}
+
+.mat-toolbar.mat-primary {
+  --mat-toolbar-container-background-color: var(--retail-surface);
+  --mat-toolbar-container-text-color: var(--retail-on-surface);
+}
+
+.mat-mdc-dialog-content {
+  overflow: visible !important;
+}
+
+.mdc-dialog__content {
+  overflow: visible !important;
 }

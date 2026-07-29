@@ -9,10 +9,11 @@ import { MatSelectModule } from "@angular/material/select";
 import { TranslatePipe } from "@ngx-translate/core";
 import { TranslationService } from "../../../core/i18n/translation.service";
 import { SettingsFacade } from "../settings.facade";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: "app-settings-page",
-  imports: [FormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatSelectModule, TranslatePipe],
+  imports: [FormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatSelectModule, TranslatePipe, MatIcon],
   providers: [SettingsFacade],
   templateUrl: "./settings-page.component.html",
   styleUrl: "./settings-page.component.scss",

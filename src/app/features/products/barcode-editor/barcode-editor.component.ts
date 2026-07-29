@@ -10,6 +10,7 @@ import { STORE_PROFILE, StoreProfile } from "@retail/kernel";
 import { BarcodeInputComponent } from "../../../shared-ui/barcode-input/barcode-input.component";
 import { ModalFormShellComponent } from "../../../shared-ui/modal-form-shell/modal-form-shell.component";
 import { ProductsFacade } from "../products.facade";
+import { MatIcon } from "@angular/material/icon";
 
 interface EditableBarcode {
   id?: string;
@@ -32,7 +33,8 @@ interface BarcodeEditorData {
     BarcodeInputComponent,
     ModalFormShellComponent,
     TranslatePipe,
-  ],
+    MatIcon
+],
   providers: [ProductsFacade],
   templateUrl: "./barcode-editor.component.html",
   styleUrl: "./barcode-editor.component.scss",

@@ -1,19 +1,21 @@
 <nav class="side-nav" [attr.aria-label]="'navigation.label' | translate">
-  <div class="side-nav__heading">{{ "app.title" | translate }}</div>
-
-  <mat-nav-list>
+  <mat-nav-list class="side-nav__list">
     @for (item of navigationItems; track item.labelKey) {
       @if (item.route) {
-        <a mat-list-item [routerLink]="item.route" routerLinkActive="is-active">
+        <a mat-list-item [routerLink]="item.route" routerLinkActive="is-active" class="side-nav__item">
           <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
           <span matListItemTitle>{{ item.labelKey | translate }}</span>
         </a>
       } @else {
-        <div mat-list-item class="is-disabled" aria-disabled="true">
+        <div mat-list-item class="side-nav__item is-disabled" aria-disabled="true">
           <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
           <span matListItemTitle>{{ item.labelKey | translate }}</span>
         </div>
       }
     }
   </mat-nav-list>
+
+  <div class="side-nav__footer">
+    <div class="side-nav__version">v1.0</div>
+  </div>
 </nav>

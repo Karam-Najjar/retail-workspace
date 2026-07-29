@@ -25,7 +25,9 @@
                 <mat-option [value]="type.code" [disabled]="isPackageAssigned(type.code, barcode)">{{ type.label_key | translate }}</mat-option>
               }
             </mat-select></mat-form-field
-          ><button type="button" class="remove-barcode" (click)="removeBarcode(index)">{{ "common.delete" | translate }}</button>
+          ><button mat-icon-button color="warn" type="button" [attr.aria-label]="'common.delete' | translate" (click)="removeBarcode(index)">
+  <mat-icon>delete</mat-icon>
+</button>
         </div>
       }
     </div>

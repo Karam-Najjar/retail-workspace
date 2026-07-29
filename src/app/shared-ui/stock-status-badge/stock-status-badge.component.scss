@@ -1,17 +1,25 @@
 .stock-status {
+  display: inline-flex;
+  align-items: center;
   border-radius: 999px;
-  padding: 0.2rem 0.55rem;
-  font-size: 0.8125rem;
+  padding: 0.1875rem 0.625rem;
+  font-size: 0.75rem;
   font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
+
 .stock-status--in {
   background: #d9f5df;
   color: #125c26;
 }
+
 .stock-status--low {
   background: #fff1c6;
   color: #765300;
 }
+
 .stock-status--out {
   background: #ffe0e0;
   color: #8b1a1a;

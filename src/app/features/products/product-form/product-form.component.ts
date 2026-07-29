@@ -20,6 +20,8 @@ import { BarcodeInputComponent } from "../../../shared-ui/barcode-input/barcode-
 import { DualCurrencyInputComponent } from "../../../shared-ui/dual-currency-input/dual-currency-input.component";
 import { ModalFormShellComponent } from "../../../shared-ui/modal-form-shell/modal-form-shell.component";
 import { ProductsFacade } from "../products.facade";
+import { MatIcon } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 interface EditableBarcode {
   readonly id?: string;
@@ -39,7 +41,9 @@ interface EditableBarcode {
     DualCurrencyInputComponent,
     BarcodeInputComponent,
     TranslatePipe,
-  ],
+    MatIcon,
+    MatButtonModule
+],
   providers: [ProductsFacade],
   templateUrl: "./product-form.component.html",
   styleUrl: "./product-form.component.scss",

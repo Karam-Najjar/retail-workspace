@@ -1,30 +1,49 @@
-:host,
+:host {
+  display: flex;
+  flex-direction: column;
+  block-size: 100dvh;
+  overflow: hidden;
+}
+
+app-top-bar {
+  flex-shrink: 0;
+}
+
 .shell-container {
-  display: block;
-  min-block-size: 100dvh;
+  flex: 1;
+  min-block-size: 0;
 }
 
 .shell-navigation {
   inline-size: 16rem;
   border-inline-end: 1px solid var(--retail-outline-variant);
+  overflow: hidden;
 }
 
 .shell-content {
-  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
+
 .update-banner {
   align-items: center;
   background: #fff3cd;
   color: #533f03;
   display: flex;
+  flex-shrink: 0;
   gap: 0.75rem;
   justify-content: center;
   padding: 0.5rem 1rem;
 }
 
 .shell-main {
-  min-block-size: calc(100dvh - 4rem);
+  flex: 1;
   padding: 1.5rem;
+  overflow-y: auto;
+
+  &--no-padding {
+    padding: 0;
+  }
 }
 
 @media (max-width: 48rem) {
@@ -34,5 +53,9 @@
 
   .shell-main {
     padding: 1rem;
+
+    &--no-padding {
+      padding: 0;
+    }
   }
 }

@@ -1,52 +1,70 @@
 @if (detail(); as current) {
-  <app-detail-page-header [title]="current.supply.supplier_name" (back)="goBack()" />
-  <mat-card appearance="outlined"
-    ><mat-card-content
-      ><dl>
-        <dt>{{ "supplies.dateTime" | translate }}</dt>
-        <dd>{{ current.supply.date | date: "medium" }}</dd>
-        <dt>{{ "supplies.supplier" | translate }}</dt>
-        <dd>{{ current.supply.supplier_name }}</dd>
-        <dt>{{ "supplies.operator" | translate }}</dt>
-        <dd>{{ current.supply.operator_name }}</dd>
-        <dt>{{ "supplies.exchangeRate" | translate }}</dt>
-        <dd>
-          1 {{ current.supply.currency_snapshot.primary_code }} = {{ current.supply.currency_snapshot.exchange_rate }}
-          {{ current.supply.currency_snapshot.secondary_code }}
-        </dd>
-      </dl></mat-card-content
-    ></mat-card
-  >
-  <div class="table-scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>{{ "supplies.product" | translate }}</th>
-          <th>{{ "supplies.packageType" | translate }}</th>
-          <th>{{ "supplies.packageQuantity" | translate }}</th>
-          <th>{{ "supplies.baseUnits" | translate }}</th>
-          <th>{{ "supplies.costPerPackage" | translate }}</th>
-          <th>{{ "supplies.costPerBaseUnit" | translate }}</th>
-          <th>{{ "supplies.subtotal" | translate }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (item of current.items; track item.id) {
-          <tr>
-            <td>{{ item.product_name }}</td>
-            <td>{{ "packages." + item.package_type_code | translate }}</td>
-            <td>{{ item.quantity_received }}</td>
-            <td>{{ item.quantity_base_units }}</td>
-            <td>{{ (item.unit_cost_entered / 100).toFixed(2) }} {{ current.supply.currency_snapshot.primary_code }}</td>
-            <td>{{ item.unit_cost_per_base_display }} {{ current.supply.currency_snapshot.primary_code }}</td>
-            <td>{{ (item.subtotal_cost / 100).toFixed(2) }} {{ current.supply.currency_snapshot.primary_code }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+  <div class="detail-layout">
+    <div class="detail-layout__top">
+      <app-detail-page-header [title]="current.supply.supplier_name" (back)="goBack()" />
+    </div>
+
+    <div class="detail-layout__body">
+      <mat-card appearance="outlined" class="metadata-card">
+        <mat-card-content>
+          <dl>
+            <dt>{{ "supplies.dateTime" | translate }}</dt>
+            <dd>{{ current.supply.date | date: "medium" }}</dd>
+            <dt>{{ "supplies.supplier" | translate }}</dt>
+            <dd>{{ current.supply.supplier_name }}</dd>
+            <dt>{{ "supplies.operator" | translate }}</dt>
+            <dd>{{ current.supply.operator_name }}</dd>
+            <dt>{{ "supplies.exchangeRate" | translate }}</dt>
+            <dd>
+              1 {{ current.supply.currency_snapshot.primary_code }} = {{ current.supply.currency_snapshot.exchange_rate }}
+              {{ current.supply.currency_snapshot.secondary_code }}
+            </dd>
+          </dl>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="items-card">
+        <mat-card-content>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ "supplies.product" | translate }}</th>
+                  <th>{{ "supplies.packageType" | translate }}</th>
+                  <th>{{ "supplies.packageQuantity" | translate }}</th>
+                  <th>{{ "supplies.baseUnits" | translate }}</th>
+                  <th>{{ "supplies.costPerPackage" | translate }}</th>
+                  <th>{{ "supplies.costPerBaseUnit" | translate }}</th>
+                  <th>{{ "supplies.subtotal" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of current.items; track item.id) {
+                  <tr>
+                    <td>{{ item.product_name }}</td>
+                    <td>
+                      <span class="badge badge--package">{{ "packages." + item.package_type_code | translate }}</span>
+                    </td>
+                    <td>{{ item.quantity_received }}</td>
+                    <td>{{ item.quantity_base_units }}</td>
+                    <td>{{ (item.unit_cost_entered / 100).toFixed(2) }} {{ current.supply.currency_snapshot.primary_code }}</td>
+                    <td>{{ item.unit_cost_per_base_display }} {{ current.supply.currency_snapshot.primary_code }}</td>
+                    <td class="subtotal-cell">{{ (item.subtotal_cost / 100).toFixed(2) }} {{ current.supply.currency_snapshot.primary_code }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <section class="totals">
+        <div class="total-card">
+          <span>{{ "supplies.totalCost" | translate }}</span>
+          <strong>{{ primaryTotal(current) }}</strong>
+          <small>{{ secondaryTotal(current) }}</small>
+        </div>
+      </section>
+    </div>
   </div>
-  <section class="totals">
-    <strong>{{ "supplies.totalCost" | translate }}: {{ primaryTotal(current) }}</strong
-    ><strong>{{ secondaryTotal(current) }}</strong>
-  </section>
 }

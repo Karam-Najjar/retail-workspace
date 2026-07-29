@@ -1,8 +1,13 @@
 .dual-currency-input {
   display: grid;
-  gap: 0.25rem;
+  gap: 0.5rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  mat-form-field {
+    inline-size: 100%;
+  }
 }
+
 @media (max-width: 32rem) {
   .dual-currency-input {
     grid-template-columns: 1fr;

@@ -1,8 +1,21 @@
 .supplier-picker {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
 }
+
 mat-form-field {
   flex: 1;
+}
+
+button[mat-icon-button] {
+  margin-block-start: 0.25rem;
+  color: var(--retail-on-surface-muted);
+  border-radius: 0.5rem;
+  transition: background 150ms ease, color 150ms ease;
+
+  &:hover {
+    background: var(--retail-primary-container);
+    color: var(--retail-primary);
+  }
 }

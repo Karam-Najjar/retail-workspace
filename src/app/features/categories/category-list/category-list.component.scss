@@ -1,22 +1,35 @@
 .category-list {
-  margin-inline: auto;
-  max-inline-size: 70rem;
+  display: grid;
+  gap: 1.5rem;
 }
 
+// ---- Page Header ----
 .page-header {
-  align-items: center;
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  margin-block-end: 1.5rem;
-}
+  flex-wrap: wrap;
 
-h1,
-p {
-  margin: 0;
-}
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--retail-on-surface);
+  }
 
-p {
-  color: var(--retail-on-surface-muted);
-  margin-block-start: 0.5rem;
+  p {
+    margin: 0.25rem 0 0;
+    font-size: 0.9375rem;
+    color: var(--retail-on-surface-muted);
+  }
+
+  button[mat-flat-button] {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding-inline: 1.25rem;
+    flex-shrink: 0;
+  }
 }

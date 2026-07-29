@@ -1,13 +1,36 @@
 :host {
   display: block;
 }
-mat-card-content {
-  display: grid;
-  gap: 0.5rem;
+
+mat-card {
+  border-radius: 0.75rem;
+  border-color: var(--retail-outline-variant);
+  transition: box-shadow 150ms ease;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
 }
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem 1.5rem;
+}
+
 span {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--retail-on-surface-muted);
 }
+
 strong {
-  font-size: 1.35rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--retail-on-surface);
+  line-height: 1.2;
 }
