@@ -1,21 +1,42 @@
 .field {
   inline-size: 100%;
 }
+
 .adjustment-content {
   display: grid;
+  gap: 1rem;
   min-inline-size: min(34rem, calc(100vw - 4rem));
-  padding-block-start: 0.5rem;
+  padding-block-start: 1rem;
 }
+
 .stock-summary {
-  color: var(--retail-on-surface-muted);
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: #f8f9f9;
+  border: 1px solid var(--retail-outline-variant);
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--retail-on-surface);
 }
-.warning,
-.form-error {
-  color: var(--retail-error);
-}
+
 .warning {
-  font-weight: 600;
+  margin: 0;
+  padding: 0.625rem 0.875rem;
+  background: #fff8e6;
+  border: 1px solid #f0d78c;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #765300;
 }
+
+.form-error {
+  color: #ba1a1a;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
 @media (max-width: 32rem) {
   .adjustment-content {
     min-inline-size: 0;
