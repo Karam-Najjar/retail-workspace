@@ -6,7 +6,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { TranslatePipe } from "@ngx-translate/core";
-import { DexieInventoryBatchRepository, Product, StorePackageType } from "@retail/kernel";
+import { DexieInventoryBatchRepository, Product, roundCurrencyMinorUnits, StorePackageType } from "@retail/kernel";
+import Decimal from "decimal.js";
 import { DualCurrencyInputComponent } from "../../../shared-ui/dual-currency-input/dual-currency-input.component";
 import { ProductPickerComponent } from "../../../shared-ui/product-picker/product-picker.component";
 
@@ -66,7 +67,7 @@ export class SupplyLineEditorComponent {
   }
   protected baseUnitCost(): string {
     const multiplier = this.multiplier();
-    return multiplier ? String(this.line().unitCostEntered / multiplier / 100) : "0";
+    return multiplier ? new Decimal(this.line().unitCostEntered).div(multiplier).div(100).toString() : "0";
   }
 
   private async autofill(productId: string, packageTypeCode: string): Promise<void> {
@@ -76,6 +77,8 @@ export class SupplyLineEditorComponent {
     const productBatches = await this.batches.listByProduct(productId);
     if (request !== this.autofillRequest) return;
     const latest = productBatches.at(-1);
-    this.update({ unitCostEntered: latest ? Math.round(Number(latest.unit_cost_display) * multiplier * 100) : 0 });
+    this.update({
+      unitCostEntered: latest ? roundCurrencyMinorUnits(new Decimal(latest.unit_cost_display).mul(multiplier).mul(100)) : 0,
+    });
   }
 }
