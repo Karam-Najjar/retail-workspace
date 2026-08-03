@@ -6,6 +6,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { TranslatePipe } from "@ngx-translate/core";
 import { TranslationService } from "../../core/i18n/translation.service";
 import { ActiveOperatorService } from "@retail/kernel";
+import type { SettingsLanguage } from "@retail/kernel";
 
 @Component({
   selector: "app-top-bar",
@@ -20,5 +21,11 @@ export class TopBarComponent {
 
   protected async selectOperator(operatorId: string): Promise<void> {
     await this.activeOperator.setActiveOperator(operatorId);
+  }
+
+  protected async toggleLanguage(): Promise<void> {
+    const language: SettingsLanguage = this.translation.activeLanguage() === "en" ? "ar" : "en";
+    await this.activeOperator.setLanguage(language);
+    this.translation.setLanguage(language);
   }
 }

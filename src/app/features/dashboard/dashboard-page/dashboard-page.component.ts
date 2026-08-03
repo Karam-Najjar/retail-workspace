@@ -214,7 +214,7 @@ export class DashboardPageComponent implements OnDestroy, OnInit {
       case "settings.updated":
         text = { key: "activityLog.eventDetails.settingsUpdated", fallback: "Settings updated", params: {} };
         break;
-      case "backup.imported":
+      case "backup_imported":
         text = { key: "activityLog.eventDetails.backupImported", fallback: "Backup imported", params: {} };
         break;
       case "data.cleared":

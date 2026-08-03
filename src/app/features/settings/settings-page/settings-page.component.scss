@@ -97,6 +97,12 @@
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
 }
 
+.field-error {
+  margin: -0.625rem 0 0;
+  color: #ba1a1a;
+  font-size: 0.75rem;
+}
+
 // ---- Card Actions ----
 .card-actions {
   display: flex;

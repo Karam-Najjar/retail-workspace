@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>{{ titleKey() | translate }}</h2>
+<mat-dialog-content>
+  <p>{{ message() }}</p>
+  @if (details().length) {
+    <ul>
+      @for (detail of details(); track detail) {
+        <li>{{ detail }}</li>
+      }
+    </ul>
+  }
+  @if (requiredText()) {
+    <mat-form-field appearance="outline">
+      <mat-label>{{ confirmationLabel() }}</mat-label>
+      <input matInput [(ngModel)]="confirmationValue" autocomplete="off" />
+    </mat-form-field>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">{{ "common.cancel" | translate }}</button>
+  <button mat-flat-button color="warn" type="button" (click)="confirm()" [disabled]="!canConfirm()">
+    {{ "common.confirm" | translate }}
+  </button>
+</mat-dialog-actions>
