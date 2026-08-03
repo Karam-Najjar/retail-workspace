@@ -1,4 +1,5 @@
 import { inject, Injectable } from "@angular/core";
+import Decimal from "decimal.js";
 import { StoreProfileService } from "../../configuration/store-profile.service";
 import { SaleCurrencySnapshot } from "../../domain/models/sale-currency-snapshot.model";
 import { CURRENCY_ROUNDING_POLICY, roundCurrencyMinorUnits } from "../../domain/policies/currency-rounding.policy";
@@ -17,14 +18,15 @@ export class SaleCurrencySnapshotService {
     const primaryPrecision = profile.currency.primary.precision;
     const secondaryCode = profile.currency.secondary.code;
     const secondaryPrecision = profile.currency.secondary.precision;
-    const numericRate = Number(exchangeRate);
+    const rate = new Decimal(exchangeRate);
+    const primaryScale = new Decimal(10).pow(primaryPrecision);
+    const secondaryScale = new Decimal(10).pow(secondaryPrecision);
 
     return (totalAmount, totalCost) => {
       this.assertPrimaryAmount(totalAmount);
       this.assertPrimaryAmount(totalCost);
-      const primaryScale = 10 ** primaryPrecision;
-      const secondaryScale = 10 ** secondaryPrecision;
-      const convert = (amount: number): number => roundCurrencyMinorUnits((amount / primaryScale) * numericRate * secondaryScale);
+      const convert = (amount: number): number =>
+        roundCurrencyMinorUnits(new Decimal(amount).div(primaryScale).mul(rate).mul(secondaryScale));
       const secondaryTotalAmount = convert(totalAmount);
       const secondaryTotalCost = convert(totalCost);
       const secondaryTotalProfit = secondaryTotalAmount - secondaryTotalCost;
