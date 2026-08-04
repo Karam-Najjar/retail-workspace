@@ -12,6 +12,27 @@
   "shell": {
     "toggleNavigation": "تبديل التنقل"
   },
+  "reportIssue": {
+    "button": "إبلاغ عن خطأ",
+    "title": "إبلاغ عن خطأ",
+    "diagnosticsNote": "جميع المعلومات المرتبطة بالخطأ سيتم تضمينها تلقائيا",
+    "fields": {
+      "title": "العنوان",
+      "description": "الوصف",
+      "images": "الصور"
+    },
+    "chooseImages": "أضف صور",
+    "imageHint": "حتى 5 صور 5 ميجا حد أعلى",
+    "removeImage": "ازالة صورة",
+    "export": "تصدير",
+    "exporting": "يتم التصدير...",
+    "errors": {
+      "imageCount": "يمكنك ارفاق 5 صور كحد أقصى",
+      "imageSize": "حجم الصورة لا يجب أن يتجاوز 5 ميجا",
+      "imageType": "المفات المسموحة فقط صور",
+      "export": "لا يمكن تصدير هذه المشكلة الرجاء المحاولة لاحقا"
+    }
+  },
   "navigation": {
     "label": "القائمة الرئيسية",
     "dashboard": "لوحة التحكم",

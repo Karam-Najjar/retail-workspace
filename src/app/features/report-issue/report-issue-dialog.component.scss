@@ -1,0 +1,67 @@
+:host {
+  display: block;
+}
+
+mat-dialog-content {
+  display: grid;
+  gap: 1rem;
+}
+
+mat-form-field {
+  inline-size: 100%;
+}
+
+.diagnostics-note,
+.attachments-hint,
+.form-error {
+  margin: 0;
+}
+
+.diagnostics-note,
+.attachments-hint {
+  color: var(--retail-on-surface-muted);
+  font-size: 0.875rem;
+}
+
+.attachments {
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+}
+
+.attachments-label {
+  color: var(--retail-on-surface);
+  font-weight: 600;
+}
+
+.image-list {
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.image-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-inline-size: 0;
+  border-bottom: 1px solid var(--retail-outline-variant);
+}
+
+.image-list span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.form-error {
+  color: #ba1a1a;
+}
+
+@media (max-width: 36rem) {
+  mat-dialog-content {
+    padding-inline: 1rem;
+  }
+}

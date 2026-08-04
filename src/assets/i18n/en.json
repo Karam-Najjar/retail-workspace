@@ -12,6 +12,27 @@
   "shell": {
     "toggleNavigation": "Toggle navigation"
   },
+  "reportIssue": {
+    "button": "Report Issue",
+    "title": "Report an issue",
+    "diagnosticsNote": "App profile, version, storage health, recent activity, and recent errors will be attached automatically.",
+    "fields": {
+      "title": "Title",
+      "description": "Description",
+      "images": "Images (optional)"
+    },
+    "chooseImages": "Choose images",
+    "imageHint": "Up to 5 images, 5 MB each.",
+    "removeImage": "Remove image",
+    "export": "Export report",
+    "exporting": "Exporting...",
+    "errors": {
+      "imageCount": "You can attach up to 5 images.",
+      "imageSize": "Each image must be 5 MB or smaller.",
+      "imageType": "Only image files can be attached.",
+      "export": "The issue report could not be exported. Please try again."
+    }
+  },
   "navigation": {
     "label": "Main navigation",
     "dashboard": "Dashboard",

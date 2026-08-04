@@ -11,6 +11,11 @@
   <span class="app-title">{{ "app.title" | translate }}</span>
   <span class="spacer"></span>
 
+  <button mat-button type="button" (click)="openReportIssue()">
+    <mat-icon>bug_report</mat-icon>
+    {{ "reportIssue.button" | translate }}
+  </button>
+
   <button mat-button type="button" [matMenuTriggerFor]="operatorMenu">
     <mat-icon>person</mat-icon>
     {{ activeOperator.activeOperator()?.display_name ?? ("operators.loading" | translate) }}

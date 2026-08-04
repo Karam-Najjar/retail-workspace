@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ "reportIssue.title" | translate }}</h2>
+
+<mat-dialog-content>
+  <p class="diagnostics-note">{{ "reportIssue.diagnosticsNote" | translate }}</p>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ "reportIssue.fields.title" | translate }}</mat-label>
+    <input matInput required [(ngModel)]="title" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ "reportIssue.fields.description" | translate }}</mat-label>
+    <textarea matInput required rows="6" [(ngModel)]="description"></textarea>
+  </mat-form-field>
+
+  <section class="attachments" aria-labelledby="report-issue-images-label">
+    <span id="report-issue-images-label" class="attachments-label">{{ "reportIssue.fields.images" | translate }}</span>
+    <input #imageInput hidden type="file" accept="image/*" multiple (change)="selectImages($event)" />
+    <button mat-stroked-button type="button" (click)="imageInput.click()">
+      <mat-icon>add_photo_alternate</mat-icon>
+      {{ "reportIssue.chooseImages" | translate }}
+    </button>
+    <span class="attachments-hint">{{ "reportIssue.imageHint" | translate }}</span>
+
+    @if (images.length) {
+      <ul class="image-list">
+        @for (image of images; track image.name + image.size; let index = $index) {
+          <li>
+            <span>{{ image.name }} ({{ formatBytes(image.size) }})</span>
+            <button
+              mat-icon-button
+              type="button"
+              [attr.aria-label]="'reportIssue.removeImage' | translate"
+              (click)="removeImage(index)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  @if (selectionError) {
+    <p class="form-error">{{ selectionError | translate }}</p>
+  }
+  @if (exportFailed) {
+    <p class="form-error">{{ "reportIssue.errors.export" | translate }}</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" [disabled]="exporting" (click)="close()">{{ "common.cancel" | translate }}</button>
+  <button mat-flat-button color="primary" type="button" [disabled]="!valid() || exporting" (click)="submit()">
+    {{ (exporting ? "reportIssue.exporting" : "reportIssue.export") | translate }}
+  </button>
+</mat-dialog-actions>
