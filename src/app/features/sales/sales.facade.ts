@@ -10,6 +10,7 @@ import {
   sumCurrencyMinorUnits,
   sumSafeIntegers,
 } from "@retail/kernel";
+import { NotificationService } from "../../core/notifications/notification.service";
 
 export interface SalesSummary {
   readonly totalRevenue: number;
@@ -23,6 +24,7 @@ export class SalesFacade {
   private readonly repository = inject(DexieSaleRepository);
   private readonly reporting = inject(SalesReportingService);
   private readonly excel = inject(ExcelExportService);
+  private readonly notifications = inject(NotificationService);
 
   readonly sales = signal<readonly SaleListEntry[]>([]);
   readonly loading = signal(false);
@@ -47,6 +49,7 @@ export class SalesFacade {
     } catch {
       this.sales.set([]);
       this.error.set("sales.errors.load");
+      this.notifications.error("sales.errors.load");
     } finally {
       this.loading.set(false);
     }
@@ -61,6 +64,9 @@ export class SalesFacade {
     try {
       const report = await this.reporting.getReport(filter);
       await this.excel.export({ fileName, rtl, sheets: [SalesWorkbookMapper.map(report.details)] });
+      this.notifications.success("notifications.success.exportCompleted");
+    } catch {
+      this.notifications.error("notifications.errors.export");
     } finally {
       this.exporting.set(false);
     }

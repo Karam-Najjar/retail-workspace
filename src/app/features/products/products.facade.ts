@@ -18,6 +18,7 @@ import {
   SaveProductUseCase,
   WriteOffAndDeleteProductUseCase,
 } from "@retail/kernel";
+import { NotificationService } from "../../core/notifications/notification.service";
 
 @Injectable()
 export class ProductsFacade {
@@ -32,6 +33,7 @@ export class ProductsFacade {
   private readonly stockIn = inject(AdjustStockInUseCase);
   private readonly stockOut = inject(AdjustStockOutUseCase);
   private readonly writeOff = inject(WriteOffAndDeleteProductUseCase);
+  private readonly notifications = inject(NotificationService);
   readonly products = signal<readonly Product[]>([]);
   readonly categories = signal<readonly Category[]>([]);
   readonly loading = signal(false);
@@ -45,6 +47,7 @@ export class ProductsFacade {
       this.categories.set(categories);
     } catch {
       this.error.set("products.errors.load");
+      this.notifications.error("products.errors.load");
     } finally {
       this.loading.set(false);
     }
@@ -57,6 +60,7 @@ export class ProductsFacade {
       return await this.getProductInventory.execute(id);
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "inventory.errors.load");
+      this.notifications.error("inventory.errors.load");
       return undefined;
     }
   }
@@ -75,15 +79,19 @@ export class ProductsFacade {
       if (!inventory) throw new Error("Product could not be found.");
       if (inventory.product.quantity !== 0) throw new Error("Only products with zero stock can be deleted.");
       await this.deleteProduct.execute(inventory.product);
+      this.notifications.success("notifications.success.productDeleted");
       return true;
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "products.errors.delete");
+      this.notifications.error("products.errors.delete");
       return false;
     }
   }
   async saveBarcodes(productId: string, barcodes: readonly ProductBarcodeInput[]): Promise<readonly ProductBarcode[] | null> {
     try {
-      return await this.manageBarcodes.execute(productId, barcodes);
+      const saved = await this.manageBarcodes.execute(productId, barcodes);
+      this.notifications.success("notifications.success.barcodesSaved");
+      return saved;
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "products.errors.barcodes");
       return null;
@@ -92,6 +100,7 @@ export class ProductsFacade {
   async createOpeningBalance(productId: string, quantity: number, unitCostCents: number, reason: string): Promise<boolean> {
     try {
       await this.openingBalance.execute({ productId, quantity, unitCostCents, reason });
+      this.notifications.success("notifications.success.openingBalanceCreated");
       return true;
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "inventory.errors.save");
@@ -101,6 +110,7 @@ export class ProductsFacade {
   async addStock(productId: string, quantity: number, unitCostCents: number, reason: string): Promise<boolean> {
     try {
       await this.stockIn.execute({ productId, quantity, unitCostCents, reason });
+      this.notifications.success("notifications.success.stockAdded");
       return true;
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "inventory.errors.save");
@@ -110,6 +120,7 @@ export class ProductsFacade {
   async removeStock(productId: string, quantity: number, reason: string): Promise<boolean> {
     try {
       await this.stockOut.execute({ productId, quantity, reason });
+      this.notifications.success("notifications.success.stockRemoved");
       return true;
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "inventory.errors.save");
@@ -119,6 +130,7 @@ export class ProductsFacade {
   async writeOffAndDelete(productId: string, reason: string): Promise<boolean> {
     try {
       await this.writeOff.execute({ productId, reason });
+      this.notifications.success("notifications.success.productWrittenOff");
       return true;
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "inventory.errors.writeOff");

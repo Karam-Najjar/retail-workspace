@@ -12,12 +12,7 @@ import {
   Product,
   Sale,
 } from "@retail/kernel";
-
-export interface PosFeedback {
-  readonly key: string;
-  readonly kind: "error" | "success";
-  readonly params?: Readonly<Record<string, number>>;
-}
+import { NotificationService } from "../../core/notifications/notification.service";
 
 @Injectable()
 export class PosFacade {
@@ -27,13 +22,13 @@ export class PosFacade {
   private readonly completeSale = inject(CheckoutUseCase);
   private readonly listProducts = inject(ListProductsUseCase);
   private readonly currency = inject(CurrencyService);
+  private readonly notifications = inject(NotificationService);
   readonly cart = inject(PosCartStore);
   private operationQueue: Promise<void> = Promise.resolve();
   readonly products = signal<readonly Product[]>([]);
   readonly exchangeRate = signal("0");
   readonly loading = signal(false);
   readonly checkingOut = signal(false);
-  readonly feedback = signal<PosFeedback | null>(null);
 
   async initialize(): Promise<void> {
     this.loading.set(true);
@@ -64,7 +59,7 @@ export class PosFacade {
   clear(): Promise<void> {
     return this.enqueue(async () => {
       await this.clearCart.execute();
-      this.feedback.set(null);
+      this.notifications.success("notifications.success.cartCleared");
     });
   }
   total(): number {
@@ -74,10 +69,9 @@ export class PosFacade {
   async checkout(): Promise<Sale | null> {
     if (this.checkingOut() || !this.cart.hasItems()) return null;
     this.checkingOut.set(true);
-    this.feedback.set(null);
     try {
       const sale = await this.enqueue(() => this.completeSale.execute());
-      this.feedback.set({ key: "pos.saleCompleted", kind: "success" });
+      this.notifications.success("pos.saleCompleted");
       try {
         await this.refreshProducts();
       } catch {
@@ -85,7 +79,7 @@ export class PosFacade {
       }
       return sale;
     } catch {
-      this.feedback.set({ key: "pos.checkoutFailed", kind: "error" });
+      this.notifications.error("pos.checkoutFailed");
       return null;
     } finally {
       this.checkingOut.set(false);
@@ -97,13 +91,13 @@ export class PosFacade {
   }
 
   setError(): void {
-    this.feedback.set({ key: "pos.cartUpdateFailed", kind: "error" });
+    this.notifications.error("pos.cartUpdateFailed");
   }
 
   setFeedback(result: AddCartItemResult): void {
-    if (result.status === "capped") this.feedback.set({ key: "pos.onlyMoreAvailable", kind: "error", params: { count: result.moreAvailable } });
-    else if (result.status === "out_of_stock") this.feedback.set({ key: "pos.outOfStock", kind: "error" });
-    else this.feedback.set(null);
+    if (result.status === "capped") this.notifications.warning("pos.onlyMoreAvailable", { count: result.moreAvailable });
+    else if (result.status === "out_of_stock") this.notifications.error("pos.outOfStock");
+    else this.notifications.success("notifications.success.cartUpdated", undefined, "pos-cart-updated");
   }
 
   private enqueue<T>(operation: () => Promise<T>): Promise<T> {

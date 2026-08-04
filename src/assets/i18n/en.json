@@ -463,5 +463,34 @@
   "packages": {
     "pocket": "Pocket",
     "carton": "Carton"
+  },
+  "notifications": {
+    "dismiss": "Dismiss",
+    "errors": {
+      "unexpected": "Something went wrong. Please try again.",
+      "export": "The export could not be completed."
+    },
+    "success": {
+      "categorySaved": "Category saved.",
+      "categoryDeleted": "Category deleted.",
+      "supplierSaved": "Supplier saved.",
+      "supplierDeleted": "Supplier deleted.",
+      "productSaved": "Product saved.",
+      "productDeleted": "Product deleted.",
+      "barcodesSaved": "Barcodes saved.",
+      "openingBalanceCreated": "Opening balance created.",
+      "stockAdded": "Stock added.",
+      "stockRemoved": "Stock removed.",
+      "productWrittenOff": "Product written off.",
+      "supplyReceived": "Supply received.",
+      "exportCompleted": "Export completed.",
+      "backupExported": "Backup exported.",
+      "backupRestored": "Backup restored.",
+      "settingsSaved": "Settings saved.",
+      "dataCleared": "Application data cleared.",
+      "licenceActivated": "Licence activated.",
+      "cartUpdated": "Cart updated.",
+      "cartCleared": "Cart cleared."
+    }
   }
 }

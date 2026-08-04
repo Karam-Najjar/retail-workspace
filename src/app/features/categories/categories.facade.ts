@@ -8,6 +8,7 @@ import {
   SaveCategoryUseCase,
 } from "@retail/kernel";
 import { DexieCategoryRepository } from "@retail/kernel";
+import { NotificationService } from "../../core/notifications/notification.service";
 
 @Injectable()
 export class CategoriesFacade {
@@ -16,6 +17,7 @@ export class CategoriesFacade {
   private readonly saveCategory = inject(SaveCategoryUseCase);
   private readonly deleteCategory = inject(DeleteCategoryUseCase);
   private readonly repository = inject(DexieCategoryRepository);
+  private readonly notifications = inject(NotificationService);
 
   readonly categories = signal<readonly Category[]>([]);
   readonly loading = signal(false);
@@ -29,6 +31,7 @@ export class CategoriesFacade {
       this.categories.set(await this.listCategories.execute());
     } catch {
       this.error.set("categories.errors.load");
+      this.notifications.error("categories.errors.load");
     } finally {
       this.loading.set(false);
     }
@@ -42,6 +45,7 @@ export class CategoriesFacade {
     try {
       const category = await this.saveCategory.execute(input);
       await this.load();
+      this.notifications.success("notifications.success.categorySaved");
       return category;
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "categories.errors.save");
@@ -53,9 +57,11 @@ export class CategoriesFacade {
     try {
       const affectedProducts = await this.deleteCategory.execute(category.id);
       await this.load();
+      this.notifications.success("notifications.success.categoryDeleted");
       return affectedProducts;
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "categories.errors.delete");
+      this.notifications.error("categories.errors.delete");
       return null;
     }
   }

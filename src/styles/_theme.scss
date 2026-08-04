@@ -39,3 +39,35 @@ html {
 .mdc-dialog__content {
   overflow: visible !important;
 }
+
+.app-notification--success {
+  --mdc-snackbar-container-color: #2e7d32 !important;
+  --mdc-snackbar-supporting-text-color: #fff !important;
+  --mat-snack-bar-button-color: #fff !important;
+  --mat-snack-bar-container-color: #2e7d32 !important;
+  --mat-snack-bar-supporting-text-color: #fff !important;
+}
+
+.app-notification--info {
+  --mdc-snackbar-container-color: #01579b !important;
+  --mdc-snackbar-supporting-text-color: #fff !important;
+  --mat-snack-bar-button-color: #fff !important;
+  --mat-snack-bar-container-color: #01579b !important;
+  --mat-snack-bar-supporting-text-color: #fff !important;
+}
+
+.app-notification--warning {
+  --mdc-snackbar-container-color: #e65100 !important;
+  --mdc-snackbar-supporting-text-color: #fff !important;
+  --mat-snack-bar-button-color: #fff !important;
+  --mat-snack-bar-container-color: #e65100 !important;
+  --mat-snack-bar-supporting-text-color: #fff !important;
+}
+
+.app-notification--error {
+  --mdc-snackbar-container-color: #c62828 !important;
+  --mdc-snackbar-supporting-text-color: #fff !important;
+  --mat-snack-bar-button-color: #fff !important;
+  --mat-snack-bar-container-color: #c62828 !important;
+  --mat-snack-bar-supporting-text-color: #fff !important;
+}

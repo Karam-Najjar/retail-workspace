@@ -17,10 +17,6 @@
     <app-summary-card labelKey="sales.totalItemsSold" [value]="facade.summary().totalItemsSold" />
   </section>
 
-  @if (facade.error()) {
-    <p class="error" role="alert">{{ facade.error() | translate }}</p>
-  }
-
   @if (facade.sales().length) {
     <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openDetail($event)" />
   } @else if (!facade.loading()) {
