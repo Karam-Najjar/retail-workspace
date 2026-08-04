@@ -7,6 +7,8 @@ import {
   SaleListFilter,
   SalesReportingService,
   SalesWorkbookMapper,
+  sumCurrencyMinorUnits,
+  sumSafeIntegers,
 } from "@retail/kernel";
 
 export interface SalesSummary {
@@ -26,17 +28,15 @@ export class SalesFacade {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly exporting = signal(false);
-  readonly summary = computed<SalesSummary>(() =>
-    this.sales().reduce<SalesSummary>(
-      (summary, entry) => ({
-        totalRevenue: summary.totalRevenue + entry.sale.total_amount,
-        totalCost: summary.totalCost + entry.sale.total_cost,
-        totalProfit: summary.totalProfit + entry.sale.total_profit,
-        totalItemsSold: summary.totalItemsSold + entry.totalItemsSold,
-      }),
-      { totalRevenue: 0, totalCost: 0, totalProfit: 0, totalItemsSold: 0 }
-    )
-  );
+  readonly summary = computed<SalesSummary>(() => {
+    const sales = this.sales();
+    return {
+      totalRevenue: sumCurrencyMinorUnits(sales.map(entry => entry.sale.total_amount)),
+      totalCost: sumCurrencyMinorUnits(sales.map(entry => entry.sale.total_cost)),
+      totalProfit: sumCurrencyMinorUnits(sales.map(entry => entry.sale.total_profit)),
+      totalItemsSold: sumSafeIntegers(sales.map(entry => entry.totalItemsSold), "Sales item total is too large."),
+    };
+  });
 
   async load(filter: SaleListFilter = {}): Promise<void> {
     this.loading.set(true);

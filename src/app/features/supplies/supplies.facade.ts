@@ -47,12 +47,11 @@ export class SuppliesFacade {
     this.loading.set(true);
     this.error.set(null);
     try {
-      const [supplies, suppliers, report] = await Promise.all([
-        this.listSupplies.execute(filter),
+      const [suppliers, report] = await Promise.all([
         this.listSuppliers.execute(),
         this.reporting.getReport(filter),
       ]);
-      this.supplies.set(supplies);
+      this.supplies.set(report.entries);
       this.suppliers.set(suppliers);
       this.summary.set(report.summary);
     } catch {

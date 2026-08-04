@@ -11,12 +11,16 @@ export function roundCurrencyMinorUnits(value: Decimal.Value): number {
 }
 
 export function sumCurrencyMinorUnits(values: Iterable<number>): number {
+  return sumSafeIntegers(values, "Currency total is too large.");
+}
+
+export function sumSafeIntegers(values: Iterable<number>, unsafeMessage = "Integer total is too large."): number {
   let total = new Decimal(0);
   for (const value of values) {
     assertSafeCurrencyMinorUnits(value);
     total = total.plus(value);
   }
-  return toSafeInteger(total, "Currency total is too large.");
+  return toSafeInteger(total, unsafeMessage);
 }
 
 export function multiplyCurrencyMinorUnits(unitAmount: number, quantity: number): number {

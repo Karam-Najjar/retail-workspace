@@ -35,14 +35,9 @@ export class SuppliesWorkbookMapper {
         ];
       })
     );
-    const totals = details.reduce(
-      (sum, detail) => ({
-        usd: sum.usd + primary(detail.supply.total_cost, detail.supply.currency_snapshot),
-      }),
-      { usd: 0 }
-    );
+    const totalUsd = storedPrimaryTotal(details);
     const totalSyp = storedSecondaryTotal(details);
-    return { name: "Supplies", columns, rows, summary: ["Summary", null, null, null, null, null, null, totals.usd, totalSyp] };
+    return { name: "Supplies", columns, rows, summary: ["Summary", null, null, null, null, null, null, totalUsd, totalSyp] };
   }
 }
 
@@ -70,6 +65,18 @@ function storedSecondaryTotal(details: readonly SupplyDetail[]): number {
     const snapshot = detail.supply.currency_snapshot;
     if (snapshot.secondary_precision !== precision) throw new Error("Supply export contains incompatible secondary currency precisions.");
     return snapshot.secondary_total_cost;
+  });
+  return currencyMinorUnitsToMajor(sumCurrencyMinorUnits(values), precision);
+}
+
+function storedPrimaryTotal(details: readonly SupplyDetail[]): number {
+  const firstSnapshot = details[0]?.supply.currency_snapshot;
+  if (!firstSnapshot) return 0;
+  const precision = firstSnapshot.primary_precision;
+  const values = details.map(detail => {
+    const snapshot = detail.supply.currency_snapshot;
+    if (snapshot.primary_precision !== precision) throw new Error("Supply export contains incompatible primary currency precisions.");
+    return detail.supply.total_cost;
   });
   return currencyMinorUnitsToMajor(sumCurrencyMinorUnits(values), precision);
 }

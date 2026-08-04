@@ -1,5 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { SalesSummary } from "../dto/sales-summary.model";
+import { sumCurrencyMinorUnits, sumSafeIntegers } from "../../domain/policies/currency-rounding.policy";
 import { SaleDetail, SaleListFilter } from "../../domain/repository-contracts/sale.repository";
 import { DexieSaleRepository } from "../../data-access/repositories/dexie-sale.repository";
 
@@ -19,15 +20,15 @@ export class SalesReportingService {
     );
     return {
       details,
-      summary: details.reduce<SalesSummary>(
-        (summary, detail) => ({
-          total_revenue: summary.total_revenue + detail.sale.total_amount,
-          total_cost: summary.total_cost + detail.sale.total_cost,
-          total_profit: summary.total_profit + detail.sale.total_profit,
-          total_items_sold: summary.total_items_sold + detail.items.reduce((total, item) => total + item.quantity_base_units, 0),
-        }),
-        { total_revenue: 0, total_cost: 0, total_profit: 0, total_items_sold: 0 }
-      ),
+      summary: {
+        total_revenue: sumCurrencyMinorUnits(details.map(detail => detail.sale.total_amount)),
+        total_cost: sumCurrencyMinorUnits(details.map(detail => detail.sale.total_cost)),
+        total_profit: sumCurrencyMinorUnits(details.map(detail => detail.sale.total_profit)),
+        total_items_sold: sumSafeIntegers(
+          details.flatMap(detail => detail.items.map(item => item.quantity_base_units)),
+          "Sales item quantity total is too large."
+        ),
+      } satisfies SalesSummary,
     };
   }
 }

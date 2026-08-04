@@ -32,6 +32,7 @@ export interface SupplyDetail {
 export interface SupplyRepository {
   receive(receipt: SupplyReceipt): Promise<void>;
   list(filter?: SupplyListFilter): Promise<readonly Supply[]>;
+  listDetails(filter?: SupplyListFilter): Promise<readonly SupplyDetail[]>;
   getDetail(id: string): Promise<SupplyDetail | undefined>;
   listRecentBySupplier(supplierId: string, limit?: number): Promise<readonly Supply[]>;
 }

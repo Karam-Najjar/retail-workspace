@@ -79,6 +79,26 @@ export class DexieSupplyRepository implements SupplyRepository {
   }
 
   async list(filter: SupplyListFilter = {}): Promise<readonly Supply[]> {
+    return this.listSupplies(filter);
+  }
+
+  async listDetails(filter: SupplyListFilter = {}): Promise<readonly SupplyDetail[]> {
+    return this.database.transaction("r", [this.database.supplies, this.database.supplyItems], async () => {
+      const supplies = await this.listSupplies(filter);
+      if (!supplies.length) return [];
+
+      const supplyIds = supplies.map(supply => supply.id);
+      const items = await this.database.supplyItems.where("supply_id").anyOf(supplyIds).toArray();
+      const itemsBySupplyId = new Map<string, SupplyDetail["items"]>();
+      for (const item of items) {
+        const current = itemsBySupplyId.get(item.supply_id) ?? [];
+        itemsBySupplyId.set(item.supply_id, [...current, item]);
+      }
+      return supplies.map(supply => ({ supply, items: itemsBySupplyId.get(supply.id) ?? [] }));
+    });
+  }
+
+  private async listSupplies(filter: SupplyListFilter): Promise<readonly Supply[]> {
     const supplies =
       filter.from && filter.to
         ? await this.database.supplies.where("date").between(filter.from, filter.to, true, true).reverse().sortBy("date")

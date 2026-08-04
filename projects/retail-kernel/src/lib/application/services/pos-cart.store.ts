@@ -179,8 +179,6 @@ export class PosCartStore {
     return Number(total);
   }
   private async replace(items: readonly DraftCartItem[], result: CartMutationResult): Promise<CartMutationResult> {
-    this.items.set(items);
-    this.checkoutIdempotency.reset(items);
     const draft: DraftCart = {
       id: "active",
       items,
@@ -190,6 +188,8 @@ export class PosCartStore {
     };
     this.persistenceQueue = this.persistenceQueue.catch(() => undefined).then(() => this.repository.save(draft));
     await this.persistenceQueue;
+    this.items.set(items);
+    this.checkoutIdempotency.reset(items);
     return result;
   }
 }
