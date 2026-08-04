@@ -26,6 +26,9 @@ export class DexieInventoryAdjustmentRepository implements InventoryAdjustmentRe
         if (change.adjustment.type === "opening_balance" && product.quantity !== 0) {
           throw new Error("Opening balance is only available when stock is zero.");
         }
+        if (change.adjustment.type === "adjustment_in" && product.quantity <= 0) {
+          throw new Error("Stock adjustment is only available when stock is positive.");
+        }
 
         const existingBatches = await this.database.inventoryBatches.where("product_id").equals(product.id).toArray();
         for (const existingBatch of existingBatches) assertValidInventoryBatch(existingBatch);

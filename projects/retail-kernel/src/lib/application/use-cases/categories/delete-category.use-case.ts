@@ -1,6 +1,5 @@
 import { inject, Injectable } from "@angular/core";
 import { ActivityLog } from "../../../domain/models/activity-log.model";
-import { Category } from "../../../domain/models/category.model";
 import { DexieCategoryRepository } from "../../../data-access/repositories/dexie-category.repository";
 import { ActiveOperatorService } from "../../services/active-operator.service";
 
@@ -9,7 +8,11 @@ export class DeleteCategoryUseCase {
   private readonly repository = inject(DexieCategoryRepository);
   private readonly activeOperator = inject(ActiveOperatorService);
 
-  async execute(category: Category): Promise<number> {
+  async execute(categoryId: string): Promise<number> {
+    const category = await this.repository.getById(categoryId);
+    if (!category) {
+      throw new Error("Category could not be found.");
+    }
     if (category.system_code) {
       throw new Error("System categories cannot be deleted.");
     }
@@ -30,6 +33,6 @@ export class DeleteCategoryUseCase {
       related_supply_id: null,
       created_at: new Date(),
     };
-    return this.repository.deleteWithActivity(category, activityLog);
+    return this.repository.deleteWithActivity(category.id, activityLog);
   }
 }

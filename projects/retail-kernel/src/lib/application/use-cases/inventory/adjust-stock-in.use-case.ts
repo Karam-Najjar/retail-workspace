@@ -28,6 +28,7 @@ export class AdjustStockInUseCase {
     const product = await this.products.getById(input.productId);
     if (!product) throw new Error("Product could not be found.");
     await this.integrity.assertConsistent(product);
+    if (product.quantity <= 0) throw new Error("Stock adjustment is only available when stock is positive.");
     const operator = this.activeOperator.activeOperator();
     if (!operator) throw new Error("An active operator is required.");
     const now = new Date();

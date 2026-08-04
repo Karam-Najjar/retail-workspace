@@ -75,7 +75,7 @@ export class StockAdjustmentComponent implements OnInit {
 
   protected availableTypes(): readonly StockAdjustmentType[] {
     if (this.writeOffOnly) return ["write_off"];
-    return this.product()?.quantity === 0 ? ["opening_balance", "adjustment_in"] : ["adjustment_in", "adjustment_out", "write_off"];
+    return this.product()?.quantity === 0 ? ["opening_balance"] : ["adjustment_in", "adjustment_out", "write_off"];
   }
 
   protected showsUnitCost(): boolean {

@@ -8,9 +8,12 @@ import { SaleCompletedPayload } from "../../domain/events/sale-completed.payload
 import { SaleItemBatchAllocation } from "../../domain/models/sale-item-batch-allocation.model";
 import { SaleItem } from "../../domain/models/sale-item.model";
 import { Sale } from "../../domain/models/sale.model";
+import { SaleCurrencySnapshot } from "../../domain/models/sale-currency-snapshot.model";
 import { allocateFifo } from "../../domain/policies/fifo-allocation.policy";
+import { CURRENCY_ROUNDING_POLICY } from "../../domain/policies/currency-rounding.policy";
 import { SaleCheckoutRequest, SaleDetail, SaleListEntry, SaleListFilter, SaleRepository } from "../../domain/repository-contracts/sale.repository";
 import { RetailDatabase } from "../database/retail.database";
+import Decimal from "decimal.js";
 
 @Injectable({ providedIn: "root" })
 export class DexieSaleRepository implements SaleRepository {
@@ -119,6 +122,8 @@ export class DexieSaleRepository implements SaleRepository {
           }
 
           const totalProfit = totalAmount - totalCost;
+          const currencySnapshot = request.createCurrencySnapshot(totalAmount, totalCost);
+          this.assertCurrencySnapshot(currencySnapshot);
           const sale: Sale = {
             id: saleId,
             date: request.date,
@@ -128,7 +133,7 @@ export class DexieSaleRepository implements SaleRepository {
             payment_method: "cash",
             operator_id: request.operatorId,
             operator_name: request.operatorName,
-            currency_snapshot: request.createCurrencySnapshot(totalAmount, totalCost),
+            currency_snapshot: currencySnapshot,
             idempotency_key: request.idempotencyKey,
             created_at: request.date,
           };
@@ -230,6 +235,53 @@ export class DexieSaleRepository implements SaleRepository {
     if (!(request.date instanceof Date) || Number.isNaN(request.date.getTime())) throw new Error("A valid sale date is required.");
     if (!request.items.length) throw new Error("The cart is empty.");
     for (const item of request.items) this.assertCartItem(item);
+  }
+
+  private assertCurrencySnapshot(snapshot: SaleCurrencySnapshot): void {
+    if (!snapshot.primary_code.trim() || !snapshot.secondary_code.trim()) {
+      throw new Error("Currency snapshot codes are required.");
+    }
+    if (!this.isValidPrecision(snapshot.primary_precision) || !this.isValidPrecision(snapshot.secondary_precision)) {
+      throw new Error("Currency snapshot precision is invalid.");
+    }
+    if (snapshot.rate_direction !== "secondary_per_primary") {
+      throw new Error("Currency snapshot rate direction is invalid.");
+    }
+    if (snapshot.rounding_policy !== CURRENCY_ROUNDING_POLICY) {
+      throw new Error("Currency snapshot rounding policy is invalid.");
+    }
+    if (!this.isPositiveDecimal(snapshot.exchange_rate)) {
+      throw new Error("Currency snapshot exchange rate is invalid.");
+    }
+    if (
+      !this.isNonNegativeSafeInteger(snapshot.secondary_total_amount) ||
+      !this.isNonNegativeSafeInteger(snapshot.secondary_total_cost) ||
+      !this.isSafeInteger(snapshot.secondary_total_profit) ||
+      snapshot.secondary_total_profit !== snapshot.secondary_total_amount - snapshot.secondary_total_cost
+    ) {
+      throw new Error("Currency snapshot totals are invalid.");
+    }
+  }
+
+  private isValidPrecision(value: number): boolean {
+    return Number.isSafeInteger(value) && value >= 0;
+  }
+
+  private isNonNegativeSafeInteger(value: number): boolean {
+    return this.isSafeInteger(value) && value >= 0;
+  }
+
+  private isSafeInteger(value: number): boolean {
+    return Number.isSafeInteger(value);
+  }
+
+  private isPositiveDecimal(value: string): boolean {
+    try {
+      const rate = new Decimal(value);
+      return value.trim().length > 0 && rate.isFinite() && rate.greaterThan(0);
+    } catch {
+      return false;
+    }
   }
 
   private assertCartItem(item: DraftCartItem): void {

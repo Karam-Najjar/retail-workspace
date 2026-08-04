@@ -52,6 +52,12 @@ export class ActivityDetailsRendererService {
         return this.text("activityLog.eventDetails.categoryDeleted", "Category '{{ name }}' deleted", { name });
       case "supplier.deleted":
         return this.text("activityLog.eventDetails.supplierDeleted", "Supplier '{{ name }}' deleted", { name });
+      case "settings.updated":
+        return this.text("activityLog.eventDetails.settingsUpdated", "Settings updated", {});
+      case "backup.imported":
+        return this.text("activityLog.eventDetails.backupImported", "Backup imported", {});
+      case "data.cleared":
+        return this.text("activityLog.eventDetails.dataCleared", "All retail data cleared", {});
       default:
         return name ? `${eventCode}: ${name}` : eventCode;
     }

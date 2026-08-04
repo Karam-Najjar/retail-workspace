@@ -95,7 +95,28 @@ export class DashboardQueryService {
   }
 
   watch(): Observable<DashboardSnapshot> {
-    return liveQuery(() => this.getSnapshot()) as unknown as Observable<DashboardSnapshot>;
+    return new Observable<DashboardSnapshot>(subscriber => {
+      let midnightTimer: ReturnType<typeof setTimeout> | undefined;
+      const databaseSubscription = (liveQuery(() => this.getSnapshot()) as unknown as Observable<DashboardSnapshot>).subscribe(subscriber);
+
+      const scheduleMidnightRefresh = (): void => {
+        if (subscriber.closed) return;
+        const now = new Date();
+        const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        midnightTimer = setTimeout(() => {
+          void this.getSnapshot()
+            .then(snapshot => subscriber.next(snapshot))
+            .catch(error => subscriber.error(error))
+            .finally(scheduleMidnightRefresh);
+        }, nextMidnight.getTime() - now.getTime());
+      };
+
+      scheduleMidnightRefresh();
+      return () => {
+        databaseSubscription.unsubscribe();
+        if (midnightTimer !== undefined) clearTimeout(midnightTimer);
+      };
+    });
   }
 
   private addDays(date: Date, days: number): Date {
