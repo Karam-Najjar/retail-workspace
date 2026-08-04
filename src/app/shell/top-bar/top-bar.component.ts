@@ -1,5 +1,6 @@
 import { Component, inject, output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -10,14 +11,23 @@ import type { SettingsLanguage } from "@retail/kernel";
 
 @Component({
   selector: "app-top-bar",
-  imports: [MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule, TranslatePipe],
+  imports: [MatButtonModule, MatDialogModule, MatIconModule, MatMenuModule, MatToolbarModule, TranslatePipe],
   templateUrl: "./top-bar.component.html",
   styleUrl: "./top-bar.component.scss",
 })
 export class TopBarComponent {
+  private readonly dialog = inject(MatDialog);
   protected readonly translation = inject(TranslationService);
   protected readonly activeOperator = inject(ActiveOperatorService);
   readonly navigationToggle = output<void>();
+
+  protected async openReportIssue(): Promise<void> {
+    const { ReportIssueDialogComponent } = await import("../../features/report-issue/report-issue-dialog.component");
+    this.dialog.open(ReportIssueDialogComponent, {
+      width: "min(40rem, calc(100vw - 2rem))",
+      maxHeight: "calc(100vh - 2rem)",
+    });
+  }
 
   protected async selectOperator(operatorId: string): Promise<void> {
     await this.activeOperator.setActiveOperator(operatorId);
