@@ -70,4 +70,7 @@ export class DexieProductRepository implements ProductRepository {
       }
     );
   }
+  async addActivity(log: ActivityLog<"product.created" | "product.updated">): Promise<void> {
+    await this.database.activity_logs.add(log);
+  }
 }

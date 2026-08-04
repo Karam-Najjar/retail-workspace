@@ -17,6 +17,9 @@ export class DexieSupplierRepository implements SupplierRepository {
   async save(supplier: Supplier): Promise<void> {
     await this.database.suppliers.put(supplier);
   }
+    async addActivity(log: ActivityLog<"supplier.created" | "supplier.updated">): Promise<void> {
+    await this.database.activity_logs.add(log);
+  }
   async deleteWithActivity(supplier: Supplier, activityLog: unknown): Promise<void> {
     await this.database.transaction("rw", this.database.suppliers, this.database.activity_logs, async () => {
       await this.database.suppliers.delete(supplier.id);

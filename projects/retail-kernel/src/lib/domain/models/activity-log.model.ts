@@ -21,9 +21,13 @@ export interface SupplierDeletedPayload {
   readonly affected_supplies: number;
 }
 
+export interface EmptyPayload {}
+
 export interface ActivityEventPayloadMap {
   readonly backup_imported: BackupImportedPayload;
+  readonly "category.created": EmptyPayload;
   readonly "category.deleted": CategoryDeletedPayload;
+  readonly "category.updated": EmptyPayload;
   readonly "data.cleared": DataClearedPayload;
   readonly "inventory.opening_balance.created": InventoryStockAddedEventPayload;
   readonly "inventory.product.written_off": InventoryWriteOffEventPayload;
@@ -31,10 +35,13 @@ export interface ActivityEventPayloadMap {
   readonly "inventory.stock.removed": InventoryStockRemovedEventPayload;
   readonly "product.created": ProductEventPayload;
   readonly "product.deleted": ProductDeletedPayload;
+  readonly "product.updated": EmptyPayload;
   readonly product_created: ProductEventPayload;
   readonly sale_completed: SaleCompletedPayload;
   readonly "settings.updated": SettingsUpdatedPayload;
+  readonly "supplier.created": EmptyPayload;
   readonly "supplier.deleted": SupplierDeletedPayload;
+  readonly "supplier.updated": EmptyPayload;
   readonly "supply.received": SupplyReceivedPayload;
 }
 

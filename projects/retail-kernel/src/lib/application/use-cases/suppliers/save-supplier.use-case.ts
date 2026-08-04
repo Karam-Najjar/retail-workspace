@@ -1,4 +1,5 @@
 import { inject, Injectable } from "@angular/core";
+import { ActivityLog, EmptyPayload } from "../../../domain/models/activity-log.model";
 import { Supplier } from "../../../domain/models/supplier.model";
 import { DexieSupplierRepository } from "../../../data-access/repositories/dexie-supplier.repository";
 import { ActiveOperatorService } from "../../services/active-operator.service";
@@ -30,6 +31,7 @@ export class SaveSupplierUseCase {
 
     const existing = input.id ? await this.repository.getById(input.id) : undefined;
     const now = new Date();
+    const isNew = !existing;
     const supplier: Supplier = {
       id: existing?.id ?? crypto.randomUUID(),
       name,
@@ -42,6 +44,22 @@ export class SaveSupplierUseCase {
       updated_at: now,
     };
     await this.repository.save(supplier);
+
+    const activityLog = {
+      id: crypto.randomUUID(),
+      event_code: (isNew ? "supplier.created" : "supplier.updated") as "supplier.created" | "supplier.updated",
+      entity_type: "supplier",
+      entity_id: supplier.id,
+      entity_name_snapshot: supplier.name,
+      payload: {} as EmptyPayload,
+      operator_id: operator.id,
+      operator_name: operator.display_name,
+      related_sale_id: null,
+      related_supply_id: null,
+      created_at: now,
+    } as ActivityLog<"supplier.created" | "supplier.updated">;
+    await this.repository.addActivity(activityLog);
+
     return supplier;
   }
 }

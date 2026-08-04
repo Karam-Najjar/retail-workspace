@@ -1,4 +1,5 @@
 import { inject, Injectable } from "@angular/core";
+import { ActivityLog } from "../../../domain/models/activity-log.model";
 import { Category } from "../../../domain/models/category.model";
 import { DexieCategoryRepository } from "../../../data-access/repositories/dexie-category.repository";
 import { ActiveOperatorService } from "../../services/active-operator.service";
@@ -30,6 +31,7 @@ export class SaveCategoryUseCase {
     if (!operator) throw new Error("An active operator is required.");
 
     const now = new Date();
+    const isNew = !existing;
     const category: Category = {
       id: existing?.id ?? crypto.randomUUID(),
       name,
@@ -40,6 +42,22 @@ export class SaveCategoryUseCase {
       updated_at: now,
     };
     await this.repository.save(category);
+
+    const activityLog: ActivityLog<"category.created" | "category.updated"> = {
+      id: crypto.randomUUID(),
+      event_code: isNew ? "category.created" : "category.updated",
+      entity_type: "category",
+      entity_id: category.id,
+      entity_name_snapshot: category.name,
+      payload: {},
+      operator_id: operator.id,
+      operator_name: operator.display_name,
+      related_sale_id: null,
+      related_supply_id: null,
+      created_at: now,
+    };
+    await this.repository.addActivity(activityLog);
+
     return category;
   }
 }
