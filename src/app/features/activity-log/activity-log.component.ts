@@ -44,10 +44,10 @@ export class ActivityLogComponent implements OnInit {
     "backupChanges",
   ] as const;
   protected readonly columns: readonly DataTableColumn[] = [
-    { labelKey: "activityLog.dateTime" },
-    { labelKey: "activityLog.type" },
-    { labelKey: "activityLog.details" },
-    { labelKey: "activityLog.operator" },
+    { labelKey: "activityLog.dateTime", sortable: true, sortKey: "dateTime" },
+    { labelKey: "activityLog.type", sortable: true, sortKey: "type" },
+    { labelKey: "activityLog.details", sortable: true, sortKey: "details" },
+    { labelKey: "activityLog.operator", sortable: true, sortKey: "operator" },
   ];
   private readonly dateFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" });
   protected readonly rows = (): readonly DataTableRow[] =>
@@ -55,6 +55,12 @@ export class ActivityLogComponent implements OnInit {
       .entries()
       .map(entry => ({
         id: entry.id,
+        sortValues: {
+          dateTime: entry.created_at.getTime(),
+          type: entry.event_code,
+          details: this.detailsRenderer.render(entry),
+          operator: entry.operator_name,
+        },
         values: [this.dateFormatter.format(entry.created_at), entry.event_code, this.detailsRenderer.render(entry), entry.operator_name],
       }));
   ngOnInit(): void {

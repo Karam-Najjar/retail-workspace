@@ -27,11 +27,11 @@ export class CategoryListComponent implements OnInit {
   protected readonly selectedCategory = signal<Category | null>(null);
   protected readonly affectedProducts = signal(0);
   protected readonly columns: readonly DataTableColumn[] = [
-    { labelKey: "categories.name" },
-    { labelKey: "categories.type" },
-    { labelKey: "common.createdBy" },
-    { labelKey: "common.createdAt" },
-    { labelKey: "common.lastModifiedBy" },
+    { labelKey: "categories.name", sortable: true, sortKey: "name" },
+    { labelKey: "categories.type", sortable: true, sortKey: "type" },
+    { labelKey: "common.createdBy", sortable: true, sortKey: "createdBy" },
+    { labelKey: "common.createdAt", sortable: true, sortKey: "createdAt" },
+    { labelKey: "common.lastModifiedBy", sortable: true, sortKey: "lastModifiedBy" },
   ];
 
   readonly rows = (): readonly DataTableRow[] =>
@@ -39,6 +39,13 @@ export class CategoryListComponent implements OnInit {
       id: category.id,
       canEdit: !category.system_code,
       canDelete: !category.system_code,
+      sortValues: {
+        name: category.name,
+        type: category.system_code ? "system" : "custom",
+        createdBy: this.operatorName(category.created_by_operator_id),
+        createdAt: category.created_at.getTime(),
+        lastModifiedBy: this.operatorName(category.last_modified_by_operator_id),
+      },
       values: [
         category.system_code ? `categories.system.${category.system_code}` : category.name,
         category.system_code ? "categories.systemLabel" : "categories.customLabel",

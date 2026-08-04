@@ -38,16 +38,23 @@ export class SaleListComponent implements OnInit {
 
   protected range: DateRange = this.todayRange();
   protected readonly columns: readonly DataTableColumn[] = [
-    { labelKey: "sales.dateTime" },
-    { labelKey: "sales.saleTotal" },
-    { labelKey: "sales.costTotal" },
-    { labelKey: "sales.profit" },
-    { labelKey: "sales.operator" },
+    { labelKey: "sales.dateTime", sortable: true, sortKey: "dateTime" },
+    { labelKey: "sales.saleTotal", sortable: true, sortKey: "saleTotal" },
+    { labelKey: "sales.costTotal", sortable: true, sortKey: "costTotal" },
+    { labelKey: "sales.profit", sortable: true, sortKey: "profit" },
+    { labelKey: "sales.operator", sortable: true, sortKey: "operator" },
   ];
 
   protected readonly rows = (): readonly DataTableRow[] =>
     this.facade.sales().map(({ sale }) => ({
       id: sale.id,
+      sortValues: {
+        dateTime: sale.date.getTime(),
+        saleTotal: sale.total_amount,
+        costTotal: sale.total_cost,
+        profit: sale.total_profit,
+        operator: sale.operator_name,
+      },
       values: [
         this.dateFormatter.format(sale.date),
         this.formatPrimary(sale.total_amount, sale.currency_snapshot),
