@@ -12,7 +12,8 @@ export class ActivityDetailsRendererService {
   render(entry: ActivityLog): string {
     const payload = this.record(entry.payload);
     const name = entry.entity_name_snapshot ?? this.stringValue(payload, "name") ?? "";
-    switch (entry.event_code) {
+    const eventCode: string = entry.event_code;
+    switch (eventCode) {
       case "sale_completed":
         return this.text("activityLog.eventDetails.saleCompleted", "Sale completed: {{ items }} items, {{ total }} total", {
           items: this.numberValue(payload, "total_items_sold") ?? 0,
@@ -52,7 +53,7 @@ export class ActivityDetailsRendererService {
       case "supplier.deleted":
         return this.text("activityLog.eventDetails.supplierDeleted", "Supplier '{{ name }}' deleted", { name });
       default:
-        return name ? `${entry.event_code}: ${name}` : entry.event_code;
+        return name ? `${eventCode}: ${name}` : eventCode;
     }
   }
 

@@ -2,7 +2,6 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { RetailDatabase } from "../../data-access/database/retail.database";
 import { Operator } from "../../domain/models/operator.model";
 import { ActivityLog } from "../../domain/models/activity-log.model";
-import { SettingsEventPayload } from "../../domain/events/settings-event.payload";
 import { isSettingsLanguage, SettingsLanguage } from "../use-cases/settings/change-language.use-case";
 import { DexieOperatorRepository } from "../../data-access/repositories/dexie-operator.repository";
 import { DexieSettingsRepository } from "../../data-access/repositories/dexie-settings.repository";
@@ -34,7 +33,7 @@ export class ActiveOperatorService {
     }
     if (settings.active_operator_id === operator.id) return;
 
-    const event: ActivityLog<SettingsEventPayload<"settings.updated">> = {
+    const event: ActivityLog<"settings.updated"> = {
       id: crypto.randomUUID(),
       event_code: "settings.updated",
       entity_type: "settings",
@@ -65,7 +64,7 @@ export class ActiveOperatorService {
     if (!actor || !settings) throw new Error("Settings and an active operator are required to change language.");
     if (settings.language === value) return;
 
-    const event: ActivityLog<SettingsEventPayload<"settings.updated">> = {
+    const event: ActivityLog<"settings.updated"> = {
       id: crypto.randomUUID(),
       event_code: "settings.updated",
       entity_type: "settings",

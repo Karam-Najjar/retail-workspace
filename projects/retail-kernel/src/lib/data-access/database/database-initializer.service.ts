@@ -3,7 +3,7 @@ import { AppMetadata } from "../../domain/models/app-metadata.model";
 import { Operator } from "../../domain/models/operator.model";
 import { Settings } from "../../domain/models/settings.model";
 import { Category } from "../../domain/models/category.model";
-import { APP_SETTINGS_KEY, OPERATOR_ONE_ID, OPERATOR_TWO_ID } from "./database.constants";
+import { APP_SETTINGS_KEY, CURRENT_SCHEMA_VERSION, OPERATOR_ONE_ID, OPERATOR_TWO_ID } from "./database.constants";
 import { RetailDatabase } from "./retail.database";
 
 @Injectable({ providedIn: "root" })
@@ -52,14 +52,12 @@ export class DatabaseInitializerService {
           await this.database.settings.add(initialSettings);
         }
 
-        const metadata: readonly AppMetadata[] = [
-          { key: "schema_version", value: 1, updated_at: now },
-          { key: "app_version", value: "1.0.0", updated_at: now },
-        ];
-        for (const entry of metadata) {
-          if (!(await this.database.app_metadata.get(entry.key))) {
-            await this.database.app_metadata.add(entry);
-          }
+        const schemaMetadata: AppMetadata = { key: "schema_version", value: CURRENT_SCHEMA_VERSION, updated_at: now };
+        await this.database.app_metadata.put(schemaMetadata);
+
+        if (!(await this.database.app_metadata.get("app_version"))) {
+          const appVersionMetadata: AppMetadata = { key: "app_version", value: "1.0.0", updated_at: now };
+          await this.database.app_metadata.add(appVersionMetadata);
         }
         if (!(await this.database.categories.where("system_code").equals("other").first())) {
           await this.database.categories.add(systemCategory);

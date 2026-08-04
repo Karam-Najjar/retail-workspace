@@ -161,7 +161,7 @@ export class DexieSaleRepository implements SaleRepository {
               total_profit: item.total_profit,
             })),
           };
-          const activityLog: ActivityLog<SaleCompletedPayload> = {
+          const activityLog: ActivityLog<"sale_completed"> = {
             id: crypto.randomUUID(),
             event_code: "sale_completed",
             entity_type: "sale",

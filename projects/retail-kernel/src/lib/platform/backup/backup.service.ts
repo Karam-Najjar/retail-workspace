@@ -1,5 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { exportDB } from "dexie-export-import";
+import { CURRENT_SCHEMA_VERSION } from "../../data-access/database/database.constants";
 import { RetailDatabase } from "../../data-access/database/retail.database";
 import { StoreProfileService } from "../../configuration/store-profile.service";
 import { BackupManifest } from "../../domain/models/backup-manifest.model";
@@ -12,7 +13,7 @@ export interface BackupFile {
 
 export type BackupManifestContent = Omit<BackupManifest, "checksum">;
 
-export const BACKUP_SCHEMA_VERSION = 8;
+export const BACKUP_SCHEMA_VERSION = CURRENT_SCHEMA_VERSION;
 export const BACKUP_APP_VERSION = "1.0.0";
 export const BACKUP_EXCLUDED_TABLES: readonly string[] = ["draftCarts", "licence_state", "app_metadata"];
 

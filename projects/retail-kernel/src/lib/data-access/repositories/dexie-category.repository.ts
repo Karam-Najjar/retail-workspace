@@ -34,7 +34,7 @@ export class DexieCategoryRepository implements CategoryRepository {
         await this.database.products.bulkPut(affectedProducts.map(product => ({ ...product, category_id: other.id })));
         await this.database.categories.delete(category.id);
         await this.database.activity_logs.add({
-          ...(activityLog as ActivityLog<{ affected_products: number }>),
+          ...(activityLog as ActivityLog<"category.deleted">),
           payload: { affected_products: affectedProducts.length },
         });
         return affectedProducts.length;

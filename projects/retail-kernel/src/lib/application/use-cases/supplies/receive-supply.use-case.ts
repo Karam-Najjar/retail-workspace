@@ -133,7 +133,7 @@ export class ReceiveSupplyUseCase {
         batch_id: entry.batch.id,
       })),
     };
-    const activityLog: ActivityLog<SupplyReceivedPayload> = {
+    const activityLog: ActivityLog<"supply.received"> = {
       id: crypto.randomUUID(),
       event_code: "supply.received",
       entity_type: "supply",

@@ -14,7 +14,6 @@ import {
   RetailDatabase,
   Settings,
   SettingsChangedField,
-  SettingsEventPayload,
   StorageHealth,
   StorageHealthService,
   UpdateCurrencyRateUseCase,
@@ -109,7 +108,7 @@ export class SettingsFacade {
           low_stock_threshold: lowStockThreshold,
           last_modified_by_operator_id: actor.id,
         });
-        const event: ActivityLog<SettingsEventPayload<"settings.updated">> = {
+        const event: ActivityLog<"settings.updated"> = {
           id: crypto.randomUUID(),
           event_code: "settings.updated",
           entity_type: "settings",
@@ -138,7 +137,7 @@ export class SettingsFacade {
       const settings = this.settings();
       if (settings) {
         const now = new Date();
-        const event: ActivityLog<SettingsEventPayload<"settings.updated">> = {
+        const event: ActivityLog<"settings.updated"> = {
           id: crypto.randomUUID(),
           event_code: "settings.updated",
           entity_type: "settings",
@@ -200,7 +199,7 @@ export class SettingsFacade {
         await this.database.transaction("rw", tablesToClear, async () => {
           for (const table of tablesToClear) await table.clear();
           await this.initializer.initialize();
-          const event: ActivityLog<SettingsEventPayload<"data.cleared">> = {
+          const event: ActivityLog<"data.cleared"> = {
             id: crypto.randomUUID(),
             event_code: "data.cleared",
             entity_type: "system",

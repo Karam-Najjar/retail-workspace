@@ -9,7 +9,7 @@ export interface VerifiedLicencePayload {
   readonly profile_id: string;
   readonly features: readonly string[];
   readonly iat: number;
-  readonly exp?: number;
+  readonly exp: number;
 }
 
 export type LicenceValidationResult =
@@ -39,17 +39,19 @@ function isVerifiedLicencePayload(value: unknown): value is VerifiedLicencePaylo
   }
 
   const features = value["features"];
-  const exp = value["exp"];
   return (
     typeof value["sub"] === "string" &&
     value["sub"].length > 0 &&
     typeof value["profile_id"] === "string" &&
     Array.isArray(features) &&
     features.every(feature => typeof feature === "string") &&
-    typeof value["iat"] === "number" &&
-    Number.isFinite(value["iat"]) &&
-    (exp === undefined || (typeof exp === "number" && Number.isFinite(exp)))
+    isValidNumericDate(value["iat"]) &&
+    isValidNumericDate(value["exp"])
   );
+}
+
+function isValidNumericDate(value: unknown): value is number {
+  return typeof value === "number" && Number.isSafeInteger(value) && value > 0;
 }
 
 @Injectable({ providedIn: "root" })
@@ -58,43 +60,51 @@ export class LicenceValidationService {
   private readonly repository = inject(DexieLicenceStateRepository);
 
   async verifyAndActivate(compactJws: string): Promise<LicenceValidationResult> {
+    const normalizedJws = compactJws.trim();
+    const result = await this.verifyCompactJws(normalizedJws);
+    if (!result.valid) {
+      return result;
+    }
+
+    const state: LicenceState = {
+      id: "active",
+      compact_jws: normalizedJws,
+      verified_payload: result.payload,
+      verified_at: new Date(),
+    };
+    await this.repository.save(state);
+    return result;
+  }
+
+  async hasValidLicence(): Promise<boolean> {
+    const state = await this.repository.getActive();
+    if (!state) {
+      return false;
+    }
+
+    return (await this.verifyCompactJws(state.compact_jws)).valid;
+  }
+
+  private async verifyCompactJws(compactJws: string): Promise<LicenceValidationResult> {
     try {
       const key = await importJWK(decodePublicJwk(), "ES256");
-      const { payload, protectedHeader } = await jwtVerify(compactJws.trim(), key, { algorithms: ["ES256"] });
+      const { payload, protectedHeader } = await jwtVerify(compactJws, key, { algorithms: ["ES256"] });
       if (protectedHeader.alg !== "ES256" || !isVerifiedLicencePayload(payload)) {
         return { valid: false, error: "The licence format is invalid." };
       }
       if (payload.profile_id !== this.profile.profile_id) {
         return { valid: false, error: "This licence does not match the active store profile." };
       }
-      if (this.isExpired(payload)) {
+      const now = Math.floor(Date.now() / 1000);
+      if (payload.iat > now || payload.exp <= payload.iat) {
+        return { valid: false, error: "The licence format is invalid." };
+      }
+      if (payload.exp <= now) {
         return { valid: false, error: "This licence has expired." };
       }
-
-      const state: LicenceState = {
-        id: "active",
-        compact_jws: compactJws.trim(),
-        verified_payload: payload,
-        verified_at: new Date(),
-      };
-      await this.repository.save(state);
       return { valid: true, payload };
     } catch {
       return { valid: false, error: "The licence signature could not be verified." };
     }
-  }
-
-  async hasValidLicence(): Promise<boolean> {
-    const state = await this.repository.getActive();
-    return (
-      !!state &&
-      isVerifiedLicencePayload(state.verified_payload) &&
-      state.verified_payload.profile_id === this.profile.profile_id &&
-      !this.isExpired(state.verified_payload)
-    );
-  }
-
-  private isExpired(payload: VerifiedLicencePayload): boolean {
-    return payload.exp !== undefined && payload.exp <= Math.floor(Date.now() / 1000);
   }
 }

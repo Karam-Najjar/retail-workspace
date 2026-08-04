@@ -43,7 +43,7 @@ export class WriteOffAndDeleteProductUseCase {
       created_at: now,
     };
     const payload: InventoryWriteOffEventPayload = { product_id: product.id, quantity: product.quantity, adjustment_id: adjustmentId, reason };
-    const activityLog: ActivityLog<InventoryWriteOffEventPayload> = {
+    const activityLog: ActivityLog<"inventory.product.written_off"> = {
       id: crypto.randomUUID(),
       event_code: "inventory.product.written_off",
       entity_type: "product",

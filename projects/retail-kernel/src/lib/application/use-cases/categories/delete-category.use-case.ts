@@ -17,7 +17,7 @@ export class DeleteCategoryUseCase {
     if (!operator) {
       throw new Error("An active operator is required.");
     }
-    const activityLog: ActivityLog<{ affected_products: number }> = {
+    const activityLog: ActivityLog<"category.deleted"> = {
       id: crypto.randomUUID(),
       event_code: "category.deleted",
       entity_type: "category",

@@ -82,7 +82,7 @@ export class AdjustStockInUseCase {
       adjustment_id: adjustmentId,
       batch_id: batchId,
     };
-    const activityLog: ActivityLog<InventoryStockAddedEventPayload> = {
+    const activityLog: ActivityLog<"inventory.stock.added"> = {
       id: crypto.randomUUID(),
       event_code: "inventory.stock.added",
       entity_type: "product",

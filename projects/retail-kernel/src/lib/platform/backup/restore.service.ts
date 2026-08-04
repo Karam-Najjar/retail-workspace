@@ -3,7 +3,6 @@ import { importDB, importInto } from "dexie-export-import";
 import { ActiveOperatorService } from "../../application/services/active-operator.service";
 import { DatabaseInitializerService } from "../../data-access/database/database-initializer.service";
 import { RetailDatabase } from "../../data-access/database/retail.database";
-import { BackupEventPayload } from "../../domain/events/backup-event.payload";
 import { ActivityLog } from "../../domain/models/activity-log.model";
 import { LicenceValidationService } from "../licence/licence-validation.service";
 import { BACKUP_EXCLUDED_TABLES, BackupFile, BackupService } from "./backup.service";
@@ -30,7 +29,7 @@ export class RestoreService {
         acceptVersionDiff: false,
         skipTables: [...BACKUP_EXCLUDED_TABLES],
       });
-      const event: ActivityLog<BackupEventPayload<"backup_imported">> = {
+      const event: ActivityLog<"backup_imported"> = {
         id: crypto.randomUUID(),
         event_code: "backup_imported",
         entity_type: "backup",

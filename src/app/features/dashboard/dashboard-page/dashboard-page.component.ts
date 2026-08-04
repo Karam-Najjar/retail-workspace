@@ -142,8 +142,9 @@ export class DashboardPageComponent implements OnDestroy, OnInit {
   protected activityDescription(entry: ActivityLog): string {
     const payload = this.payloadRecord(entry.payload);
     const name = entry.entity_name_snapshot ?? this.stringValue(payload, "name") ?? "";
+    const eventCode: string = entry.event_code;
     let text: ActivityText;
-    switch (entry.event_code) {
+    switch (eventCode) {
       case "sale_completed":
         text = {
           key: "activityLog.eventDetails.saleCompleted",
@@ -221,7 +222,7 @@ export class DashboardPageComponent implements OnDestroy, OnInit {
         text = { key: "activityLog.eventDetails.dataCleared", fallback: "All retail data cleared", params: {} };
         break;
       default:
-        text = { key: "activityLog.eventDetails.unknown", fallback: "Activity: {{ code }}", params: { code: entry.event_code } };
+        text = { key: "activityLog.eventDetails.unknown", fallback: "Activity: {{ code }}", params: { code: eventCode } };
         break;
     }
     return this.translatedText(text);

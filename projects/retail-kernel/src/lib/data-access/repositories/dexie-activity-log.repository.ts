@@ -8,7 +8,7 @@ import { RetailDatabase } from "../database/retail.database";
 export class DexieActivityLogRepository implements ActivityLogRepository {
   private readonly database = inject(RetailDatabase);
 
-  async add<TPayload>(entry: ActivityLog<TPayload>): Promise<void> {
+  async add(entry: ActivityLog): Promise<void> {
     await this.database.activity_logs.add(entry);
   }
 
