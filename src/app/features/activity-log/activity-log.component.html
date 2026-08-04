@@ -14,9 +14,6 @@
       </mat-select></mat-form-field
     ><app-export-button [busy]="facade.exporting()" (export)="export()" />
   </div>
-  @if (facade.error()) {
-    <p class="error">{{ facade.error() | translate }}</p>
-  }
   @if (facade.entries().length) {
     <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openEntry($event)" />
   } @else if (!facade.loading()) {

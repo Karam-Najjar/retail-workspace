@@ -41,19 +41,28 @@ export class ProductListComponent implements OnInit {
   protected categoryId = "";
   protected readonly selected = signal<Product | null>(null);
   protected readonly columns: readonly DataTableColumn[] = [
-    { labelKey: "products.name" },
-    { labelKey: "products.category" },
-    { labelKey: "products.sellingPrice" },
-    { labelKey: "products.quantity" },
-    { labelKey: "common.createdBy" },
-    { labelKey: "common.createdAt" },
-    { labelKey: "common.lastModifiedBy" },
+    { labelKey: "products.name", sortable: true, sortKey: "name" },
+    { labelKey: "products.category", sortable: true, sortKey: "category" },
+    { labelKey: "products.sellingPrice", sortable: true, sortKey: "sellingPrice" },
+    { labelKey: "products.quantity", sortable: true, sortKey: "quantity" },
+    { labelKey: "common.createdBy", sortable: true, sortKey: "createdBy" },
+    { labelKey: "common.createdAt", sortable: true, sortKey: "createdAt" },
+    { labelKey: "common.lastModifiedBy", sortable: true, sortKey: "lastModifiedBy" },
   ];
   readonly rows = (): readonly DataTableRow[] =>
     this.facade
       .products()
       .map(product => ({
         id: product.id,
+        sortValues: {
+          name: product.name,
+          category: this.categoryName(product.category_id),
+          sellingPrice: product.selling_price,
+          quantity: product.quantity,
+          createdBy: this.operatorName(product.created_by_operator_id),
+          createdAt: product.created_at.getTime(),
+          lastModifiedBy: this.operatorName(product.last_modified_by_operator_id),
+        },
         values: [
           product.name,
           this.categoryName(product.category_id),

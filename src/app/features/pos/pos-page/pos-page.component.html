@@ -27,11 +27,6 @@
             autocomplete="off" />
         </mat-form-field>
         <app-product-search [products]="facade.products()" (productSelected)="addProduct($event)" />
-        @if (facade.feedback(); as feedback) {
-          <p class="pos-feedback" [class.pos-feedback--success]="feedback.kind === 'success'" aria-live="polite">
-            {{ feedback.key | translate: feedback.params }}
-          </p>
-        }
         <app-cart
           [items]="facade.cart.items()"
           (increase)="increase($event)"

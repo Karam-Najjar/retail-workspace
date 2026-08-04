@@ -21,6 +21,7 @@ import {
   SuppliesWorkbookMapper,
   SupplySummary,
 } from "@retail/kernel";
+import { NotificationService } from "../../core/notifications/notification.service";
 
 @Injectable()
 export class SuppliesFacade {
@@ -34,6 +35,7 @@ export class SuppliesFacade {
   private readonly profile = inject(StoreProfileService);
   private readonly reporting = inject(SupplyReportingService);
   private readonly excel = inject(ExcelExportService);
+  private readonly notifications = inject(NotificationService);
   readonly supplies = signal<readonly SupplyListEntry[]>([]);
   readonly products = signal<readonly Product[]>([]);
   readonly suppliers = signal<readonly Supplier[]>([]);
@@ -56,6 +58,7 @@ export class SuppliesFacade {
       this.summary.set(report.summary);
     } catch {
       this.error.set("supplies.errors.load");
+      this.notifications.error("supplies.errors.load");
     } finally {
       this.loading.set(false);
     }
@@ -75,7 +78,9 @@ export class SuppliesFacade {
   async receive(input: ReceiveSupplyInput): Promise<Supply | null> {
     this.error.set(null);
     try {
-      return await this.receiveSupply.execute(input);
+      const supply = await this.receiveSupply.execute(input);
+      this.notifications.success("notifications.success.supplyReceived");
+      return supply;
     } catch (error: unknown) {
       this.error.set(error instanceof Error ? error.message : "supplies.errors.receive");
       return null;
@@ -102,6 +107,9 @@ export class SuppliesFacade {
     try {
       const report = await this.reporting.getReport(filter);
       await this.excel.export({ fileName, rtl, sheets: [SuppliesWorkbookMapper.map(report.details)] });
+      this.notifications.success("notifications.success.exportCompleted");
+    } catch {
+      this.notifications.error("notifications.errors.export");
     } finally {
       this.exporting.set(false);
     }

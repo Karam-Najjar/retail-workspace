@@ -8,6 +8,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { TranslatePipe } from "@ngx-translate/core";
 import { Category, CreatePosProductUseCase, CurrencyService, ListCategoriesUseCase, PosProductCreationResult } from "@retail/kernel";
 import { DualCurrencyInputComponent } from "../../../shared-ui/dual-currency-input/dual-currency-input.component";
+import { NotificationService } from "../../../core/notifications/notification.service";
 
 export interface UnknownProductCreateDialogData {
   readonly barcode: string;
@@ -34,6 +35,7 @@ export class UnknownProductCreateComponent implements OnInit {
   private readonly createProduct = inject(CreatePosProductUseCase);
   private readonly listCategories = inject(ListCategoriesUseCase);
   private readonly currency = inject(CurrencyService);
+  private readonly notifications = inject(NotificationService);
 
   protected readonly categories = signal<readonly Category[]>([]);
   protected readonly exchangeRate = signal("");
@@ -77,6 +79,7 @@ export class UnknownProductCreateComponent implements OnInit {
         openingQuantity: this.openingQuantity,
         unitCostCents: this.unitCostCents,
       });
+      this.notifications.success("notifications.success.productSaved");
       this.dialogRef.close(result);
     } catch {
       this.error.set("pos.createProductFailed");

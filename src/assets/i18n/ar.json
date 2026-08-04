@@ -368,5 +368,34 @@
   "packages": {
     "pocket": "علبة",
     "carton": "كرتون"
+  },
+  "notifications": {
+    "dismiss": "",
+    "errors": {
+      "unexpected": "",
+      "export": ""
+    },
+    "success": {
+      "categorySaved": "",
+      "categoryDeleted": "",
+      "supplierSaved": "",
+      "supplierDeleted": "",
+      "productSaved": "",
+      "productDeleted": "",
+      "barcodesSaved": "",
+      "openingBalanceCreated": "",
+      "stockAdded": "",
+      "stockRemoved": "",
+      "productWrittenOff": "",
+      "supplyReceived": "",
+      "exportCompleted": "",
+      "backupExported": "",
+      "backupRestored": "",
+      "settingsSaved": "",
+      "dataCleared": "",
+      "licenceActivated": "",
+      "cartUpdated": "",
+      "cartCleared": ""
+    }
   }
 }

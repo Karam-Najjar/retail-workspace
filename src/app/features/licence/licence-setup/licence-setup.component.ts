@@ -7,6 +7,7 @@ import { MatInputModule } from "@angular/material/input";
 import { Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
 import { LicenceValidationService } from "@retail/kernel";
+import { NotificationService } from "../../../core/notifications/notification.service";
 
 @Component({
   selector: "app-licence-setup",
@@ -17,6 +18,7 @@ import { LicenceValidationService } from "@retail/kernel";
 export class LicenceSetupComponent {
   private readonly licenceValidation = inject(LicenceValidationService);
   private readonly router = inject(Router);
+  private readonly notifications = inject(NotificationService);
 
   protected licence = "";
   protected readonly error = signal<string | null>(null);
@@ -37,6 +39,7 @@ export class LicenceSetupComponent {
       this.error.set(result.error);
       return;
     }
+    this.notifications.success("notifications.success.licenceActivated");
     await this.router.navigateByUrl("/dashboard");
   }
 }

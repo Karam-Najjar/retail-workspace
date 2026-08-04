@@ -42,17 +42,24 @@ export class SupplyListComponent implements OnInit {
   protected range: DateRange = this.todayRange();
   protected supplierId = "";
   protected readonly columns: readonly DataTableColumn[] = [
-    { labelKey: "supplies.dateTime" },
-    { labelKey: "supplies.supplier" },
-    { labelKey: "supplies.itemsCount" },
-    { labelKey: "supplies.totalCost" },
-    { labelKey: "supplies.operator" },
+    { labelKey: "supplies.dateTime", sortable: true, sortKey: "dateTime" },
+    { labelKey: "supplies.supplier", sortable: true, sortKey: "supplier" },
+    { labelKey: "supplies.itemsCount", sortable: true, sortKey: "itemsCount" },
+    { labelKey: "supplies.totalCost", sortable: true, sortKey: "totalCost" },
+    { labelKey: "supplies.operator", sortable: true, sortKey: "operator" },
   ];
   protected readonly rows = (): readonly DataTableRow[] =>
     this.facade
       .supplies()
       .map(({ supply, itemCount }) => ({
         id: supply.id,
+        sortValues: {
+          dateTime: supply.date.getTime(),
+          supplier: supply.supplier_name,
+          itemsCount: itemCount,
+          totalCost: supply.total_cost,
+          operator: supply.operator_name,
+        },
         values: [
           this.dateFormatter.format(supply.date),
           supply.supplier_name,

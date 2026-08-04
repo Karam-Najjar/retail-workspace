@@ -15,6 +15,7 @@ import {
   StorageHealth,
 } from "@retail/kernel";
 import { TranslationService } from "../../../core/i18n/translation.service";
+import { NotificationService } from "../../../core/notifications/notification.service";
 import { SettingsConfirmationDialogComponent } from "../settings-confirmation-dialog/settings-confirmation-dialog.component";
 import { SettingsFacade, SettingsOperation } from "../settings.facade";
 import { MatIcon } from "@angular/material/icon";
@@ -31,6 +32,7 @@ export class SettingsPageComponent implements OnInit {
   private readonly translation = inject(TranslationService);
   private readonly translate = inject(TranslateService);
   private readonly dialog = inject(MatDialog);
+  private readonly notifications = inject(NotificationService);
   protected readonly normalizePositiveDecimal = normalizePositiveDecimal;
   protected readonly isValidLowStockThreshold = isValidLowStockThreshold;
   protected operatorOne = "";
@@ -44,6 +46,7 @@ export class SettingsPageComponent implements OnInit {
       this.fill();
     } catch (error: unknown) {
       this.logHandledError("load", error);
+      this.notifications.error("settings.errors.load");
     }
   }
 
@@ -55,24 +58,32 @@ export class SettingsPageComponent implements OnInit {
         rate: this.rate,
         threshold: this.threshold,
       });
+      this.notifications.success("notifications.success.settingsSaved");
     } catch (error: unknown) {
       this.logHandledError("save", error);
+      this.notifications.error("settings.errors.save");
     }
   }
 
   protected async export(): Promise<void> {
     try {
       await this.facade.exportBackup();
+      this.notifications.success("notifications.success.backupExported");
     } catch (error: unknown) {
       this.logHandledError("export", error);
+      this.notifications.error("settings.errors.export");
     }
   }
 
   protected async persist(): Promise<void> {
     try {
       await this.facade.persistStorage();
+      const feedback = this.facade.storageFeedback();
+      if (feedback === "settings.persistence.granted") this.notifications.success(feedback);
+      else if (feedback) this.notifications.warning(feedback);
     } catch (error: unknown) {
       this.logHandledError("persistence", error);
+      this.notifications.error("settings.errors.persistence");
     }
   }
 
@@ -90,8 +101,10 @@ export class SettingsPageComponent implements OnInit {
       )
         return;
       await this.facade.restoreBackup(backup);
+      this.notifications.success("notifications.success.backupRestored");
     } catch (error: unknown) {
       this.logHandledError("restore", error);
+      this.notifications.error("settings.errors.restore");
     } finally {
       input.value = "";
     }
@@ -110,8 +123,10 @@ export class SettingsPageComponent implements OnInit {
       )
         return;
       await this.facade.clearAllData();
+      this.notifications.success("notifications.success.dataCleared");
     } catch (error: unknown) {
       this.logHandledError("clear", error);
+      this.notifications.error("settings.errors.clear");
     }
   }
   protected settingsFormValid(): boolean {

@@ -11,6 +11,7 @@ import { routes } from "./app.routes";
 import { provideServiceWorker } from "@angular/service-worker";
 import { GlobalErrorHandler } from "./core/errors/global-error.handler";
 import { TranslationService } from "./core/i18n/translation.service";
+import { NotificationService } from "./core/notifications/notification.service";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,8 +33,13 @@ export const appConfig: ApplicationConfig = {
       const databaseInitializer = inject(DatabaseInitializerService);
       const activeOperator = inject(ActiveOperatorService);
       const translation = inject(TranslationService);
+      const notifications = inject(NotificationService);
 
-      return databaseInitializer.initialize().then(() => activeOperator.initialize()).then(() => translation.setLanguage(activeOperator.language()));
+      return databaseInitializer
+        .initialize()
+        .then(() => activeOperator.initialize())
+        .then(() => translation.setLanguage(activeOperator.language()))
+        .then(() => notifications.initialize());
     }),
     provideServiceWorker("ngsw-worker.js", {
       enabled: !isDevMode(),

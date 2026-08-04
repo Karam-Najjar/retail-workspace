@@ -27,18 +27,26 @@ export class SupplierListComponent implements OnInit {
   protected readonly selectedSupplier = signal<Supplier | null>(null);
   protected readonly affectedSupplies = signal(0);
   protected readonly columns: readonly DataTableColumn[] = [
-    { labelKey: "suppliers.name" },
-    { labelKey: "suppliers.phone" },
-    { labelKey: "suppliers.address" },
-    { labelKey: "common.createdBy" },
-    { labelKey: "common.createdAt" },
-    { labelKey: "common.lastModifiedBy" },
+    { labelKey: "suppliers.name", sortable: true, sortKey: "name" },
+    { labelKey: "suppliers.phone", sortable: true, sortKey: "phone" },
+    { labelKey: "suppliers.address", sortable: true, sortKey: "address" },
+    { labelKey: "common.createdBy", sortable: true, sortKey: "createdBy" },
+    { labelKey: "common.createdAt", sortable: true, sortKey: "createdAt" },
+    { labelKey: "common.lastModifiedBy", sortable: true, sortKey: "lastModifiedBy" },
   ];
   readonly rows = (): readonly DataTableRow[] =>
     this.facade
       .suppliers()
       .map(supplier => ({
         id: supplier.id,
+        sortValues: {
+          name: supplier.name,
+          phone: supplier.phone ?? "",
+          address: supplier.address ?? "",
+          createdBy: this.operatorName(supplier.created_by_operator_id),
+          createdAt: supplier.created_at.getTime(),
+          lastModifiedBy: this.operatorName(supplier.last_modified_by_operator_id),
+        },
         values: [
           supplier.name,
           supplier.phone || "—",

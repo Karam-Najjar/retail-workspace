@@ -4,13 +4,6 @@
     <p>{{ "settings.description" | translate }}</p>
   </header>
 
-  @if (facade.operationError(); as operationError) {
-    <div class="warning" role="alert" aria-live="assertive">
-      <p>{{ operationError.messageKey | translate }}</p>
-      <p>{{ "settings.errors.retry" | translate }}</p>
-    </div>
-  }
-
   <div class="settings-grid">
     <!-- General Settings -->
     <mat-card class="settings-card">
@@ -102,9 +95,6 @@
           }
         } @else {
           <p class="warning">{{ (health.error ? "settings.storageError" : "settings.storageUnavailable") | translate }}</p>
-        }
-        @if (facade.storageFeedback(); as feedback) {
-          <p class="feedback" aria-live="polite">{{ feedback | translate }}</p>
         }
       }
     </mat-card>

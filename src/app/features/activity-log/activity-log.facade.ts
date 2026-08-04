@@ -1,10 +1,12 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { ActivityLog, ActivityLogListFilter, ActivityReportingService, ExcelExportService, ActivityWorkbookMapper } from "@retail/kernel";
+import { NotificationService } from "../../core/notifications/notification.service";
 
 @Injectable()
 export class ActivityLogFacade {
   private readonly reporting = inject(ActivityReportingService);
   private readonly excel = inject(ExcelExportService);
+  private readonly notifications = inject(NotificationService);
   readonly entries = signal<readonly ActivityLog[]>([]);
   readonly loading = signal(false);
   readonly exporting = signal(false);
@@ -18,6 +20,7 @@ export class ActivityLogFacade {
     } catch {
       this.entries.set([]);
       this.error.set("activityLog.errors.load");
+      this.notifications.error("activityLog.errors.load");
     } finally {
       this.loading.set(false);
     }
@@ -27,6 +30,9 @@ export class ActivityLogFacade {
     this.exporting.set(true);
     try {
       await this.excel.export({ fileName, rtl, sheets: [ActivityWorkbookMapper.map(await this.reporting.list(filter))] });
+      this.notifications.success("notifications.success.exportCompleted");
+    } catch {
+      this.notifications.error("notifications.errors.export");
     } finally {
       this.exporting.set(false);
     }

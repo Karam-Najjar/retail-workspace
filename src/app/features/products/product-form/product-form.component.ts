@@ -19,6 +19,7 @@ import {
 import { BarcodeInputComponent } from "../../../shared-ui/barcode-input/barcode-input.component";
 import { DualCurrencyInputComponent } from "../../../shared-ui/dual-currency-input/dual-currency-input.component";
 import { ModalFormShellComponent } from "../../../shared-ui/modal-form-shell/modal-form-shell.component";
+import { NotificationService } from "../../../core/notifications/notification.service";
 import { ProductsFacade } from "../products.facade";
 import { MatIcon } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
@@ -54,6 +55,7 @@ export class ProductFormComponent implements OnInit {
   private readonly settings = inject(DexieSettingsRepository);
   private readonly repository = inject(DexieProductRepository);
   private readonly manageBarcodes = inject(ManageProductBarcodesUseCase);
+  private readonly notifications = inject(NotificationService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly dialogRef = inject(MatDialogRef<ProductFormComponent>, { optional: true });
@@ -126,6 +128,7 @@ export class ProductFormComponent implements OnInit {
         return;
       }
       await this.manageBarcodes.execute(product.id, this.barcodes as readonly ProductBarcodeInput[]);
+      this.notifications.success("notifications.success.productSaved");
       if (this.dialogRef) this.dialogRef.close(product);
       else this.close();
     } catch (error: unknown) {
