@@ -1,5 +1,5 @@
 import { Component, computed, inject, input } from "@angular/core";
-import { StoreProfileService } from "@retail/kernel";
+import { convertCurrencyMinorUnits, formatCurrencyMinorUnits, StoreProfileService } from "@retail/kernel";
 import { TranslatePipe } from "@ngx-translate/core";
 
 @Component({
@@ -14,10 +14,15 @@ export class CartTotalsComponent {
   readonly exchangeRate = input.required<string>();
   protected readonly primary = computed(
     () =>
-      `${(this.total() / 10 ** this.profile.currency.primary.precision).toFixed(this.profile.currency.primary.precision)} ${this.profile.currency.primary.code}`
+      `${formatCurrencyMinorUnits(this.total(), this.profile.currency.primary.precision)} ${this.profile.currency.primary.code}`
   );
-  protected readonly secondary = computed(
-    () =>
-      `${((this.total() / 10 ** this.profile.currency.primary.precision) * Number(this.exchangeRate())).toFixed(this.profile.currency.secondary.precision)} ${this.profile.currency.secondary.code}`
-  );
+  protected readonly secondary = computed(() => {
+    const secondaryMinorUnits = convertCurrencyMinorUnits(
+      this.total(),
+      this.exchangeRate(),
+      this.profile.currency.primary.precision,
+      this.profile.currency.secondary.precision
+    );
+    return `${formatCurrencyMinorUnits(secondaryMinorUnits, this.profile.currency.secondary.precision)} ${this.profile.currency.secondary.code}`;
+  });
 }

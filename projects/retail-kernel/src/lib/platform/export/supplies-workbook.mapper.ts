@@ -1,3 +1,8 @@
+import {
+  convertCurrencyMinorUnits,
+  currencyMinorUnitsToMajor,
+  sumCurrencyMinorUnits,
+} from "../../domain/policies/currency-rounding.policy";
 import { SupplyDetail } from "../../domain/repository-contracts/supply.repository";
 import { ExcelSheetDefinition } from "./excel-export.models";
 
@@ -17,28 +22,54 @@ export class SuppliesWorkbookMapper {
     const rows = details.flatMap(detail =>
       detail.items.map(item => {
         const snapshot = detail.supply.currency_snapshot;
-        const primaryScale = 10 ** snapshot.primary_precision;
-        const unitCostUsd = item.unit_cost_entered / primaryScale;
         return [
           detail.supply.date,
           detail.supply.supplier_name,
           item.product_name,
           item.package_type_code,
           item.quantity_received,
-          unitCostUsd,
-          unitCostUsd * Number(snapshot.exchange_rate),
-          item.subtotal_cost / primaryScale,
-          (item.subtotal_cost / primaryScale) * Number(snapshot.exchange_rate),
+          primary(item.unit_cost_entered, snapshot),
+          secondary(item.unit_cost_entered, snapshot),
+          primary(item.subtotal_cost, snapshot),
+          secondary(item.subtotal_cost, snapshot),
         ];
       })
     );
     const totals = details.reduce(
       (sum, detail) => ({
-        usd: sum.usd + detail.supply.total_cost / 10 ** detail.supply.currency_snapshot.primary_precision,
-        syp: sum.syp + detail.supply.currency_snapshot.secondary_total_cost / 10 ** detail.supply.currency_snapshot.secondary_precision,
+        usd: sum.usd + primary(detail.supply.total_cost, detail.supply.currency_snapshot),
       }),
-      { usd: 0, syp: 0 }
+      { usd: 0 }
     );
-    return { name: "Supplies", columns, rows, summary: ["Summary", null, null, null, null, null, null, totals.usd, totals.syp] };
+    const totalSyp = storedSecondaryTotal(details);
+    return { name: "Supplies", columns, rows, summary: ["Summary", null, null, null, null, null, null, totals.usd, totalSyp] };
   }
+}
+
+type SupplyCurrencySnapshot = SupplyDetail["supply"]["currency_snapshot"];
+
+function primary(value: number, snapshot: SupplyCurrencySnapshot): number {
+  return currencyMinorUnitsToMajor(value, snapshot.primary_precision);
+}
+
+function secondary(value: number, snapshot: SupplyCurrencySnapshot): number {
+  const minorUnits = convertCurrencyMinorUnits(
+    value,
+    snapshot.exchange_rate,
+    snapshot.primary_precision,
+    snapshot.secondary_precision
+  );
+  return currencyMinorUnitsToMajor(minorUnits, snapshot.secondary_precision);
+}
+
+function storedSecondaryTotal(details: readonly SupplyDetail[]): number {
+  const firstSnapshot = details[0]?.supply.currency_snapshot;
+  if (!firstSnapshot) return 0;
+  const precision = firstSnapshot.secondary_precision;
+  const values = details.map(detail => {
+    const snapshot = detail.supply.currency_snapshot;
+    if (snapshot.secondary_precision !== precision) throw new Error("Supply export contains incompatible secondary currency precisions.");
+    return snapshot.secondary_total_cost;
+  });
+  return currencyMinorUnitsToMajor(sumCurrencyMinorUnits(values), precision);
 }
