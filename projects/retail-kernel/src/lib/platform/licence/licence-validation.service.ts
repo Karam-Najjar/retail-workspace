@@ -15,11 +15,10 @@ export interface VerifiedLicencePayload {
 export type LicenceValidationResult =
   { readonly valid: true; readonly payload: VerifiedLicencePayload } | { readonly valid: false; readonly error: string };
 
-const TEMPORARY_PUBLIC_JWK_BASE64URL =
-  "eyJrdHkiOiJFQyIsIngiOiJpYVJjeW1hZUtFcE5kX3FSMEY1N1o1WTY3WGozTEltcGFodzdMcHFSU3BnIiwieSI6IkxBWjNyTkFWUVRDeWpleERfcWxPaFZwNi12cU9LSUpuZjlsSkdadHJCVk0iLCJjcnYiOiJQLTI1NiJ9";
+const PUBLIC_JWK_BASE64URL = "eyJrdHkiOiJFQyIsIngiOiJweDB6ZWFZczJkeUNFWVNfb2xrWTV1OVhsMzZDa0w3UEhMZmpTVl9YM1FrIiwieSI6IkI4cW04YkRUNkc2eGh5N2JwUHdibG8zWDl3NThIeHc2U1I1dmRMaTFEclEiLCJjcnYiOiJQLTI1NiJ9";
 
 function decodePublicJwk(): JWK {
-  const encoded = TEMPORARY_PUBLIC_JWK_BASE64URL.replace(/-/g, "+").replace(/_/g, "/");
+  const encoded = PUBLIC_JWK_BASE64URL.replace(/-/g, "+").replace(/_/g, "/");
   const padded = encoded.padEnd(Math.ceil(encoded.length / 4) * 4, "=");
   const parsed: unknown = JSON.parse(atob(padded));
 

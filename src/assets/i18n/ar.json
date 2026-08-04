@@ -103,8 +103,17 @@
     "addBarcode": "إضافة باركود",
     "manageBarcodes": "إدارة الباركودات",
     "noBarcodes": "لم تُضف أي باركودات.",
-    "stock": { "in": "متوفر", "low": "مخزون منخفض", "out": "نفذ المخزون" },
-    "errors": { "load": "تعذر تحميل المنتجات.", "save": "تعذر حفظ المنتج.", "delete": "تعذر حذف المنتج.", "barcodes": "تعذر حفظ الباركودات." }
+    "stock": {
+      "in": "متوفر",
+      "low": "مخزون منخفض",
+      "out": "نفذ المخزون"
+    },
+    "errors": {
+      "load": "تعذر تحميل المنتجات.",
+      "save": "تعذر حفظ المنتج.",
+      "delete": "تعذر حذف المنتج.",
+      "barcodes": "تعذر حفظ الباركودات."
+    }
   },
   "inventory": {
     "adjustStock": "تعديل المخزون",
@@ -245,14 +254,48 @@
     "allocatedCost": "التكلفة المخصصة"
   },
   "reports": {
-    "filters": { "today": "اليوم", "week": "هذا الأسبوع", "month": "هذا الشهر", "custom": "مخصص", "from": "من", "to": "إلى" },
+    "filters": {
+      "today": "اليوم",
+      "week": "هذا الأسبوع",
+      "month": "هذا الشهر",
+      "custom": "مخصص",
+      "from": "من",
+      "to": "إلى"
+    },
     "export": "تصدير إلى Excel",
     "exporting": "جاري التصدير..."
   },
   "exports": {
-    "sales": { "dateTime": "التاريخ والوقت", "product": "المنتج", "quantity": "الكمية", "unitPriceUsd": "سعر الوحدة (USD)", "unitPriceSyp": "سعر الوحدة (SYP)", "costUsd": "التكلفة (USD)", "costSyp": "التكلفة (SYP)", "profitUsd": "الربح (USD)", "profitSyp": "الربح (SYP)", "totalUsd": "الإجمالي (USD)", "totalSyp": "الإجمالي (SYP)" },
-    "supplies": { "dateTime": "التاريخ والوقت", "supplier": "المورد", "product": "المنتج", "packageType": "نوع العبوة", "quantity": "الكمية", "unitCostUsd": "تكلفة الوحدة (USD)", "unitCostSyp": "تكلفة الوحدة (SYP)", "subtotalUsd": "المجموع الفرعي (USD)", "subtotalSyp": "المجموع الفرعي (SYP)" },
-    "activity": { "dateTime": "التاريخ والوقت", "type": "النوع", "details": "التفاصيل", "operator": "المستخدم" }
+    "sales": {
+      "dateTime": "التاريخ والوقت",
+      "product": "المنتج",
+      "quantity": "الكمية",
+      "unitPriceUsd": "سعر الوحدة (USD)",
+      "unitPriceSyp": "سعر الوحدة (SYP)",
+      "costUsd": "التكلفة (USD)",
+      "costSyp": "التكلفة (SYP)",
+      "profitUsd": "الربح (USD)",
+      "profitSyp": "الربح (SYP)",
+      "totalUsd": "الإجمالي (USD)",
+      "totalSyp": "الإجمالي (SYP)"
+    },
+    "supplies": {
+      "dateTime": "التاريخ والوقت",
+      "supplier": "المورد",
+      "product": "المنتج",
+      "packageType": "نوع العبوة",
+      "quantity": "الكمية",
+      "unitCostUsd": "تكلفة الوحدة (USD)",
+      "unitCostSyp": "تكلفة الوحدة (SYP)",
+      "subtotalUsd": "المجموع الفرعي (USD)",
+      "subtotalSyp": "المجموع الفرعي (SYP)"
+    },
+    "activity": {
+      "dateTime": "التاريخ والوقت",
+      "type": "النوع",
+      "details": "التفاصيل",
+      "operator": "المستخدم"
+    }
   },
   "activityLog": {
     "title": "سجل النشاط",
@@ -262,12 +305,22 @@
     "details": "التفاصيل",
     "operator": "المستخدم",
     "allTypes": "جميع الأنواع",
-    "types": { "sales": "المبيعات", "supplies": "المشتريات", "productChanges": "تغييرات المنتجات", "categoryChanges": "تغييرات الفئات", "supplierChanges": "تغييرات الموردين", "settingsChanges": "تغييرات الإعدادات", "backupChanges": "استيراد نسخة احتياطية" },
+    "types": {
+      "sales": "المبيعات",
+      "supplies": "المشتريات",
+      "productChanges": "تغييرات المنتجات",
+      "categoryChanges": "تغييرات الفئات",
+      "supplierChanges": "تغييرات الموردين",
+      "settingsChanges": "تغييرات الإعدادات",
+      "backupChanges": "استيراد نسخة احتياطية"
+    },
     "emptyTitle": "لا يوجد نشاط",
     "emptyMessage": "لا يوجد نشاط يطابق عوامل التصفية المحددة.",
-    "errors": { "load": "تعذر تحميل سجل النشاط." },
+    "errors": {
+      "load": "تعذر تحميل سجل النشاط."
+    },
     "eventDetails": {
-            "settingsUpdated": "تم تحديث الإعدادات",
+      "settingsUpdated": "تم تحديث الإعدادات",
       "backupImported": "تم استيراد النسخة الاحتياطية",
       "dataCleared": "تم مسح جميع بيانات المتجر",
       "unknown": "نشاط: {{ code }}",
@@ -315,7 +368,7 @@
     "leaveMessage": "السلة غير فارغة. هل تريد تفريغها ومغادرة نقطة البيع؟"
   },
   "dashboard": {
-        "totalProducts": "إجمالي المنتجات",
+    "totalProducts": "إجمالي المنتجات",
     "activeProducts": "نشط: {{ count }}",
     "monthRevenue": "إيرادات هذا الشهر",
     "inventoryAlerts": "تنبيهات المخزون",
@@ -349,8 +402,50 @@
     "newSale": "بيع جديد",
     "newScan": "مسح جديد"
   },
-  "settings": { "title": "الإعدادات", "general": "عام", "operatorOne": "اسم المستخدم 1", "operatorTwo": "اسم المستخدم 2", "currencyRate": "سعر الصرف", "lowStockThreshold": "حد المخزون المنخفض", "language": "اللغة", "backup": "النسخ الاحتياطي", "lastBackup": "آخر نسخة احتياطية ناجحة", "never": "لم يتم", "exportBackup": "تصدير نسخة احتياطية", "restoreBackup": "استعادة نسخة احتياطية", "storage": "صحة التخزين", "usedStorage": "المستخدم", "availableStorage": "المتاح", "lowStorage": "مساحة التخزين منخفضة", "persistent": "التخزين الدائم مفعّل", "notPersistent": "التخزين الدائم غير مفعّل", "requestPersistence": "طلب التخزين الدائم", "persistence": { "granted": "", "denied": "", "unsupported": "", "error": "" }, "errors": { "load": "تعذر تحميل الإعدادات.", "save": "تعذر حفظ الإعدادات.", "export": "تعذر تصدير النسخة الاحتياطية.", "persistence": "تعذر إكمال طلب التخزين الدائم.", "restore": "تعذرت استعادة النسخة الاحتياطية.", "clear": "تعذر مسح بيانات التطبيق.", "retry": "يرجى المحاولة مرة أخرى. إذا استمرت المشكلة، احتفظ بأحدث نسخة احتياطية وأعد تحميل التطبيق." }, "dangerousActions": "إجراءات خطيرة", "clearAllData": "مسح جميع البيانات" },
-  "pwa": { "updateReady": "تحديث جاهز.", "updateClearCart": "تحديث جاهز. أفرغ السلة للتطبيق.", "updateWait": "التحديث جاهز. جارٍ انتظار انتهاء العملية الحالية.", "apply": "تطبيق" },
+  "settings": {
+    "title": "الإعدادات",
+    "general": "عام",
+    "operatorOne": "اسم المستخدم 1",
+    "operatorTwo": "اسم المستخدم 2",
+    "currencyRate": "سعر الصرف",
+    "lowStockThreshold": "حد المخزون المنخفض",
+    "language": "اللغة",
+    "backup": "النسخ الاحتياطي",
+    "lastBackup": "آخر نسخة احتياطية ناجحة",
+    "never": "لم يتم",
+    "exportBackup": "تصدير نسخة احتياطية",
+    "restoreBackup": "استعادة نسخة احتياطية",
+    "storage": "صحة التخزين",
+    "usedStorage": "المستخدم",
+    "availableStorage": "المتاح",
+    "lowStorage": "مساحة التخزين منخفضة",
+    "persistent": "التخزين الدائم مفعّل",
+    "notPersistent": "التخزين الدائم غير مفعّل",
+    "requestPersistence": "طلب التخزين الدائم",
+    "persistence": {
+      "granted": "",
+      "denied": "",
+      "unsupported": "",
+      "error": ""
+    },
+    "errors": {
+      "load": "تعذر تحميل الإعدادات.",
+      "save": "تعذر حفظ الإعدادات.",
+      "export": "تعذر تصدير النسخة الاحتياطية.",
+      "persistence": "تعذر إكمال طلب التخزين الدائم.",
+      "restore": "تعذرت استعادة النسخة الاحتياطية.",
+      "clear": "تعذر مسح بيانات التطبيق.",
+      "retry": "يرجى المحاولة مرة أخرى. إذا استمرت المشكلة، احتفظ بأحدث نسخة احتياطية وأعد تحميل التطبيق."
+    },
+    "dangerousActions": "إجراءات خطيرة",
+    "clearAllData": "مسح جميع البيانات"
+  },
+  "pwa": {
+    "updateReady": "تحديث جاهز.",
+    "updateClearCart": "تحديث جاهز. أفرغ السلة للتطبيق.",
+    "updateWait": "التحديث جاهز. جارٍ انتظار انتهاء العملية الحالية.",
+    "apply": "تطبيق"
+  },
   "notFound": {
     "title": "الصفحة غير موجودة",
     "description": "الصفحة التي طلبتها غير متوفرة.",
@@ -367,35 +462,37 @@
   },
   "packages": {
     "pocket": "علبة",
-    "carton": "كرتون"
+    "carton": "كرتون",
+    "unit": "وحدة",
+    "case": "صندوق"
   },
   "notifications": {
-    "dismiss": "",
+    "dismiss": "إغلاق",
     "errors": {
-      "unexpected": "",
-      "export": ""
+      "unexpected": "حدث خطأ غير متوقع",
+      "export": "فشل التصدير"
     },
     "success": {
-      "categorySaved": "",
-      "categoryDeleted": "",
-      "supplierSaved": "",
-      "supplierDeleted": "",
-      "productSaved": "",
-      "productDeleted": "",
-      "barcodesSaved": "",
-      "openingBalanceCreated": "",
-      "stockAdded": "",
-      "stockRemoved": "",
-      "productWrittenOff": "",
-      "supplyReceived": "",
-      "exportCompleted": "",
-      "backupExported": "",
-      "backupRestored": "",
-      "settingsSaved": "",
-      "dataCleared": "",
-      "licenceActivated": "",
-      "cartUpdated": "",
-      "cartCleared": ""
+      "categorySaved": "تم حفظ الفئة",
+      "categoryDeleted": "تم حذف الفئة",
+      "supplierSaved": "تم حفظ المورد",
+      "supplierDeleted": "تم حذف المورد",
+      "productSaved": "تم حفظ المنتج",
+      "productDeleted": "تم حذف المنتج",
+      "barcodesSaved": "تم حفظ الباركودات",
+      "openingBalanceCreated": "تم إنشاء الرصيد الافتتاحي",
+      "stockAdded": "تمت إضافة المخزون",
+      "stockRemoved": "تم سحب المخزون",
+      "productWrittenOff": "تم شطب المنتج",
+      "supplyReceived": "تم استلام التوريدة",
+      "exportCompleted": "تم التصدير بنجاح",
+      "backupExported": "تم تصدير النسخة الاحتياطية",
+      "backupRestored": "تمت استعادة النسخة الاحتياطية",
+      "settingsSaved": "تم حفظ الإعدادات",
+      "dataCleared": "تم مسح البيانات",
+      "licenceActivated": "تم تفعيل الترخيص",
+      "cartUpdated": "تم تحديث السلة",
+      "cartCleared": "تم مسح السلة"
     }
   }
 }
