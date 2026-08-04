@@ -1,4 +1,9 @@
 import { SaleCurrencySnapshot } from "../../domain/models/sale-currency-snapshot.model";
+import {
+  convertCurrencyMinorUnits,
+  currencyMinorUnitsToMajor,
+  sumCurrencyMinorUnits,
+} from "../../domain/policies/currency-rounding.policy";
 import { SaleDetail } from "../../domain/repository-contracts/sale.repository";
 import { ExcelSheetDefinition } from "./excel-export.models";
 
@@ -35,17 +40,12 @@ export class SalesWorkbookMapper {
         ];
       })
     );
-    const totals = details.reduce(
-      (sum, detail) => ({
-        amountUsd: sum.amountUsd + primary(detail.sale.total_amount, detail.sale.currency_snapshot),
-        amountSyp: sum.amountSyp + secondary(detail.sale.total_amount, detail.sale.currency_snapshot),
-        costUsd: sum.costUsd + primary(detail.sale.total_cost, detail.sale.currency_snapshot),
-        costSyp: sum.costSyp + secondary(detail.sale.total_cost, detail.sale.currency_snapshot),
-        profitUsd: sum.profitUsd + primary(detail.sale.total_profit, detail.sale.currency_snapshot),
-        profitSyp: sum.profitSyp + secondary(detail.sale.total_profit, detail.sale.currency_snapshot),
-      }),
-      { amountUsd: 0, amountSyp: 0, costUsd: 0, costSyp: 0, profitUsd: 0, profitSyp: 0 }
-    );
+    const amountUsd = storedPrimaryTotal(details, snapshot => snapshot.total_amount);
+    const costUsd = storedPrimaryTotal(details, snapshot => snapshot.total_cost);
+    const profitUsd = storedPrimaryTotal(details, snapshot => snapshot.total_profit);
+    const amountSyp = storedSecondaryTotal(details, snapshot => snapshot.secondary_total_amount);
+    const costSyp = storedSecondaryTotal(details, snapshot => snapshot.secondary_total_cost);
+    const profitSyp = storedSecondaryTotal(details, snapshot => snapshot.secondary_total_profit);
     return {
       name: "Sales",
       columns,
@@ -56,20 +56,49 @@ export class SalesWorkbookMapper {
         null,
         null,
         null,
-        totals.costUsd,
-        totals.costSyp,
-        totals.profitUsd,
-        totals.profitSyp,
-        totals.amountUsd,
-        totals.amountSyp,
+        costUsd,
+        costSyp,
+        profitUsd,
+        profitSyp,
+        amountUsd,
+        amountSyp,
       ],
     };
   }
 }
 
 function primary(value: number, snapshot: SaleCurrencySnapshot): number {
-  return value / 10 ** snapshot.primary_precision;
+  return currencyMinorUnitsToMajor(value, snapshot.primary_precision);
 }
 function secondary(value: number, snapshot: SaleCurrencySnapshot): number {
-  return primary(value, snapshot) * Number(snapshot.exchange_rate);
+  const minorUnits = convertCurrencyMinorUnits(
+    value,
+    snapshot.exchange_rate,
+    snapshot.primary_precision,
+    snapshot.secondary_precision
+  );
+  return currencyMinorUnitsToMajor(minorUnits, snapshot.secondary_precision);
+}
+
+function storedSecondaryTotal(details: readonly SaleDetail[], select: (snapshot: SaleCurrencySnapshot) => number): number {
+  const firstSnapshot = details[0]?.sale.currency_snapshot;
+  if (!firstSnapshot) return 0;
+  const precision = firstSnapshot.secondary_precision;
+  const values = details.map(detail => {
+    const snapshot = detail.sale.currency_snapshot;
+    if (snapshot.secondary_precision !== precision) throw new Error("Sales export contains incompatible secondary currency precisions.");
+    return select(snapshot);
+  });
+  return currencyMinorUnitsToMajor(sumCurrencyMinorUnits(values), precision);
+}
+
+function storedPrimaryTotal(details: readonly SaleDetail[], select: (sale: SaleDetail["sale"]) => number): number {
+  const firstSnapshot = details[0]?.sale.currency_snapshot;
+  if (!firstSnapshot) return 0;
+  const precision = firstSnapshot.primary_precision;
+  const values = details.map(detail => {
+    if (detail.sale.currency_snapshot.primary_precision !== precision) throw new Error("Sales export contains incompatible primary currency precisions.");
+    return select(detail.sale);
+  });
+  return currencyMinorUnitsToMajor(sumCurrencyMinorUnits(values), precision);
 }

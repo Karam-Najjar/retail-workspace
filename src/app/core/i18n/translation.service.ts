@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
+import { firstValueFrom } from "rxjs";
 import { AppLanguage, DirectionalityService } from "./directionality.service";
 
 @Injectable({ providedIn: "root" })
@@ -11,16 +12,15 @@ export class TranslationService {
 
   constructor() {
     this.translate.addLangs(["en", "ar"]);
-    this.setLanguage("en");
   }
 
-  setLanguage(language: AppLanguage): void {
+  async setLanguage(language: AppLanguage): Promise<void> {
     this.activeLanguage.set(language);
     this.directionality.setLanguage(language);
-    this.translate.use(language).subscribe();
+    await firstValueFrom(this.translate.use(language));
   }
 
-  toggleLanguage(): void {
-    this.setLanguage(this.activeLanguage() === "en" ? "ar" : "en");
+  async toggleLanguage(): Promise<void> {
+    await this.setLanguage(this.activeLanguage() === "en" ? "ar" : "en");
   }
 }

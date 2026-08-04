@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { InventoryBatch } from "../../domain/models/inventory-batch.model";
 import { InventoryMovement } from "../../domain/models/inventory-movement.model";
-import { allocateFifo } from "../../domain/policies/fifo-allocation.policy";
+import { allocateFifo, assertValidInventoryBatch, checkedAddSafeIntegers } from "../../domain/policies/fifo-allocation.policy";
 import {
   InventoryAdjustmentRepository,
   NegativeInventoryChange,
@@ -26,14 +26,20 @@ export class DexieInventoryAdjustmentRepository implements InventoryAdjustmentRe
         if (change.adjustment.type === "opening_balance" && product.quantity !== 0) {
           throw new Error("Opening balance is only available when stock is zero.");
         }
+        if (change.adjustment.type === "adjustment_in" && product.quantity <= 0) {
+          throw new Error("Stock adjustment is only available when stock is positive.");
+        }
 
         const existingBatches = await this.database.inventoryBatches.where("product_id").equals(product.id).toArray();
-        const sequence = existingBatches.reduce((maximum, batch) => Math.max(maximum, batch.sequence), 0) + 1;
+        for (const existingBatch of existingBatches) assertValidInventoryBatch(existingBatch);
+        const maximumSequence = existingBatches.reduce((maximum, batch) => Math.max(maximum, batch.sequence), 0);
+        const sequence = checkedAddSafeIntegers(maximumSequence, 1, "Inventory batch sequence is too large.");
         const batch: InventoryBatch = { ...change.batch, sequence };
+        assertValidInventoryBatch(batch);
         const quantity = change.adjustment.quantity_change;
         const updatedProduct = {
           ...product,
-          quantity: product.quantity + quantity,
+          quantity: checkedAddSafeIntegers(product.quantity, quantity, "Product quantity is too large."),
           last_modified_by_operator_id: change.adjustment.operator_id,
           updated_at: change.adjustment.created_at,
         };
@@ -65,7 +71,7 @@ export class DexieInventoryAdjustmentRepository implements InventoryAdjustmentRe
         const movements = this.createMovements(change, result.allocations);
         const updatedProduct = {
           ...product,
-          quantity: product.quantity - change.quantity,
+          quantity: checkedAddSafeIntegers(product.quantity, -change.quantity, "Product quantity is invalid."),
           last_modified_by_operator_id: change.adjustment.operator_id,
           updated_at: change.adjustment.created_at,
         };
@@ -122,8 +128,15 @@ export class DexieInventoryAdjustmentRepository implements InventoryAdjustmentRe
   }
 
   private async assertStoredQuantity(productId: string, expectedQuantity: number): Promise<void> {
+    if (!Number.isSafeInteger(expectedQuantity) || expectedQuantity < 0) {
+      throw new Error("Inventory integrity check failed. Further stock changes are blocked.");
+    }
     const batches = await this.database.inventoryBatches.where("product_id").equals(productId).toArray();
-    const actualQuantity = batches.reduce((sum, batch) => sum + batch.remaining_quantity, 0);
+    for (const batch of batches) assertValidInventoryBatch(batch);
+    const actualQuantity = batches.reduce(
+      (sum, batch) => checkedAddSafeIntegers(sum, batch.remaining_quantity, "Inventory quantity is too large."),
+      0
+    );
     if (actualQuantity !== expectedQuantity) {
       console.error(`Inventory integrity failure for product ${productId}: cached=${expectedQuantity}, batches=${actualQuantity}`);
       throw new Error("Inventory integrity check failed. Further stock changes are blocked.");

@@ -4,6 +4,13 @@
     <p>{{ "settings.description" | translate }}</p>
   </header>
 
+  @if (facade.operationError(); as operationError) {
+    <div class="warning" role="alert" aria-live="assertive">
+      <p>{{ operationError.messageKey | translate }}</p>
+      <p>{{ "settings.errors.retry" | translate }}</p>
+    </div>
+  }
+
   <div class="settings-grid">
     <!-- General Settings -->
     <mat-card class="settings-card">
@@ -14,29 +21,36 @@
       <div class="form">
         <mat-form-field appearance="outline">
           <mat-label>{{ "settings.operatorOne" | translate }}</mat-label>
-          <input matInput [(ngModel)]="operatorOne" />
+          <input matInput [(ngModel)]="operatorOne" required maxlength="100" [attr.aria-invalid]="!operatorOne.trim() || operatorOne.trim().length > 100" />
         </mat-form-field>
+        @if (!operatorOne.trim() || operatorOne.trim().length > 100) {
+          <p class="field-error">{{ "settings.validation.operatorName" | translate }}</p>
+        }
         <mat-form-field appearance="outline">
           <mat-label>{{ "settings.operatorTwo" | translate }}</mat-label>
-          <input matInput [(ngModel)]="operatorTwo" />
+          <input matInput [(ngModel)]="operatorTwo" required maxlength="100" [attr.aria-invalid]="!operatorTwo.trim() || operatorTwo.trim().length > 100" />
         </mat-form-field>
+        @if (!operatorTwo.trim() || operatorTwo.trim().length > 100) {
+          <p class="field-error">{{ "settings.validation.operatorName" | translate }}</p>
+        }
         <mat-form-field appearance="outline">
           <mat-label>{{ "settings.currencyRate" | translate }}</mat-label>
-          <input matInput [(ngModel)]="rate" />
+          <input matInput [(ngModel)]="rate" required [attr.aria-invalid]="normalizePositiveDecimal(rate) === null" />
         </mat-form-field>
+        @if (normalizePositiveDecimal(rate) === null) {
+          <p class="field-error">{{ "settings.validation.currencyRate" | translate }}</p>
+        }
         <mat-form-field appearance="outline">
           <mat-label>{{ "settings.lowStockThreshold" | translate }}</mat-label>
-          <input matInput type="number" [(ngModel)]="threshold" />
+          <input matInput type="number" [(ngModel)]="threshold" required min="0" step="1" [attr.aria-invalid]="!isValidLowStockThreshold(threshold)" />
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>{{ "settings.language" | translate }}</mat-label>
-          <mat-select [(ngModel)]="language">
-            <mat-option value="en">English</mat-option>
-            <mat-option value="ar">Arabic</mat-option>
-          </mat-select>
-        </mat-form-field>
+        @if (!isValidLowStockThreshold(threshold)) {
+          <p class="field-error">{{ "settings.validation.threshold" | translate }}</p>
+        }
       </div>
-      <button mat-flat-button color="primary" (click)="save()" [disabled]="facade.busy()">{{ "common.save" | translate }}</button>
+      <button mat-flat-button color="primary" (click)="save()" [disabled]="facade.busy() || !settingsFormValid()">
+        {{ "common.save" | translate }}
+      </button>
     </mat-card>
 
     <!-- Backup -->
@@ -62,21 +76,33 @@
       </div>
       <h2>{{ "settings.storage" | translate }}</h2>
       @if (facade.storage(); as health) {
-        <div class="storage-info">
-          <div class="storage-bar">
-            <div class="storage-bar__fill" [style.inline-size.%]="health.quota ? ((health.usage ?? 0) / health.quota) * 100 : 0"></div>
+        @if (health.available) {
+          <div class="storage-info">
+            <div class="storage-bar">
+              <div class="storage-bar__fill" [style.inline-size.%]="storageUsagePercent(health)"></div>
+            </div>
+            <p class="card-description">
+              {{ "settings.usedStorage" | translate }}: {{ formatBytes(health.usage) }} / {{ formatBytes(health.quota) }}
+            </p>
+            @if (health.low_space) {
+              <p class="warning">{{ "settings.lowStorage" | translate }}</p>
+            }
+            @if (health.persistence_error) {
+              <p class="warning">{{ "settings.persistenceStatusError" | translate }}</p>
+            } @else if (!health.persistence_supported) {
+              <p class="card-description">{{ "settings.persistence.unsupported" | translate }}</p>
+            } @else {
+              <p class="persistence-badge" [class.persistence-badge--active]="health.persisted">
+                {{ health.persisted ? ("settings.persistent" | translate) : ("settings.notPersistent" | translate) }}
+              </p>
+            }
           </div>
-          <p class="card-description">
-            {{ "settings.usedStorage" | translate }}: {{ health.usage ?? 0 }} / {{ health.quota ?? "—" }}
-          </p>
-          @if (health.low_space) {
-            <p class="warning">{{ "settings.lowStorage" | translate }}</p>
+          @if (health.persistence_supported && !health.persisted) {
+            <button mat-stroked-button (click)="persist()" [disabled]="facade.busy()">{{ "settings.requestPersistence" | translate }}</button>
           }
-          <p class="persistence-badge" [class.persistence-badge--active]="health.persisted">
-            {{ health.persisted ? ("settings.persistent" | translate) : ("settings.notPersistent" | translate) }}
-          </p>
-        </div>
-        <button mat-stroked-button (click)="persist()" [disabled]="facade.busy()">{{ "settings.requestPersistence" | translate }}</button>
+        } @else {
+          <p class="warning">{{ (health.error ? "settings.storageError" : "settings.storageUnavailable") | translate }}</p>
+        }
         @if (facade.storageFeedback(); as feedback) {
           <p class="feedback" aria-live="polite">{{ feedback | translate }}</p>
         }

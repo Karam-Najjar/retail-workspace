@@ -51,7 +51,7 @@ export class CategoriesFacade {
 
   async delete(category: Category): Promise<number | null> {
     try {
-      const affectedProducts = await this.deleteCategory.execute(category);
+      const affectedProducts = await this.deleteCategory.execute(category.id);
       await this.load();
       return affectedProducts;
     } catch (error: unknown) {

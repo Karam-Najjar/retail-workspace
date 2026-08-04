@@ -23,7 +23,7 @@
     }
   </mat-menu>
 
-  <button mat-button type="button" (click)="translation.toggleLanguage()">
+  <button mat-button type="button" (click)="toggleLanguage()">
     {{ translation.activeLanguage() === "en" ? ("languages.arabic" | translate) : ("languages.english" | translate) }}
   </button>
 </mat-toolbar>

@@ -44,7 +44,7 @@ export class AdjustStockOutUseCase {
       created_at: now,
     };
     const payload: InventoryStockRemovedEventPayload = { product_id: product.id, quantity: input.quantity, adjustment_id: adjustmentId };
-    const activityLog: ActivityLog<InventoryStockRemovedEventPayload> = {
+    const activityLog: ActivityLog<"inventory.stock.removed"> = {
       id: crypto.randomUUID(),
       event_code: "inventory.stock.removed",
       entity_type: "product",

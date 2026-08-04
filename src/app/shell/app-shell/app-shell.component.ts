@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, viewChild } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
-import { PosCartStore, PwaUpdateService } from "@retail/kernel";
+import { CriticalOperationService, PosCartStore, PwaUpdateService } from "@retail/kernel";
 import { TranslatePipe } from "@ngx-translate/core";
 import { MatSidenav, MatSidenavModule } from "@angular/material/sidenav";
 import { NavigationEnd, Router, RouterOutlet } from "@angular/router";
@@ -21,7 +21,9 @@ export class AppShellComponent {
   private readonly router = inject(Router);
   protected readonly updates = inject(PwaUpdateService);
   private readonly cart = inject(PosCartStore);
+  private readonly criticalOperations = inject(CriticalOperationService);
   protected readonly cartHasItems = computed(() => this.cart.items().length > 0);
+  protected readonly updateSafe = computed(() => !this.cartHasItems() && !this.criticalOperations.active());
 
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
@@ -38,7 +40,7 @@ export class AppShellComponent {
 
   constructor() {
     effect(() => {
-      if (this.updates.ready() && !this.cartHasItems()) void this.updates.apply();
+      if (this.updates.ready() && this.updateSafe()) void this.updates.apply();
     });
   }
 

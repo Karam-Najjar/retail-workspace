@@ -13,7 +13,7 @@ export class DeleteSupplierUseCase {
     const operator = this.activeOperator.activeOperator();
     if (!operator) throw new Error("An active operator is required.");
     const affectedSupplies = await this.repository.countAffectedSupplies(supplier.id);
-    const activityLog: ActivityLog<{ affected_supplies: number }> = {
+    const activityLog: ActivityLog<"supplier.deleted"> = {
       id: crypto.randomUUID(),
       event_code: "supplier.deleted",
       entity_type: "supplier",

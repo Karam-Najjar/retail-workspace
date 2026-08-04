@@ -1,5 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { InventoryBatch } from "../../domain/models/inventory-batch.model";
+import { assertValidInventoryBatch, checkedAddSafeIntegers } from "../../domain/policies/fifo-allocation.policy";
 import { InventoryBatchRepository } from "../../domain/repository-contracts/inventory-batch.repository";
 import { RetailDatabase } from "../database/retail.database";
 
@@ -14,6 +15,10 @@ export class DexieInventoryBatchRepository implements InventoryBatchRepository {
 
   async sumRemainingQuantity(productId: string): Promise<number> {
     const batches = await this.database.inventoryBatches.where("product_id").equals(productId).toArray();
-    return batches.reduce((sum, batch) => sum + batch.remaining_quantity, 0);
+    for (const batch of batches) assertValidInventoryBatch(batch);
+    return batches.reduce(
+      (sum, batch) => checkedAddSafeIntegers(sum, batch.remaining_quantity, "Inventory quantity is too large."),
+      0
+    );
   }
 }

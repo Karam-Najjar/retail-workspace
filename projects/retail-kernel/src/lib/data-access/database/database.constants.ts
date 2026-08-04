@@ -1,4 +1,5 @@
 export const RETAIL_DATABASE_NAME = "retail-app";
+export const CURRENT_SCHEMA_VERSION = 8;
 export const APP_SETTINGS_KEY = "app" as const;
 export const ACTIVE_LICENCE_KEY = "active" as const;
 export const OPERATOR_ONE_ID = "op-00000000-0000-0000-0000-000000000001";

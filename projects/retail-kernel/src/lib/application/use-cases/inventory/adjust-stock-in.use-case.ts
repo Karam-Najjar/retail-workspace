@@ -28,6 +28,7 @@ export class AdjustStockInUseCase {
     const product = await this.products.getById(input.productId);
     if (!product) throw new Error("Product could not be found.");
     await this.integrity.assertConsistent(product);
+    if (product.quantity <= 0) throw new Error("Stock adjustment is only available when stock is positive.");
     const operator = this.activeOperator.activeOperator();
     if (!operator) throw new Error("An active operator is required.");
     const now = new Date();
@@ -82,7 +83,7 @@ export class AdjustStockInUseCase {
       adjustment_id: adjustmentId,
       batch_id: batchId,
     };
-    const activityLog: ActivityLog<InventoryStockAddedEventPayload> = {
+    const activityLog: ActivityLog<"inventory.stock.added"> = {
       id: crypto.randomUUID(),
       event_code: "inventory.stock.added",
       entity_type: "product",

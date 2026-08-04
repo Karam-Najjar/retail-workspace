@@ -1,4 +1,5 @@
 import { inject, Injectable } from "@angular/core";
+import Decimal from "decimal.js";
 import { StoreProfileService } from "../../../configuration/store-profile.service";
 import { DexieProductRepository } from "../../../data-access/repositories/dexie-product.repository";
 import { DexieSupplierRepository } from "../../../data-access/repositories/dexie-supplier.repository";
@@ -76,7 +77,7 @@ export class ReceiveSupplyUseCase {
         multiplier: packageType.multiplier,
         quantity_base_units: quantityBaseUnits,
         unit_cost_entered: line.unitCostEntered,
-        unit_cost_per_base_display: String(line.unitCostEntered / packageType.multiplier / 100),
+        unit_cost_per_base_display: new Decimal(line.unitCostEntered).div(packageType.multiplier).div(100).toString(),
         subtotal_cost: subtotalCost,
       };
       const batch: Omit<InventoryBatch, "sequence"> = {
@@ -132,7 +133,7 @@ export class ReceiveSupplyUseCase {
         batch_id: entry.batch.id,
       })),
     };
-    const activityLog: ActivityLog<SupplyReceivedPayload> = {
+    const activityLog: ActivityLog<"supply.received"> = {
       id: crypto.randomUUID(),
       event_code: "supply.received",
       entity_type: "supply",

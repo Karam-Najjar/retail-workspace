@@ -8,9 +8,6 @@ import { Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
 import { LicenceValidationService } from "@retail/kernel";
 
-// Temporary manual-test licence (ES256, expires 2030-01-01):
-// eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9maWxlX2lkIjoidG9iYWNjb192MSIsImZlYXR1cmVzIjpbImR1YWxfY3VycmVuY3kiLCJjYXJ0b25fYmFyY29kZXMiLCJpbnZlbnRvcnlfYWRqdXN0bWVudHMiXSwic3ViIjoidGVzdC1jdXN0b21lciIsImlhdCI6MTc4NTA0NTk1MiwiZXhwIjoxODkzNDU2MDAwfQ.QwzD3EhALkJ-Q_1aIfD5jUwzfi4qauTWRwBQmiDVxj87QajWeSNik6dOnw4520hdR_fZf3eoBw1st37PyXBerw
-
 @Component({
   selector: "app-licence-setup",
   imports: [FormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, TranslatePipe],

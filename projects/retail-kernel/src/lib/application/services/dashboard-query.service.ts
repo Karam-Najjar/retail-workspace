@@ -1,6 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { DashboardSnapshot, DashboardWeeklySalesDay } from "../dto/dashboard-snapshot.model";
 import { RetailDatabase } from "../../data-access/database/retail.database";
+import { sumCurrencyMinorUnits } from "../../domain/policies/currency-rounding.policy";
 import { liveQuery } from "dexie";
 import { Observable } from "rxjs";
 
@@ -65,9 +66,9 @@ export class DashboardQueryService {
       const nextDate = this.addDays(date, 1);
       return {
         date,
-        sales_usd: eligibleSales
-          .filter(sale => this.isWithin(sale.date, date, nextDate) && date <= today)
-          .reduce((sum, sale) => sum + sale.total_amount, 0),
+        sales_usd: sumCurrencyMinorUnits(
+          eligibleSales.filter(sale => this.isWithin(sale.date, date, nextDate) && date <= today).map(sale => sale.total_amount)
+        ),
         is_today: date.getTime() === today.getTime(),
         is_future: date > today,
       };
@@ -76,12 +77,12 @@ export class DashboardQueryService {
     return {
       total_products: products.length,
       active_products: products.filter(product => product.quantity > 0).length,
-      today_sales_usd: todaySales.reduce((sum, sale) => sum + sale.total_amount, 0),
-      today_sales_syp: todaySales.reduce((sum, sale) => sum + sale.currency_snapshot.secondary_total_amount, 0),
-      month_sales_usd: monthSales.reduce((sum, sale) => sum + sale.total_amount, 0),
-      month_sales_syp: monthSales.reduce((sum, sale) => sum + sale.currency_snapshot.secondary_total_amount, 0),
-      month_profit_usd: monthSales.reduce((sum, sale) => sum + sale.total_profit, 0),
-      month_profit_syp: monthSales.reduce((sum, sale) => sum + sale.currency_snapshot.secondary_total_profit, 0),
+      today_sales_usd: sumCurrencyMinorUnits(todaySales.map(sale => sale.total_amount)),
+      today_sales_syp: sumCurrencyMinorUnits(todaySales.map(sale => sale.currency_snapshot.secondary_total_amount)),
+      month_sales_usd: sumCurrencyMinorUnits(monthSales.map(sale => sale.total_amount)),
+      month_sales_syp: sumCurrencyMinorUnits(monthSales.map(sale => sale.currency_snapshot.secondary_total_amount)),
+      month_profit_usd: sumCurrencyMinorUnits(monthSales.map(sale => sale.total_profit)),
+      month_profit_syp: sumCurrencyMinorUnits(monthSales.map(sale => sale.currency_snapshot.secondary_total_profit)),
       weekly_sales: weeklySales,
       inventory_health: inventoryHealth,
       low_stock_products: products
@@ -94,7 +95,28 @@ export class DashboardQueryService {
   }
 
   watch(): Observable<DashboardSnapshot> {
-    return liveQuery(() => this.getSnapshot()) as unknown as Observable<DashboardSnapshot>;
+    return new Observable<DashboardSnapshot>(subscriber => {
+      let midnightTimer: ReturnType<typeof setTimeout> | undefined;
+      const databaseSubscription = (liveQuery(() => this.getSnapshot()) as unknown as Observable<DashboardSnapshot>).subscribe(subscriber);
+
+      const scheduleMidnightRefresh = (): void => {
+        if (subscriber.closed) return;
+        const now = new Date();
+        const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        midnightTimer = setTimeout(() => {
+          void this.getSnapshot()
+            .then(snapshot => subscriber.next(snapshot))
+            .catch(error => subscriber.error(error))
+            .finally(scheduleMidnightRefresh);
+        }, nextMidnight.getTime() - now.getTime());
+      };
+
+      scheduleMidnightRefresh();
+      return () => {
+        databaseSubscription.unsubscribe();
+        if (midnightTimer !== undefined) clearTimeout(midnightTimer);
+      };
+    });
   }
 
   private addDays(date: Date, days: number): Date {

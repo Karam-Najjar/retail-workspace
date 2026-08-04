@@ -1,4 +1,5 @@
 import { inject, Injectable } from "@angular/core";
+import Decimal from "decimal.js";
 import { StoreProfileService } from "../../configuration/store-profile.service";
 import { DexieSettingsRepository } from "../../data-access/repositories/dexie-settings.repository";
 import { SupplyCurrencySnapshot } from "../../domain/models/supply-currency-snapshot.model";
@@ -20,9 +21,11 @@ export class CurrencyService {
     if (!Number.isSafeInteger(primaryTotalCost) || primaryTotalCost < 0) throw new Error("Supply total must be a valid currency amount.");
     const exchangeRate = await this.currentExchangeRate();
     const profile = this.storeProfile.profile;
-    const primaryScale = 10 ** profile.currency.primary.precision;
-    const secondaryScale = 10 ** profile.currency.secondary.precision;
-    const secondaryTotalCost = roundCurrencyMinorUnits((primaryTotalCost / primaryScale) * Number(exchangeRate) * secondaryScale);
+    const primaryScale = new Decimal(10).pow(profile.currency.primary.precision);
+    const secondaryScale = new Decimal(10).pow(profile.currency.secondary.precision);
+    const secondaryTotalCost = roundCurrencyMinorUnits(
+      new Decimal(primaryTotalCost).div(primaryScale).mul(exchangeRate).mul(secondaryScale)
+    );
     return {
       primary_code: profile.currency.primary.code,
       primary_precision: profile.currency.primary.precision,
@@ -36,7 +39,11 @@ export class CurrencyService {
   }
 
   private validRate(value: string): boolean {
-    const rate = Number(value);
-    return Number.isFinite(rate) && rate > 0;
+    try {
+      const rate = new Decimal(value);
+      return rate.isFinite() && rate.isPositive();
+    } catch {
+      return false;
+    }
   }
 }

@@ -1,9 +1,12 @@
 import { inject, Injectable } from "@angular/core";
 import { SupplySummary } from "../dto/supply-summary.model";
+import { SupplyListEntry } from "../use-cases/supplies/list-supplies.use-case";
+import { sumCurrencyMinorUnits, sumSafeIntegers } from "../../domain/policies/currency-rounding.policy";
 import { SupplyDetail, SupplyListFilter } from "../../domain/repository-contracts/supply.repository";
 import { DexieSupplyRepository } from "../../data-access/repositories/dexie-supply.repository";
 
 export interface SupplyReport {
+  readonly entries: readonly SupplyListEntry[];
   readonly details: readonly SupplyDetail[];
   readonly summary: SupplySummary;
 }
@@ -13,18 +16,16 @@ export class SupplyReportingService {
   private readonly repository = inject(DexieSupplyRepository);
 
   async getReport(filter: SupplyListFilter = {}): Promise<SupplyReport> {
-    const supplies = await this.repository.list(filter);
-    const details = (await Promise.all(supplies.map(supply => this.repository.getDetail(supply.id)))).filter(
-      (detail): detail is SupplyDetail => detail !== undefined
-    );
+    const details = await this.repository.listDetails(filter);
     return {
+      entries: details.map(detail => ({ supply: detail.supply, itemCount: detail.items.length })),
       details,
       summary: {
-        total_cost: details.reduce((total, detail) => total + detail.supply.total_cost, 0),
+        total_cost: sumCurrencyMinorUnits(details.map(detail => detail.supply.total_cost)),
         transaction_count: details.length,
-        total_base_units: details.reduce(
-          (total, detail) => total + detail.items.reduce((lineTotal, item) => lineTotal + item.quantity_base_units, 0),
-          0
+        total_base_units: sumSafeIntegers(
+          details.flatMap(detail => detail.items.map(item => item.quantity_base_units)),
+          "Supply quantity total is too large."
         ),
       },
     };

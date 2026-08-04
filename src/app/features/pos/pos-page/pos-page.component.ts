@@ -74,16 +74,16 @@ export class PosPageComponent implements AfterViewInit, OnDestroy, OnInit {
     if (!this.facade.checkingOut()) void this.processResult(this.facade.addProduct(productId), null);
   }
   protected increase(item: DraftCartItem): void {
-    if (!this.facade.checkingOut()) void this.facade.change(item, 1);
+    if (!this.facade.checkingOut()) void this.processCartAction(() => this.facade.change(item, 1));
   }
   protected decrease(item: DraftCartItem): void {
-    if (!this.facade.checkingOut()) void this.facade.change(item, -1);
+    if (!this.facade.checkingOut()) void this.processCartAction(() => this.facade.change(item, -1));
   }
   protected remove(item: DraftCartItem): void {
-    if (!this.facade.checkingOut()) void this.facade.remove(item);
+    if (!this.facade.checkingOut()) void this.processCartAction(() => this.facade.remove(item));
   }
   protected clear(): void {
-    if (!this.facade.checkingOut()) void this.facade.clear();
+    if (!this.facade.checkingOut()) void this.processCartAction(() => this.facade.clear());
   }
   protected checkout(): void {
     if (this.facade.checkingOut()) return;
@@ -107,6 +107,16 @@ export class PosPageComponent implements AfterViewInit, OnDestroy, OnInit {
       const result = await resultPromise;
       if (result.status === "not_found" && barcode !== null) await this.handleUnknownBarcode(barcode);
       else this.facade.setFeedback(result);
+    } catch {
+      this.facade.setError();
+    } finally {
+      this.focusScanInput();
+    }
+  }
+
+  private async processCartAction(action: () => Promise<void>): Promise<void> {
+    try {
+      await action();
     } catch {
       this.facade.setError();
     } finally {

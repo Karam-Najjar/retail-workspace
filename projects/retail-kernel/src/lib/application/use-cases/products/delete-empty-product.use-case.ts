@@ -13,7 +13,7 @@ export class DeleteEmptyProductUseCase {
     const operator = this.activeOperator.activeOperator();
     if (!operator) throw new Error("An active operator is required.");
     const barcodes = await this.repository.listBarcodes(product.id);
-    const activityLog: ActivityLog<{ barcode_count: number }> = {
+    const activityLog: ActivityLog<"product.deleted"> = {
       id: crypto.randomUUID(),
       event_code: "product.deleted",
       entity_type: "product",

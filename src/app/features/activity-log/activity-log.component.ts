@@ -95,7 +95,7 @@ export class ActivityLogComponent implements OnInit {
       categoryChanges: ["category.deleted"],
       supplierChanges: ["supplier.deleted"],
       settingsChanges: ["settings.updated"],
-      backupChanges: ["backup.imported"],
+      backupChanges: ["backup_imported"],
     };
     return { from: this.range.from, to: this.range.to, eventCodes: this.activityType ? groups[this.activityType] : undefined };
   }

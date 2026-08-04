@@ -5,6 +5,8 @@ import { DraftCartItem } from "../../domain/models/draft-cart-item.model";
 import { Product } from "../../domain/models/product.model";
 import { CheckoutIdempotencyService } from "./checkout-idempotency.service";
 
+const MAX_SAFE_INTEGER_BIGINT = BigInt(Number.MAX_SAFE_INTEGER);
+
 export type CartMutationStatus = "added" | "capped" | "out_of_stock";
 
 export interface CartMutationResult {
@@ -39,7 +41,12 @@ export class PosCartStore {
   }
 
   total(): number {
-    return this.items().reduce((sum, item) => sum + item.quantity_base_units * item.selling_price_per_unit, 0);
+    return this.sumSafeNonNegativeIntegers(
+      this.items().map(item =>
+        this.multiplySafeNonNegativeIntegers(item.selling_price_per_unit, item.quantity_base_units, "Cart total is too large.")
+      ),
+      "Cart total is too large."
+    );
   }
   hasItems(): boolean {
     return this.items().length > 0;
@@ -74,7 +81,7 @@ export class PosCartStore {
       const nextLine: DraftCartItem = {
         ...lineTemplate,
         package_quantity: desiredPackages,
-        quantity_base_units: desiredPackages * lineTemplate.multiplier,
+        quantity_base_units: this.multiplyQuantity(desiredPackages, lineTemplate.multiplier),
       };
       return this.replace(
         currentItems.map((item, itemIndex) => (itemIndex === index ? nextLine : item)),
@@ -94,7 +101,7 @@ export class PosCartStore {
       const cappedLine: DraftCartItem = {
         ...lineTemplate,
         package_quantity: maximumPackages,
-        quantity_base_units: maximumPackages * lineTemplate.multiplier,
+        quantity_base_units: this.multiplyQuantity(maximumPackages, lineTemplate.multiplier),
       };
       const cappedItems =
         index >= 0 ? currentItems.map((item, itemIndex) => (itemIndex === index ? cappedLine : item)) : [...currentItems, cappedLine];
@@ -104,7 +111,7 @@ export class PosCartStore {
     const nextLine: DraftCartItem = {
       ...lineTemplate,
       package_quantity: desiredPackages,
-      quantity_base_units: desiredPackages * lineTemplate.multiplier,
+      quantity_base_units: this.multiplyQuantity(desiredPackages, lineTemplate.multiplier),
     };
     const nextItems = index >= 0 ? currentItems.map((item, itemIndex) => (itemIndex === index ? nextLine : item)) : [...currentItems, nextLine];
     return this.replace(nextItems, { status: "added", moreAvailable: Math.max(0, product.quantity - this.productQuantity(product.id, nextItems)) });
@@ -144,11 +151,34 @@ export class PosCartStore {
   }
 
   private productQuantity(productId: string, items: readonly DraftCartItem[]): number {
-    return items.filter(item => item.product_id === productId).reduce((sum, item) => sum + item.quantity_base_units, 0);
+    return this.sumSafeNonNegativeIntegers(
+      items.filter(item => item.product_id === productId).map(item => item.quantity_base_units),
+      "Cart quantity is too large."
+    );
+  }
+  private multiplyQuantity(quantity: number, multiplier: number): number {
+    return this.multiplySafeNonNegativeIntegers(quantity, multiplier, "Cart quantity is too large.");
+  }
+  private assertQuantity(value: number): void {
+    if (!Number.isSafeInteger(value) || value < 0) throw new Error("Cart quantity must be a non-negative safe integer.");
+  }
+  private multiplySafeNonNegativeIntegers(left: number, right: number, unsafeMessage: string): number {
+    this.assertQuantity(left);
+    this.assertQuantity(right);
+    const result = BigInt(left) * BigInt(right);
+    if (result > MAX_SAFE_INTEGER_BIGINT) throw new Error(unsafeMessage);
+    return Number(result);
+  }
+  private sumSafeNonNegativeIntegers(values: Iterable<number>, unsafeMessage: string): number {
+    let total = 0n;
+    for (const value of values) {
+      this.assertQuantity(value);
+      total += BigInt(value);
+      if (total > MAX_SAFE_INTEGER_BIGINT) throw new Error(unsafeMessage);
+    }
+    return Number(total);
   }
   private async replace(items: readonly DraftCartItem[], result: CartMutationResult): Promise<CartMutationResult> {
-    this.items.set(items);
-    this.checkoutIdempotency.reset(items);
     const draft: DraftCart = {
       id: "active",
       items,
@@ -158,6 +188,8 @@ export class PosCartStore {
     };
     this.persistenceQueue = this.persistenceQueue.catch(() => undefined).then(() => this.repository.save(draft));
     await this.persistenceQueue;
+    this.items.set(items);
+    this.checkoutIdempotency.reset(items);
     return result;
   }
 }

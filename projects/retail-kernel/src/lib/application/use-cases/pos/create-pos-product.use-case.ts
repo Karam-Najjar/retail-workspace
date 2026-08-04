@@ -120,7 +120,7 @@ export class CreatePosProductUseCase {
       adjustment_id: adjustmentId,
       batch_id: batchId,
     };
-    const activityLog: ActivityLog<InventoryStockAddedEventPayload> = {
+    const activityLog: ActivityLog<"inventory.opening_balance.created"> = {
       id: crypto.randomUUID(),
       event_code: "inventory.opening_balance.created",
       entity_type: "product",
