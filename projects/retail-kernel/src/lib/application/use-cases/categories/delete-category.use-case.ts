@@ -17,21 +17,19 @@ export class DeleteCategoryUseCase {
     if (!operator) {
       throw new Error("An active operator is required.");
     }
-    const affectedProducts = await this.repository.countAffectedProducts(category.id);
     const activityLog: ActivityLog<{ affected_products: number }> = {
       id: crypto.randomUUID(),
       event_code: "category.deleted",
       entity_type: "category",
       entity_id: category.id,
       entity_name_snapshot: category.name,
-      payload: { affected_products: affectedProducts },
+      payload: { affected_products: 0 },
       operator_id: operator.id,
       operator_name: operator.display_name,
       related_sale_id: null,
       related_supply_id: null,
       created_at: new Date(),
     };
-    await this.repository.deleteWithActivity(category, activityLog);
-    return affectedProducts;
+    return this.repository.deleteWithActivity(category, activityLog);
   }
 }

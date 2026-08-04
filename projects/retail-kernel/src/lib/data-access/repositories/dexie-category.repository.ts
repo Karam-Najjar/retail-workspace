@@ -20,11 +20,26 @@ export class DexieCategoryRepository implements CategoryRepository {
     await this.database.categories.put(category);
   }
 
-  async deleteWithActivity(category: Category, activityLog: unknown): Promise<void> {
-    await this.database.transaction("rw", this.database.categories, this.database.activity_logs, async () => {
-      await this.database.categories.delete(category.id);
-      await this.database.activity_logs.add(activityLog as ActivityLog);
-    });
+  async deleteWithActivity(category: Category, activityLog: unknown): Promise<number> {
+    return this.database.transaction(
+      "rw",
+      this.database.categories,
+      this.database.products,
+      this.database.activity_logs,
+      async () => {
+        const other = await this.database.categories.where("system_code").equals("other").first();
+        if (!other) throw new Error("The system Other category could not be found.");
+
+        const affectedProducts = await this.database.products.where("category_id").equals(category.id).toArray();
+        await this.database.products.bulkPut(affectedProducts.map(product => ({ ...product, category_id: other.id })));
+        await this.database.categories.delete(category.id);
+        await this.database.activity_logs.add({
+          ...(activityLog as ActivityLog<{ affected_products: number }>),
+          payload: { affected_products: affectedProducts.length },
+        });
+        return affectedProducts.length;
+      }
+    );
   }
 
   async hasName(name: string, excludedId?: string): Promise<boolean> {
@@ -33,7 +48,7 @@ export class DexieCategoryRepository implements CategoryRepository {
     return categories.some(category => category.id !== excludedId && category.name.trim().toLocaleLowerCase() === normalized);
   }
 
-  countAffectedProducts(_categoryId: string): Promise<number> {
-    return Promise.resolve(0);
+  countAffectedProducts(categoryId: string): Promise<number> {
+    return this.database.products.where("category_id").equals(categoryId).count();
   }
 }
