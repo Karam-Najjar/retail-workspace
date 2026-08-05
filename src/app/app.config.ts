@@ -5,13 +5,13 @@ import { provideRouter } from "@angular/router";
 import { provideTranslateService } from "@ngx-translate/core";
 import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
 import { ActiveOperatorService, DatabaseInitializerService, STORE_PROFILE } from "@retail/kernel";
-import { TOBACCO_PROFILE } from "@retail/profiles";
 
 import { routes } from "./app.routes";
 import { provideServiceWorker } from "@angular/service-worker";
 import { GlobalErrorHandler } from "./core/errors/global-error.handler";
 import { TranslationService } from "./core/i18n/translation.service";
 import { NotificationService } from "./core/notifications/notification.service";
+import { ACTIVE_STORE_PROFILE } from "./core/store-profile/active-store-profile";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,7 +28,7 @@ export const appConfig: ApplicationConfig = {
         suffix: ".json",
       }),
     }),
-    { provide: STORE_PROFILE, useValue: TOBACCO_PROFILE },
+    { provide: STORE_PROFILE, useValue: ACTIVE_STORE_PROFILE },
     provideAppInitializer(() => {
       const databaseInitializer = inject(DatabaseInitializerService);
       const activeOperator = inject(ActiveOperatorService);

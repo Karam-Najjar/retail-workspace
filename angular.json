@@ -60,6 +60,7 @@
               }
             ],
             "styles": [
+              "node_modules/@fontsource/material-icons/index.css",
               "src/styles.scss"
             ]
           },
@@ -77,8 +78,70 @@
                   "maximumError": "8kB"
                 }
               ],
+              "baseHref": "./",
               "outputHashing": "all",
               "serviceWorker": "ngsw-config.json"
+            },
+            "grocery": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "baseHref": "./",
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json",
+              "fileReplacements": [
+                {
+                  "replace": "src/app/core/store-profile/active-store-profile.ts",
+                  "with": "src/app/core/store-profile/active-store-profile.grocery.ts"
+                }
+              ]
+            },
+            "client-tobacco": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "baseHref": "./",
+              "outputHashing": "all"
+            },
+            "client-grocery": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "baseHref": "./",
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/app/core/store-profile/active-store-profile.ts",
+                  "with": "src/app/core/store-profile/active-store-profile.grocery.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
