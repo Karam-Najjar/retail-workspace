@@ -8,6 +8,8 @@
     "start": "ng serve retail-app",
     "build": "ng build",
     "build:production": "ng build --configuration=production",
+    "build:client-tobacco": "ng build --configuration=client-tobacco",
+    "build:client-grocery": "ng build --configuration=client-grocery",
     "build:kernel": "ng build retail-kernel --configuration=production",
     "build:profiles": "ng build store-profiles --configuration=production",
     "watch": "ng build --watch --configuration=development",
