@@ -9,6 +9,7 @@ export interface DraftCartItem {
   readonly multiplier: number;
   readonly package_quantity: number;
   readonly quantity_base_units: number;
+  readonly default_selling_price_per_unit: number;
   readonly selling_price_per_unit: number;
   readonly entry_method: DraftCartEntryMethod;
 }

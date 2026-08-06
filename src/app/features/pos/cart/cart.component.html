@@ -5,7 +5,13 @@
   </header>
   @if (items().length) {
     @for (item of items(); track item.product_id + ":" + (item.product_barcode_id ?? "search")) {
-      <app-cart-item [item]="item" (increase)="increase.emit(item)" (decrease)="decrease.emit(item)" (remove)="remove.emit(item)" />
+      <app-cart-item
+        [item]="item"
+        [exchangeRate]="exchangeRate()"
+        (increase)="increase.emit(item)"
+        (decrease)="decrease.emit(item)"
+        (remove)="remove.emit(item)"
+        (priceChange)="priceChange.emit({ item, sellingPricePerUnit: $event })" />
     }
   } @else {
     <p>{{ "pos.emptyCart" | translate }}</p>

@@ -15,7 +15,34 @@
     ><button mat-icon-button type="button" [attr.aria-label]="'pos.increase' | translate" (click)="increase.emit()"><mat-icon>add</mat-icon></button>
   </div>
   <div class="cart-item__price">
-    <span>{{ (item().selling_price_per_unit / 100).toFixed(2) }} USD</span><strong>{{ (subtotal() / 100).toFixed(2) }} USD</strong>
+    <span class="cart-item__default-price"> {{ "pos.defaultPrice" | translate }}: {{ formatPrice(item().default_selling_price_per_unit) }} USD </span>
+    @if (editingPrice()) {
+      <form class="cart-item__price-editor" (submit)="savePrice($event)">
+        <app-dual-currency-input
+          labelKey="pos.customPrice"
+          [cents]="editedPriceCents()"
+          [exchangeRate]="exchangeRate()"
+          (centsChange)="updateEditedPrice($event)" />
+        @if (priceInvalid()) {
+          <span class="cart-item__price-error" aria-live="polite">{{ "pos.invalidCustomPrice" | translate }}</span>
+        }
+        <div class="cart-item__price-actions">
+          <button mat-button type="submit" [disabled]="priceInvalid()">{{ "common.save" | translate }}</button>
+          <button mat-button type="button" (click)="cancelPriceEdit()">{{ "common.cancel" | translate }}</button>
+          @if (isPriceOverridden()) {
+            <button mat-button type="button" (click)="useDefaultPrice()">{{ "pos.useDefaultPrice" | translate }}</button>
+          }
+        </div>
+      </form>
+    } @else {
+      <button class="cart-item__unit-price" type="button" [attr.aria-label]="'pos.editPrice' | translate" (click)="beginPriceEdit()">
+        <span>{{ formatPrice(item().selling_price_per_unit) }} USD</span>
+        @if (isPriceOverridden()) {
+          <small>{{ "pos.customPrice" | translate }}</small>
+        }
+      </button>
+    }
+    <strong>{{ formatPrice(subtotal()) }} USD</strong>
   </div>
   <button mat-icon-button color="warn" type="button" [attr.aria-label]="'pos.remove' | translate" (click)="remove.emit()">
     <mat-icon>delete</mat-icon>

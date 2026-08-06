@@ -82,6 +82,9 @@ export class PosPageComponent implements AfterViewInit, OnDestroy, OnInit {
   protected remove(item: DraftCartItem): void {
     if (!this.facade.checkingOut()) void this.processCartAction(() => this.facade.remove(item));
   }
+  protected changePrice(item: DraftCartItem, sellingPricePerUnit: number | null): void {
+    if (!this.facade.checkingOut()) void this.processCartAction(() => this.facade.changePrice(item, sellingPricePerUnit));
+  }
   protected clear(): void {
     if (!this.facade.checkingOut()) void this.processCartAction(() => this.facade.clear());
   }

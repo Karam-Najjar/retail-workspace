@@ -34,6 +34,7 @@ export class CheckoutIdempotencyService {
         item.multiplier,
         item.package_quantity,
         item.quantity_base_units,
+        item.default_selling_price_per_unit,
         item.selling_price_per_unit,
         item.entry_method,
       ])
