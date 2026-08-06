@@ -29,9 +29,11 @@
         <app-product-search [products]="facade.products()" (productSelected)="addProduct($event)" />
         <app-cart
           [items]="facade.cart.items()"
+          [exchangeRate]="facade.exchangeRate()"
           (increase)="increase($event)"
           (decrease)="decrease($event)"
           (remove)="remove($event)"
+          (priceChange)="changePrice($event.item, $event.sellingPricePerUnit)"
           (clear)="clear()" />
       </section>
       <aside class="pos-layout__summary">

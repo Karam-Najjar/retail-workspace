@@ -87,6 +87,7 @@ export class DexieSaleRepository implements SaleRepository {
               product_name: cartItem.product_name,
               barcode_scanned: cartItem.barcode,
               quantity_base_units: cartItem.quantity_base_units,
+              default_selling_price_per_unit: cartItem.default_selling_price_per_unit,
               selling_price_per_unit: cartItem.selling_price_per_unit,
               subtotal_amount: subtotalAmount,
               total_cost: allocationResult.total_allocated_cost,
@@ -219,7 +220,11 @@ export class DexieSaleRepository implements SaleRepository {
   async getDetail(id: string): Promise<SaleDetail | undefined> {
     const sale = await this.database.sales.get(id);
     if (!sale) return undefined;
-    const items = await this.database.saleItems.where("sale_id").equals(id).toArray();
+    const storedItems = await this.database.saleItems.where("sale_id").equals(id).toArray();
+    const items = storedItems.map(item => ({
+      ...item,
+      default_selling_price_per_unit: item.default_selling_price_per_unit ?? item.selling_price_per_unit,
+    }));
     const itemIds = items.map(item => item.id);
     const allocations = itemIds.length ? await this.database.saleItemBatchAllocations.where("sale_item_id").anyOf(itemIds).toArray() : [];
     return { sale, items, allocations };
@@ -290,6 +295,9 @@ export class DexieSaleRepository implements SaleRepository {
     if (!Number.isSafeInteger(item.package_quantity) || item.package_quantity <= 0) throw new Error("A cart quantity is invalid.");
     if (!Number.isSafeInteger(item.quantity_base_units) || item.quantity_base_units <= 0) throw new Error("A cart quantity is invalid.");
     if (item.quantity_base_units !== item.package_quantity * item.multiplier) throw new Error("A cart package quantity is inconsistent.");
+    if (!Number.isSafeInteger(item.default_selling_price_per_unit) || item.default_selling_price_per_unit <= 0) {
+      throw new Error("A cart default selling price is invalid.");
+    }
     if (!Number.isSafeInteger(item.selling_price_per_unit) || item.selling_price_per_unit <= 0) throw new Error("A cart selling price is invalid.");
   }
 
@@ -351,6 +359,7 @@ export class DexieSaleRepository implements SaleRepository {
           item.multiplier === other.multiplier &&
           item.package_quantity === other.package_quantity &&
           item.quantity_base_units === other.quantity_base_units &&
+          item.default_selling_price_per_unit === other.default_selling_price_per_unit &&
           item.selling_price_per_unit === other.selling_price_per_unit &&
           item.entry_method === other.entry_method
         );

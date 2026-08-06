@@ -32,19 +32,25 @@ export class PosCartStore {
   async initialize(): Promise<void> {
     if (this.initialized()) return;
     const draft = await this.repository.getActive();
+    const restoredItems =
+      draft?.items.map(item => ({
+        ...item,
+        default_selling_price_per_unit: item.default_selling_price_per_unit ?? item.selling_price_per_unit,
+      })) ?? [];
     if (draft) {
-      this.items.set(draft.items);
+      this.items.set(restoredItems);
       this.createdAt = draft.created_at;
     }
-    this.checkoutIdempotency.restore(this.items(), draft?.checkout_idempotency_key ?? null);
+    this.checkoutIdempotency.restore(restoredItems, draft?.checkout_idempotency_key ?? null);
     this.initialized.set(true);
   }
 
   total(): number {
+    return this.totalForItems(this.items());
+  }
+  private totalForItems(items: readonly DraftCartItem[]): number {
     return this.sumSafeNonNegativeIntegers(
-      this.items().map(item =>
-        this.multiplySafeNonNegativeIntegers(item.selling_price_per_unit, item.quantity_base_units, "Cart total is too large.")
-      ),
+      items.map(item => this.multiplySafeNonNegativeIntegers(item.selling_price_per_unit, item.quantity_base_units, "Cart total is too large.")),
       "Cart total is too large."
     );
   }
@@ -124,6 +130,21 @@ export class PosCartStore {
     );
   }
 
+  async changePrice(productId: string, barcodeId: string | null, sellingPricePerUnit: number | null): Promise<void> {
+    const currentItems = this.items();
+    const index = currentItems.findIndex(item => item.product_id === productId && item.product_barcode_id === barcodeId);
+    const current = index >= 0 ? currentItems[index] : undefined;
+    if (!current) throw new Error("Cart line could not be found.");
+    const nextPrice = sellingPricePerUnit ?? current.default_selling_price_per_unit;
+    this.assertPositivePrice(nextPrice);
+    this.assertPositivePrice(current.default_selling_price_per_unit);
+    if (current.selling_price_per_unit === nextPrice) return;
+    const nextLine: DraftCartItem = { ...current, selling_price_per_unit: nextPrice };
+    const nextItems = currentItems.map((item, itemIndex) => (itemIndex === index ? nextLine : item));
+    this.totalForItems(nextItems);
+    await this.replace(nextItems, { status: "added", moreAvailable: 0 });
+  }
+
   async clear(): Promise<void> {
     await this.replace([], { status: "added", moreAvailable: 0 });
   }
@@ -161,6 +182,9 @@ export class PosCartStore {
   }
   private assertQuantity(value: number): void {
     if (!Number.isSafeInteger(value) || value < 0) throw new Error("Cart quantity must be a non-negative safe integer.");
+  }
+  private assertPositivePrice(value: number): void {
+    if (!Number.isSafeInteger(value) || value <= 0) throw new Error("Cart selling price must be a positive safe integer.");
   }
   private multiplySafeNonNegativeIntegers(left: number, right: number, unsafeMessage: string): number {
     this.assertQuantity(left);

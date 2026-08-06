@@ -104,6 +104,7 @@ export * from "./lib/platform/scanner/hid-keyboard.transport";
 export * from "./lib/application/services/pos-cart.store";
 export * from "./lib/application/use-cases/pos/add-cart-item.use-case";
 export * from "./lib/application/use-cases/pos/change-cart-quantity.use-case";
+export * from "./lib/application/use-cases/pos/change-cart-price.use-case";
 export * from "./lib/application/use-cases/pos/clear-cart.use-case";
 export * from "./lib/data-access/repositories/dexie-pos-product-creation.repository";
 export * from "./lib/application/use-cases/pos/create-pos-product.use-case";

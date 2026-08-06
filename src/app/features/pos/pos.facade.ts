@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import {
   AddCartItemResult,
   AddCartItemUseCase,
+  ChangeCartPriceUseCase,
   ChangeCartQuantityUseCase,
   CheckoutUseCase,
   ClearCartUseCase,
@@ -17,6 +18,7 @@ import { NotificationService } from "../../core/notifications/notification.servi
 @Injectable()
 export class PosFacade {
   private readonly addItem = inject(AddCartItemUseCase);
+  private readonly updatePrice = inject(ChangeCartPriceUseCase);
   private readonly changeQuantity = inject(ChangeCartQuantityUseCase);
   private readonly clearCart = inject(ClearCartUseCase);
   private readonly completeSale = inject(CheckoutUseCase);
@@ -51,6 +53,16 @@ export class PosFacade {
     return this.enqueue(async () => {
       const result = await this.changeQuantity.execute({ productId: item.product_id, productBarcodeId: item.product_barcode_id, packageDelta });
       this.setFeedback(result);
+    });
+  }
+  changePrice(item: DraftCartItem, sellingPricePerUnit: number | null): Promise<void> {
+    return this.enqueue(async () => {
+      await this.updatePrice.execute({
+        productId: item.product_id,
+        productBarcodeId: item.product_barcode_id,
+        sellingPricePerUnit,
+      });
+      this.notifications.success("notifications.success.cartUpdated", undefined, "pos-cart-updated");
     });
   }
   remove(item: DraftCartItem): Promise<void> {

@@ -36,6 +36,7 @@ export class AddCartItemUseCase {
       barcode: barcode.barcode,
       package_type_code: barcode.package_type_code,
       multiplier: barcode.multiplier,
+      default_selling_price_per_unit: product.selling_price,
       selling_price_per_unit: product.selling_price,
       entry_method: "scan",
     };
@@ -52,6 +53,7 @@ export class AddCartItemUseCase {
       barcode: null,
       package_type_code: null,
       multiplier: 1,
+      default_selling_price_per_unit: product.selling_price,
       selling_price_per_unit: product.selling_price,
       entry_method: "search",
     };
