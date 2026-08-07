@@ -24,6 +24,8 @@ export interface DashboardSnapshot {
   readonly active_products: number;
   readonly today_sales_usd: number;
   readonly today_sales_syp: number;
+  readonly today_profit_usd: number;
+  readonly today_profit_syp: number;
   readonly month_sales_usd: number;
   readonly month_sales_syp: number;
   readonly month_profit_usd: number;

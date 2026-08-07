@@ -397,6 +397,8 @@
     "totalProducts": "Total Products",
     "activeProducts": "Active: {{ count }}",
     "monthRevenue": "This Month's Revenue",
+    "todayRevenue": "Today's Revenue",
+    "todayProfit": "Today's Profit",
     "inventoryAlerts": "Inventory Alerts",
     "alertStatus": {
       "clear": "All clear",

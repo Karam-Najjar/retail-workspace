@@ -23,6 +23,8 @@ export class DashboardQueryService {
     ]);
     const eligibleSales = sales.filter(sale => sale.date <= now);
     const todaySales = eligibleSales.filter(sale => this.isWithin(sale.date, today, tomorrow));
+    const todayProfitUsd = sumCurrencyMinorUnits(todaySales.map(sale => sale.total_profit));
+    const todayProfitSyp = sumCurrencyMinorUnits(todaySales.map(sale => sale.currency_snapshot.secondary_total_profit));
     const monthSales = eligibleSales.filter(sale => this.isWithin(sale.date, monthStart, tomorrow));
     const monthSaleIds = monthSales.map(sale => sale.id);
     const monthItems = monthSaleIds.length > 0 ? await this.db.saleItems.where("sale_id").anyOf(monthSaleIds).toArray() : [];
@@ -79,6 +81,8 @@ export class DashboardQueryService {
       active_products: products.filter(product => product.quantity > 0).length,
       today_sales_usd: sumCurrencyMinorUnits(todaySales.map(sale => sale.total_amount)),
       today_sales_syp: sumCurrencyMinorUnits(todaySales.map(sale => sale.currency_snapshot.secondary_total_amount)),
+      today_profit_usd: todayProfitUsd,
+      today_profit_syp: todayProfitSyp,
       month_sales_usd: sumCurrencyMinorUnits(monthSales.map(sale => sale.total_amount)),
       month_sales_syp: sumCurrencyMinorUnits(monthSales.map(sale => sale.currency_snapshot.secondary_total_amount)),
       month_profit_usd: sumCurrencyMinorUnits(monthSales.map(sale => sale.total_profit)),

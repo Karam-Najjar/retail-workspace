@@ -24,6 +24,18 @@
         <span class="hero-secondary-currency">{{ secondaryMoney(data.today_sales_syp) }}</span>
         <div class="hero-breakdown">
           <div>
+            <span>{{ "dashboard.todayRevenue" | translate }}</span>
+            <strong>{{ primaryMoney(data.today_sales_usd) }}</strong>
+            <small>{{ secondaryMoney(data.today_sales_syp) }}</small>
+          </div>
+          <div class="hero-profit">
+            <span>{{ "dashboard.todayProfit" | translate }}</span>
+            <strong>{{ primaryMoney(data.today_profit_usd) }}</strong>
+            <small>{{ secondaryMoney(data.today_profit_syp) }}</small>
+          </div>
+        </div>
+        <div class="hero-breakdown">
+          <div>
             <span>{{ "dashboard.monthRevenue" | translate }}</span>
             <strong>{{ primaryMoney(data.month_sales_usd) }}</strong>
             <small>{{ secondaryMoney(data.month_sales_syp) }}</small>
