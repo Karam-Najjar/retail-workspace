@@ -47,10 +47,10 @@
                     <td>{{ item.product_name }}</td>
                     <td class="barcode-cell">{{ item.barcode_scanned || "—" }}</td>
                     <td>{{ item.quantity_base_units }}</td>
-                    <td>{{ primaryAmount(item.selling_price_per_unit, current.sale.currency_snapshot) }}</td>
-                    <td>{{ primaryAmount(item.subtotal_amount, current.sale.currency_snapshot) }}</td>
-                    <td>{{ primaryAmount(item.total_cost, current.sale.currency_snapshot) }}</td>
-                    <td>{{ primaryAmount(item.total_profit, current.sale.currency_snapshot) }}</td>
+                    <td>{{ dualAmount(item.selling_price_per_unit, current.sale.currency_snapshot) }}</td>
+                    <td>{{ dualAmount(item.subtotal_amount, current.sale.currency_snapshot) }}</td>
+                    <td>{{ dualAmount(item.total_cost, current.sale.currency_snapshot) }}</td>
+                    <td>{{ dualAmount(item.total_profit, current.sale.currency_snapshot) }}</td>
                   </tr>
                   @if (allocationsFor(item).length) {
                     <tr class="allocation-heading">
@@ -61,7 +61,7 @@
                         <td colspan="2">{{ "sales.batch" | translate }} {{ allocation.batch_id }}</td>
                         <td>{{ allocation.quantity_consumed }}</td>
                         <td colspan="2">{{ "sales.allocatedCost" | translate }}</td>
-                        <td colspan="2">{{ primaryAmount(allocation.allocated_cost, current.sale.currency_snapshot) }}</td>
+                        <td colspan="2">{{ dualAmount(allocation.allocated_cost, current.sale.currency_snapshot) }}</td>
                       </tr>
                     }
                   }
@@ -75,17 +75,17 @@
       <section class="totals" [attr.aria-label]="'sales.summary' | translate">
         <div class="total-card total-card--revenue">
           <span>{{ "sales.totalRevenue" | translate }}</span>
-          <strong>{{ primaryAmount(current.sale.total_amount, current.sale.currency_snapshot) }}</strong>
+          <strong>{{ dualAmount(current.sale.total_amount, current.sale.currency_snapshot) }}</strong>
           <small>{{ secondaryAmount(current.sale.currency_snapshot.secondary_total_amount, current.sale.currency_snapshot) }}</small>
         </div>
         <div class="total-card total-card--cost">
           <span>{{ "sales.totalCost" | translate }}</span>
-          <strong>{{ primaryAmount(current.sale.total_cost, current.sale.currency_snapshot) }}</strong>
+          <strong>{{ dualAmount(current.sale.total_cost, current.sale.currency_snapshot) }}</strong>
           <small>{{ secondaryAmount(current.sale.currency_snapshot.secondary_total_cost, current.sale.currency_snapshot) }}</small>
         </div>
         <div class="total-card total-card--profit">
           <span>{{ "sales.totalProfit" | translate }}</span>
-          <strong>{{ primaryAmount(current.sale.total_profit, current.sale.currency_snapshot) }}</strong>
+          <strong>{{ dualAmount(current.sale.total_profit, current.sale.currency_snapshot) }}</strong>
           <small>{{ secondaryAmount(current.sale.currency_snapshot.secondary_total_profit, current.sale.currency_snapshot) }}</small>
         </div>
       </section>

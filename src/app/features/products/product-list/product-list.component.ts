@@ -7,12 +7,13 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
-import { ActiveOperatorService, Product } from "@retail/kernel";
+import { ActiveOperatorService, CurrencyService, formatDualCurrencyMinorUnits, Product, STORE_PROFILE, StoreProfile } from "@retail/kernel";
 import { ConfirmationDialogComponent } from "../../../shared-ui/confirmation-dialog/confirmation-dialog.component";
 import { DataTableColumn, DataTableComponent, DataTableRow } from "../../../shared-ui/data-table/data-table.component";
 import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.component";
 import { ProductsFacade } from "../products.facade";
 import { ProductFormComponent } from "../product-form/product-form.component";
+import Decimal from "decimal.js";
 
 @Component({
   selector: "app-product-list",
@@ -37,6 +38,9 @@ export class ProductListComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
   private readonly dateFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" });
+  private readonly currency = inject(CurrencyService);
+  private readonly exchangeRate = signal<Decimal>(new Decimal(1));
+  private readonly profile: StoreProfile = inject(STORE_PROFILE);
   protected search = "";
   protected categoryId = "";
   protected readonly selected = signal<Product | null>(null);
@@ -49,51 +53,64 @@ export class ProductListComponent implements OnInit {
     { labelKey: "common.createdAt", sortable: true, sortKey: "createdAt" },
     { labelKey: "common.lastModifiedBy", sortable: true, sortKey: "lastModifiedBy" },
   ];
-  readonly rows = (): readonly DataTableRow[] =>
-    this.facade
-      .products()
-      .map(product => ({
-        id: product.id,
-        sortValues: {
-          name: product.name,
-          category: this.categoryName(product.category_id),
-          sellingPrice: product.selling_price,
-          quantity: product.quantity,
-          createdBy: this.operatorName(product.created_by_operator_id),
-          createdAt: product.created_at.getTime(),
-          lastModifiedBy: this.operatorName(product.last_modified_by_operator_id),
-        },
-        values: [
-          product.name,
-          this.categoryName(product.category_id),
-          `$${(product.selling_price / 100).toFixed(2)}`,
-          String(product.quantity),
-          this.operatorName(product.created_by_operator_id),
-          this.dateFormatter.format(product.created_at),
-          this.operatorName(product.last_modified_by_operator_id),
-        ],
-      }));
+
+  readonly rows = (): readonly DataTableRow[] => {
+    const result = this.facade.products().map(product => ({
+      id: product.id,
+      sortValues: {
+        name: product.name,
+        category: this.categoryName(product.category_id),
+        sellingPrice: product.selling_price,
+        quantity: product.quantity,
+        createdBy: this.operatorName(product.created_by_operator_id),
+        createdAt: product.created_at.getTime(),
+        lastModifiedBy: this.operatorName(product.last_modified_by_operator_id),
+      },
+      values: [
+        product.name,
+        this.categoryName(product.category_id),
+        this.formatDualPrice(product.selling_price),
+        String(product.quantity),
+        this.operatorName(product.created_by_operator_id),
+        this.dateFormatter.format(product.created_at),
+        this.operatorName(product.last_modified_by_operator_id),
+      ],
+    }));
+    return result;
+  };
+
   ngOnInit(): void {
     void this.load();
   }
-  load(): void {
-    void this.facade.load(this.search, this.categoryId || undefined);
+
+  async load(): Promise<void> {
+    await this.facade.load(this.search, this.categoryId || undefined);
+    try {
+      const rate = await this.currency.currentExchangeRate();
+      this.exchangeRate.set(new Decimal(rate));
+    } catch {
+      this.exchangeRate.set(new Decimal(1));
+    }
   }
+
   openCreate(): void {
     this.dialog
       .open(ProductFormComponent, { width: "min(42rem, calc(100vw - 2rem))" })
       .afterClosed()
       .subscribe(() => this.load());
   }
+
   openDetail(id: string): void {
     void this.router.navigate(["/products", id]);
   }
+
   edit(id: string): void {
     this.dialog
       .open(ProductFormComponent, { width: "min(42rem, calc(100vw - 2rem))", data: { productId: id } })
       .afterClosed()
       .subscribe(() => this.load());
   }
+
   prepareDelete(id: string): void {
     const product = this.facade.products().find(item => item.id === id);
     if (!product) return;
@@ -106,6 +123,7 @@ export class ProductListComponent implements OnInit {
       else this.selected.set(null);
     });
   }
+
   private async deleteSelected(): Promise<void> {
     const product = this.selected();
     if (product && (await this.facade.delete(product))) {
@@ -113,10 +131,23 @@ export class ProductListComponent implements OnInit {
       this.load();
     }
   }
+
   private categoryName(id: string): string {
     return this.facade.categories().find(category => category.id === id)?.name ?? "—";
   }
+
   private operatorName(id: string): string {
     return this.operators.operators().find(operator => operator.id === id)?.display_name ?? "—";
   }
+
+private formatDualPrice(cents: number): string {
+  return formatDualCurrencyMinorUnits(
+    cents,
+    this.profile.currency.primary.precision,
+    this.profile.currency.primary.code,
+    this.exchangeRate(),
+    this.profile.currency.secondary.code,
+    this.profile.currency.secondary.precision,
+  );
+}
 }

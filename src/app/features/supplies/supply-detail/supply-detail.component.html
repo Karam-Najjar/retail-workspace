@@ -47,9 +47,9 @@
                     </td>
                     <td>{{ item.quantity_received }}</td>
                     <td>{{ item.quantity_base_units }}</td>
-                    <td>{{ (item.unit_cost_entered / 100).toFixed(2) }} {{ current.supply.currency_snapshot.primary_code }}</td>
+                    <td>{{ formatDual(item.unit_cost_entered, current.supply.currency_snapshot) }}</td>
                     <td>{{ item.unit_cost_per_base_display }} {{ current.supply.currency_snapshot.primary_code }}</td>
-                    <td class="subtotal-cell">{{ (item.subtotal_cost / 100).toFixed(2) }} {{ current.supply.currency_snapshot.primary_code }}</td>
+                    <td class="subtotal-cell">{{ formatDual(item.subtotal_cost, current.supply.currency_snapshot) }}</td>
                   </tr>
                 }
               </tbody>

@@ -45,7 +45,7 @@
                   @for (supply of recentSupplies(); track supply.id) {
                     <tr tabindex="0" (click)="openSupply(supply.id)" (keydown.enter)="openSupply(supply.id)">
                       <td>{{ supply.date | date: "medium" }}</td>
-                      <td>{{ (supply.total_cost / 100).toFixed(2) }} {{ supply.currency_snapshot.primary_code }}</td>
+                      <td>{{ formatDual(supply.total_cost, supply.currency_snapshot) }}</td>
                       <td>{{ supply.operator_name }}</td>
                     </tr>
                   }
