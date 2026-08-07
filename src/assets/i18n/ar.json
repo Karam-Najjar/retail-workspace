@@ -397,6 +397,8 @@
     "totalProducts": "إجمالي المنتجات",
     "activeProducts": "نشط: {{ count }}",
     "monthRevenue": "إيرادات هذا الشهر",
+    "todayRevenue": "إيرادات اليوم",
+    "todayProfit": "أرباح اليوم",
     "inventoryAlerts": "تنبيهات المخزون",
     "alertStatus": {
       "clear": "الكل بخير",
