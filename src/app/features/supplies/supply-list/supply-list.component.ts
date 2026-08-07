@@ -14,6 +14,7 @@ import { ExportButtonComponent } from "../../../shared-ui/export-button/export-b
 import { SummaryCardComponent } from "../../../shared-ui/summary-card/summary-card.component";
 import { AddStockFormComponent } from "../add-stock-form/add-stock-form.component";
 import { SuppliesFacade } from "../supplies.facade";
+import { formatDualCurrencyMinorUnits, STORE_PROFILE, StoreProfile, SupplyCurrencySnapshot } from "@retail/kernel";
 
 @Component({
   selector: "app-supply-list",
@@ -41,6 +42,7 @@ export class SupplyListComponent implements OnInit {
   private readonly dateFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" });
   protected range: DateRange = this.todayRange();
   protected supplierId = "";
+  private readonly storeProfile: StoreProfile = inject(STORE_PROFILE);
   protected readonly columns: readonly DataTableColumn[] = [
     { labelKey: "supplies.dateTime", sortable: true, sortKey: "dateTime" },
     { labelKey: "supplies.supplier", sortable: true, sortKey: "supplier" },
@@ -64,7 +66,7 @@ export class SupplyListComponent implements OnInit {
           this.dateFormatter.format(supply.date),
           supply.supplier_name,
           String(itemCount),
-          `${(supply.total_cost / 100).toFixed(2)} ${supply.currency_snapshot.primary_code}`,
+          this.formatDual(supply.total_cost, supply.currency_snapshot),
           supply.operator_name,
         ],
       }));
@@ -112,4 +114,15 @@ export class SupplyListComponent implements OnInit {
   private isArabic(): boolean {
     return document.documentElement.lang.toLowerCase().startsWith("ar");
   }
+
+  private formatDual(amount: number, snapshot: SupplyCurrencySnapshot): string {
+  return formatDualCurrencyMinorUnits(
+    amount,
+    snapshot.primary_precision,
+    snapshot.primary_code,
+    snapshot.exchange_rate,
+    this.storeProfile.currency.secondary.code,
+    this.storeProfile.currency.secondary.precision,
+  );
+}
 }

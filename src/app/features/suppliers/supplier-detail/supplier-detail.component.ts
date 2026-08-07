@@ -12,6 +12,7 @@ import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.
 import { SuppliersFacade } from "../suppliers.facade";
 import { SupplierFormComponent } from "../supplier-form/supplier-form.component";
 import { SuppliesFacade } from "../../supplies/supplies.facade";
+import { formatDualCurrencyMinorUnits, STORE_PROFILE, StoreProfile, SupplyCurrencySnapshot } from "@retail/kernel";
 
 @Component({
   selector: "app-supplier-detail",
@@ -36,6 +37,7 @@ export class SupplierDetailComponent implements OnInit {
   private readonly facade = inject(SuppliersFacade);
   private readonly operators = inject(ActiveOperatorService);
   private readonly suppliesFacade = inject(SuppliesFacade);
+  private readonly storeProfile: StoreProfile = inject(STORE_PROFILE);
   protected readonly supplier = signal<Supplier | null>(null);
   protected readonly confirmDelete = signal(false);
   protected readonly affectedSupplies = signal(0);
@@ -91,4 +93,15 @@ export class SupplierDetailComponent implements OnInit {
     const id = this.supplier()?.id;
     if (id) this.supplier.set((await this.facade.get(id)) ?? null);
   }
+
+  protected formatDual(amount: number, snapshot: SupplyCurrencySnapshot): string {
+  return formatDualCurrencyMinorUnits(
+    amount,
+    snapshot.primary_precision,
+    snapshot.primary_code,
+    snapshot.exchange_rate,
+    this.storeProfile.currency.secondary.code,
+    this.storeProfile.currency.secondary.precision,
+  );
+}
 }

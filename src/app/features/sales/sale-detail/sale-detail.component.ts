@@ -7,6 +7,7 @@ import { SaleCurrencySnapshot, SaleDetail, SaleItem } from "@retail/kernel";
 import { DetailPageHeaderComponent } from "../../../shared-ui/detail-page-header/detail-page-header.component";
 import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.component";
 import { SalesFacade } from "../sales.facade";
+import { formatDualCurrencyMinorUnits, STORE_PROFILE, StoreProfile } from "@retail/kernel";
 
 @Component({
   selector: "app-sale-detail",
@@ -19,6 +20,7 @@ export class SaleDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly facade = inject(SalesFacade);
+  private readonly storeProfile: StoreProfile = inject(STORE_PROFILE);
 
   protected readonly detail = signal<SaleDetail | null>(null);
   protected readonly loading = signal(true);
@@ -38,8 +40,15 @@ export class SaleDetailComponent implements OnInit {
     void this.router.navigate(["/sales"]);
   }
 
-  protected primaryAmount(amount: number, snapshot: SaleCurrencySnapshot): string {
-    return `${(amount / 10 ** snapshot.primary_precision).toFixed(snapshot.primary_precision)} ${snapshot.primary_code}`;
+  protected dualAmount(amount: number, snapshot: SaleCurrencySnapshot): string {
+    return formatDualCurrencyMinorUnits(
+      amount,
+      snapshot.primary_precision,
+      snapshot.primary_code,
+      snapshot.exchange_rate,
+      this.storeProfile.currency.secondary.code,
+      this.storeProfile.currency.secondary.precision
+    );
   }
 
   protected secondaryAmount(amount: number, snapshot: SaleCurrencySnapshot): string {

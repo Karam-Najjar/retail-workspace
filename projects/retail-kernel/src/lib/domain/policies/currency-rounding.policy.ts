@@ -29,20 +29,12 @@ export function multiplyCurrencyMinorUnits(unitAmount: number, quantity: number)
   return toSafeInteger(new Decimal(unitAmount).mul(quantity), "Currency total is too large.");
 }
 
-export function convertCurrencyMinorUnits(
-  value: number,
-  exchangeRate: Decimal.Value,
-  primaryPrecision: number,
-  secondaryPrecision: number
-): number {
+export function convertCurrencyMinorUnits(value: number, exchangeRate: Decimal.Value, primaryPrecision: number, secondaryPrecision: number): number {
   assertSafeCurrencyMinorUnits(value);
   const rate = new Decimal(exchangeRate);
   if (!rate.isFinite() || !rate.isPositive()) throw new Error("Currency exchange rate must be a positive finite number.");
 
-  const converted = new Decimal(value)
-    .div(currencyScale(primaryPrecision))
-    .mul(rate)
-    .mul(currencyScale(secondaryPrecision));
+  const converted = new Decimal(value).div(currencyScale(primaryPrecision)).mul(rate).mul(currencyScale(secondaryPrecision));
   const roundedMagnitude = roundCurrencyMinorUnits(converted.abs());
   return converted.isNegative() ? -roundedMagnitude : roundedMagnitude;
 }
@@ -74,4 +66,22 @@ function toSafeInteger(value: Decimal, unsafeMessage: string): number {
   if (!value.isFinite() || !value.isInteger()) throw new Error("Currency value must be a finite integer.");
   if (value.abs().greaterThan(Number.MAX_SAFE_INTEGER)) throw new Error(unsafeMessage);
   return value.toNumber();
+}
+
+export function formatDualCurrencyMinorUnits(
+  cents: number,
+  primaryPrecision: number,
+  primaryCode: string,
+  exchangeRate: Decimal.Value,
+  secondaryCode: string,
+  secondaryPrecision: number
+): string {
+  const primary = formatCurrencyMinorUnits(cents, primaryPrecision);
+  try {
+    const rate = new Decimal(exchangeRate);
+    const syp = rate.mul(cents).div(currencyScale(primaryPrecision)).toDecimalPlaces(secondaryPrecision).toString();
+    return `${primary} ${primaryCode} (${syp} ${secondaryCode})`;
+  } catch {
+    return `${primary} ${primaryCode}`;
+  }
 }

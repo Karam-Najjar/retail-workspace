@@ -2,7 +2,15 @@ import { Component, inject, OnInit } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
-import { DateRange, SaleCurrencySnapshot, SaleListFilter, StoreProfileService } from "@retail/kernel";
+import {
+  DateRange,
+  formatDualCurrencyMinorUnits,
+  SaleCurrencySnapshot,
+  SaleListFilter,
+  STORE_PROFILE,
+  StoreProfile,
+  StoreProfileService,
+} from "@retail/kernel";
 import { DataTableColumn, DataTableComponent, DataTableRow } from "../../../shared-ui/data-table/data-table.component";
 import { DateRangeFilterComponent } from "../../../shared-ui/date-range-filter/date-range-filter.component";
 import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.component";
@@ -35,6 +43,7 @@ export class SaleListComponent implements OnInit {
     dateStyle: "medium",
     timeStyle: "short",
   });
+  private readonly storeProfile: StoreProfile = inject(STORE_PROFILE);
 
   protected range: DateRange = this.todayRange();
   protected readonly columns: readonly DataTableColumn[] = [
@@ -57,9 +66,9 @@ export class SaleListComponent implements OnInit {
       },
       values: [
         this.dateFormatter.format(sale.date),
-        this.formatPrimary(sale.total_amount, sale.currency_snapshot),
-        this.formatPrimary(sale.total_cost, sale.currency_snapshot),
-        this.formatPrimary(sale.total_profit, sale.currency_snapshot),
+        this.formatDual(sale.total_amount, sale.currency_snapshot),
+        this.formatDual(sale.total_cost, sale.currency_snapshot),
+        this.formatDual(sale.total_profit, sale.currency_snapshot),
         sale.operator_name,
       ],
     }));
@@ -85,14 +94,26 @@ export class SaleListComponent implements OnInit {
 
   protected summaryMoney(amount: number): string {
     const firstSale = this.facade.sales().at(0)?.sale;
-    if (firstSale) return this.formatPrimary(amount, firstSale.currency_snapshot);
-
-    const currency = this.profile.profile.currency.primary;
-    return `${(amount / 10 ** currency.precision).toFixed(currency.precision)} ${currency.code}`;
+    if (firstSale) return this.formatDual(amount, firstSale.currency_snapshot);
+    return formatDualCurrencyMinorUnits(
+      amount,
+      this.storeProfile.currency.primary.precision,
+      this.storeProfile.currency.primary.code,
+      "1",
+      this.storeProfile.currency.secondary.code,
+      this.storeProfile.currency.secondary.precision
+    );
   }
 
-  private formatPrimary(amount: number, snapshot: SaleCurrencySnapshot): string {
-    return `${(amount / 10 ** snapshot.primary_precision).toFixed(snapshot.primary_precision)} ${snapshot.primary_code}`;
+  private formatDual(amount: number, snapshot: SaleCurrencySnapshot): string {
+    return formatDualCurrencyMinorUnits(
+      amount,
+      snapshot.primary_precision,
+      snapshot.primary_code,
+      snapshot.exchange_rate,
+      this.storeProfile.currency.secondary.code,
+      this.storeProfile.currency.secondary.precision
+    );
   }
 
   private filter(): SaleListFilter {

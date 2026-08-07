@@ -1,8 +1,15 @@
-import { Component, input, output, signal } from "@angular/core";
+import { Component, inject, input, output, signal } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { TranslatePipe } from "@ngx-translate/core";
-import { DraftCartItem, formatCurrencyMinorUnits, multiplyCurrencyMinorUnits } from "@retail/kernel";
+import {
+  DraftCartItem,
+  formatCurrencyMinorUnits,
+  formatDualCurrencyMinorUnits,
+  multiplyCurrencyMinorUnits,
+  STORE_PROFILE,
+  StoreProfile,
+} from "@retail/kernel";
 import { DualCurrencyInputComponent } from "../../../shared-ui/dual-currency-input/dual-currency-input.component";
 
 @Component({
@@ -21,6 +28,7 @@ export class CartItemComponent {
   protected readonly editingPrice = signal(false);
   protected readonly editedPriceCents = signal(0);
   protected readonly priceInvalid = signal(false);
+  private readonly profile: StoreProfile = inject(STORE_PROFILE);
 
   protected subtotal(): number {
     const item = this.item();
@@ -71,5 +79,16 @@ export class CartItemComponent {
 
   private isValidPrice(value: number): boolean {
     return Number.isSafeInteger(value) && value > 0;
+  }
+
+  protected formatDualPrice(cents: number): string {
+    return formatDualCurrencyMinorUnits(
+      cents,
+      this.profile.currency.primary.precision,
+      this.profile.currency.primary.code,
+      this.exchangeRate(),
+      this.profile.currency.secondary.code,
+      this.profile.currency.secondary.precision
+    );
   }
 }
