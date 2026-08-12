@@ -12,7 +12,7 @@ export const GROCERY_PROFILE: StoreProfile = {
     { code: "case", multiplier: 12, label_key: "packages.case" },
   ],
   currency: {
-    primary: { code: "USD", precision: 2, symbol: "$" },
+    primary: { code: "USD", precision: 4, symbol: "$" },
     secondary: { code: "SYP", precision: 0, symbol: "SYP" },
   },
   costing: "fifo",

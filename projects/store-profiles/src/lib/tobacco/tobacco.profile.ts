@@ -12,7 +12,7 @@ export const TOBACCO_PROFILE: StoreProfile = {
     { code: "carton", multiplier: 10, label_key: "packages.carton" },
   ],
   currency: {
-    primary: { code: "USD", precision: 2, symbol: "$" },
+    primary: { code: "USD", precision: 4, symbol: "$" },
     secondary: { code: "SYP", precision: 0, symbol: "SYP" },
   },
   costing: "fifo",

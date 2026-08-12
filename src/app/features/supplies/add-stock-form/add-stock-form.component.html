@@ -31,7 +31,7 @@
       <h3>{{ "supplies.review" | translate }}</h3>
       <span>{{ "supplies.itemsCount" | translate }}: {{ lines().length }}</span
       ><span>{{ "supplies.totalBaseUnits" | translate }}: {{ totalBaseUnits() }}</span
-      ><strong>{{ "supplies.totalCost" | translate }}: {{ (totalCost() / 100).toFixed(2) }} USD</strong>
+      ><strong>{{ "supplies.totalCost" | translate }}: {{ (totalCost() / 100).toFixed(4) }} USD</strong>
     </section>
     @if (error()) {
       <p class="form-error">{{ error()! | translate }}</p>

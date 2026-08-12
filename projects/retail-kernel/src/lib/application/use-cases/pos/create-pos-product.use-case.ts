@@ -53,7 +53,7 @@ export class CreatePosProductUseCase {
     const barcodeId = crypto.randomUUID();
     const adjustmentId = crypto.randomUUID();
     const batchId = crypto.randomUUID();
-    const unitCostDisplay = (input.unitCostCents / 100).toFixed(2);
+    const unitCostDisplay = (input.unitCostCents / 100).toFixed(4);
     const product: Product = {
       id: productId,
       name,
