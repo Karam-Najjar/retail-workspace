@@ -43,7 +43,7 @@ export class AdjustStockInUseCase {
       type: "adjustment_in",
       product_id: product.id,
       quantity_change: input.quantity,
-      unit_cost: (input.unitCostCents / 100).toFixed(2),
+      unit_cost: (input.unitCostCents / 100).toFixed(4),
       operator_id: operator.id,
       operator_name: operator.display_name,
       reason,
@@ -58,7 +58,7 @@ export class AdjustStockInUseCase {
       remaining_quantity: input.quantity,
       original_total_cost: totalCost,
       remaining_total_cost: totalCost,
-      unit_cost_display: (input.unitCostCents / 100).toFixed(2),
+      unit_cost_display: (input.unitCostCents / 100).toFixed(4),
       created_at: now,
     };
     const movement: InventoryMovement = {

@@ -36,7 +36,7 @@ export class CartItemComponent {
   }
 
   protected formatPrice(value: number): string {
-    return formatCurrencyMinorUnits(value, 2);
+    return formatCurrencyMinorUnits(value, 4);
   }
 
   protected isPriceOverridden(): boolean {

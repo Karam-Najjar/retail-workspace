@@ -44,7 +44,7 @@ export class CreateOpeningBalanceUseCase {
       type: "opening_balance",
       product_id: product.id,
       quantity_change: input.quantity,
-      unit_cost: (input.unitCostCents / 100).toFixed(2),
+      unit_cost: (input.unitCostCents / 100).toFixed(4),
       operator_id: operator.id,
       operator_name: operator.display_name,
       reason,
@@ -59,7 +59,7 @@ export class CreateOpeningBalanceUseCase {
       remaining_quantity: input.quantity,
       original_total_cost: totalCost,
       remaining_total_cost: totalCost,
-      unit_cost_display: (input.unitCostCents / 100).toFixed(2),
+      unit_cost_display: (input.unitCostCents / 100).toFixed(4),
       created_at: now,
     };
     const movement: InventoryMovement = {
