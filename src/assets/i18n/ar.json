@@ -43,7 +43,8 @@
     "supplies": "المشتريات",
     "suppliers": "الموردين",
     "activityLog": "سجل النشاط",
-    "settings": "الإعدادات"
+    "settings": "الإعدادات",
+    "valuation": "قيمة المخزون"
   },
   "common": {
     "back": "رجوع",
@@ -393,6 +394,17 @@
     "leaveTitle": "السلة غير فارغة",
     "leaveMessage": "السلة غير فارغة. هل تريد تفريغها ومغادرة نقطة البيع؟"
   },
+  "valuation": {
+    "title": "تقييم المخزون",
+    "description": "قيمة المخزون الحالي حسب آخر أسعار الشراء",
+    "products": "المنتجات",
+    "units": "الوحدات",
+    "value": "القيمة",
+    "latestCost": "آخر تكلفة",
+    "totalValue": "القيمة الإجمالية",
+    "emptyTitle": "لا يوجد مخزون",
+    "emptyMessage": "لا توجد منتجات بمخزون"
+  },
   "dashboard": {
     "totalProducts": "إجمالي المنتجات",
     "activeProducts": "نشط: {{ count }}",
@@ -400,6 +412,9 @@
     "todayRevenue": "إيرادات اليوم",
     "todayProfit": "أرباح اليوم",
     "inventoryAlerts": "تنبيهات المخزون",
+    "inventoryValue": "قيمة المخزون",
+    "products": "منتجات",
+    "units": "وحدات",
     "alertStatus": {
       "clear": "الكل بخير",
       "low": "مخزون منخفض",

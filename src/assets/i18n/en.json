@@ -43,7 +43,8 @@
     "supplies": "Supplies",
     "suppliers": "Suppliers",
     "activityLog": "Activity Log",
-    "settings": "Settings"
+    "settings": "Settings",
+    "valuation": "Valuation"
   },
   "common": {
     "back": "Back",
@@ -393,6 +394,17 @@
     "leaveTitle": "Cart not empty",
     "leaveMessage": "Cart not empty. Clear it and leave POS?"
   },
+  "valuation": {
+    "title": "Inventory Valuation",
+    "description": "Current stock value at latest purchase prices",
+    "products": "Products",
+    "units": "Units",
+    "value": "Value",
+    "latestCost": "Latest cost",
+    "totalValue": "Total Value",
+    "emptyTitle": "No inventory",
+    "emptyMessage": "No products with stock"
+  },
   "dashboard": {
     "totalProducts": "Total Products",
     "activeProducts": "Active: {{ count }}",
@@ -400,6 +412,9 @@
     "todayRevenue": "Today's Revenue",
     "todayProfit": "Today's Profit",
     "inventoryAlerts": "Inventory Alerts",
+    "inventoryValue": "Inventory Value",
+    "products": "products",
+    "units": "units",
     "alertStatus": {
       "clear": "All clear",
       "low": "Low stock",

@@ -34,6 +34,10 @@ export const routes: Routes = [
         loadComponent: () => import("./features/dashboard/dashboard-page/dashboard-page.component").then(module => module.DashboardPageComponent),
       },
       {
+        path: "valuation",
+        loadComponent: () => import("./features/valuation/valuation-page/valuation-page.component").then(module => module.ValuationPageComponent),
+      },
+      {
         path: "not-found",
         loadComponent: () => import("./features/not-found/not-found.component").then(module => module.NotFoundComponent),
       },
