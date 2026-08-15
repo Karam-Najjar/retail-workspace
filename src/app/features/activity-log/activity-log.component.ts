@@ -3,8 +3,8 @@ import { Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from "@angular/material/select";
-import { TranslatePipe } from "@ngx-translate/core";
-import { ActivityLogListFilter, DateRange } from "@retail/kernel";
+import { TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { ActivityLog, ActivityLogListFilter, DateRange } from "@retail/kernel";
 import { DataTableColumn, DataTableComponent, DataTableRow } from "../../shared-ui/data-table/data-table.component";
 import { DateRangeFilterComponent } from "../../shared-ui/date-range-filter/date-range-filter.component";
 import { EmptyStateComponent } from "../../shared-ui/empty-state/empty-state.component";
@@ -32,6 +32,7 @@ export class ActivityLogComponent implements OnInit {
   protected readonly facade = inject(ActivityLogFacade);
   private readonly detailsRenderer = inject(ActivityDetailsRendererService);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
   protected range: DateRange = this.todayRange();
   protected activityType = "";
   protected readonly activityTypes = [
@@ -51,18 +52,22 @@ export class ActivityLogComponent implements OnInit {
   ];
   private readonly dateFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" });
   protected readonly rows = (): readonly DataTableRow[] =>
-    this.facade
-      .entries()
-      .map(entry => ({
-        id: entry.id,
-        sortValues: {
-          dateTime: entry.created_at.getTime(),
-          type: entry.event_code,
-          details: this.detailsRenderer.render(entry),
-          operator: entry.operator_name,
-        },
-        values: [this.dateFormatter.format(entry.created_at), entry.event_code, this.detailsRenderer.render(entry), entry.operator_name],
-      }));
+    this.facade.entries().map(entry => ({
+      id: entry.id,
+      sortValues: {
+        dateTime: entry.created_at.getTime(),
+        type: this.typeGroup(entry.event_code),
+        details: this.detailsRenderer.render(entry),
+        operator: entry.operator_name,
+      },
+      values: [
+        this.dateFormatter.format(entry.created_at),
+        this.translate.instant(`activityLog.types.${this.typeGroup(entry.event_code)}`),
+        this.detailsRenderer.render(entry),
+        entry.operator_name,
+      ],
+    }));
+
   ngOnInit(): void {
     this.load();
   }
@@ -85,23 +90,34 @@ export class ActivityLogComponent implements OnInit {
     if (entry?.related_sale_id) void this.router.navigate(["/sales", entry.related_sale_id]);
     else if (entry?.related_supply_id) void this.router.navigate(["/supplies", entry.related_supply_id]);
   }
+  private typeGroup(eventCode: string): string {
+    if (eventCode === "sale_completed" || eventCode === "sale_reversed") return "sales";
+    if (eventCode === "supply.received") return "supplies";
+    if (eventCode.startsWith("product") || eventCode.startsWith("inventory")) return "productChanges";
+    if (eventCode.startsWith("category")) return "categoryChanges";
+    if (eventCode.startsWith("supplier")) return "supplierChanges";
+    if (eventCode === "settings.updated" || eventCode === "data.cleared") return "settingsChanges";
+    if (eventCode === "backup_imported" || eventCode === "backup.imported") return "backupChanges";
+    return "settingsChanges";
+  }
   private filter(): ActivityLogListFilter {
     const groups: Record<string, readonly string[]> = {
-      sales: ["sale_completed"],
+      sales: ["sale_completed", "sale_reversed"],
       supplies: ["supply.received"],
       productChanges: [
         "product_created",
         "product.created",
+        "product.updated",
         "product.deleted",
         "inventory.opening_balance.created",
         "inventory.stock.added",
         "inventory.stock.removed",
         "inventory.product.written_off",
       ],
-      categoryChanges: ["category.deleted"],
-      supplierChanges: ["supplier.deleted"],
-      settingsChanges: ["settings.updated"],
-      backupChanges: ["backup_imported"],
+      categoryChanges: ["category.created", "category.updated", "category.deleted"],
+      supplierChanges: ["supplier.created", "supplier.updated", "supplier.deleted"],
+      settingsChanges: ["settings.updated", "data.cleared"],
+      backupChanges: ["backup_imported", "backup.imported"],
     };
     return { from: this.range.from, to: this.range.to, eventCodes: this.activityType ? groups[this.activityType] : undefined };
   }

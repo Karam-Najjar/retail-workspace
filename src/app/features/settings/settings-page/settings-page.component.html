@@ -14,14 +14,24 @@
       <div class="form">
         <mat-form-field appearance="outline">
           <mat-label>{{ "settings.operatorOne" | translate }}</mat-label>
-          <input matInput [(ngModel)]="operatorOne" required maxlength="100" [attr.aria-invalid]="!operatorOne.trim() || operatorOne.trim().length > 100" />
+          <input
+            matInput
+            [(ngModel)]="operatorOne"
+            required
+            maxlength="100"
+            [attr.aria-invalid]="!operatorOne.trim() || operatorOne.trim().length > 100" />
         </mat-form-field>
         @if (!operatorOne.trim() || operatorOne.trim().length > 100) {
           <p class="field-error">{{ "settings.validation.operatorName" | translate }}</p>
         }
         <mat-form-field appearance="outline">
           <mat-label>{{ "settings.operatorTwo" | translate }}</mat-label>
-          <input matInput [(ngModel)]="operatorTwo" required maxlength="100" [attr.aria-invalid]="!operatorTwo.trim() || operatorTwo.trim().length > 100" />
+          <input
+            matInput
+            [(ngModel)]="operatorTwo"
+            required
+            maxlength="100"
+            [attr.aria-invalid]="!operatorTwo.trim() || operatorTwo.trim().length > 100" />
         </mat-form-field>
         @if (!operatorTwo.trim() || operatorTwo.trim().length > 100) {
           <p class="field-error">{{ "settings.validation.operatorName" | translate }}</p>
@@ -35,11 +45,26 @@
         }
         <mat-form-field appearance="outline">
           <mat-label>{{ "settings.lowStockThreshold" | translate }}</mat-label>
-          <input matInput type="number" [(ngModel)]="threshold" required min="0" step="1" [attr.aria-invalid]="!isValidLowStockThreshold(threshold)" />
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="threshold"
+            required
+            min="0"
+            step="1"
+            [attr.aria-invalid]="!isValidLowStockThreshold(threshold)" />
         </mat-form-field>
         @if (!isValidLowStockThreshold(threshold)) {
           <p class="field-error">{{ "settings.validation.threshold" | translate }}</p>
         }
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "settings.storeNameEn" | translate }}</mat-label>
+          <input matInput [(ngModel)]="storeNameEn" maxlength="100" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "settings.storeNameAr" | translate }}</mat-label>
+          <input matInput [(ngModel)]="storeNameAr" maxlength="100" />
+        </mat-form-field>
       </div>
       <button mat-flat-button color="primary" (click)="save()" [disabled]="facade.busy() || !settingsFormValid()">
         {{ "common.save" | translate }}
@@ -52,7 +77,9 @@
         <mat-icon>cloud_download</mat-icon>
       </div>
       <h2>{{ "settings.backup" | translate }}</h2>
-      <p class="card-description">{{ "settings.lastBackup" | translate }}: {{ facade.settings()?.last_backup_date || ("settings.never" | translate) }}</p>
+      <p class="card-description">
+        {{ "settings.lastBackup" | translate }}: {{ facade.settings()?.last_backup_date || ("settings.never" | translate) }}
+      </p>
       <div class="card-actions">
         <button mat-stroked-button (click)="export()" [disabled]="facade.busy()">{{ "settings.exportBackup" | translate }}</button>
         <label class="restore-label">

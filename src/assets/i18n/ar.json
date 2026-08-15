@@ -47,15 +47,15 @@
     "valuation": "قيمة المخزون"
   },
   "common": {
-    "back": "رجوع",
-    "cancel": "إلغاء",
-    "confirm": "تأكيد",
+    "actions": "إجراءات",
     "save": "حفظ",
+    "cancel": "إلغاء",
     "edit": "تعديل",
     "delete": "حذف",
     "createdBy": "أنشئ بواسطة",
     "createdAt": "تاريخ الإنشاء",
-    "lastModifiedBy": "آخر تعديل بواسطة"
+    "lastModifiedBy": "آخر تعديل بواسطة",
+    "loading": "جارٍ التحميل..."
   },
   "categories": {
     "title": "الفئات",
@@ -157,9 +157,10 @@
       "opening_balance": "رصيد افتتاحي",
       "adjustment_in": "إضافة مخزون",
       "adjustment_out": "سحب مخزون",
-      "write_off": "شطب وحذف",
-      "supply": "مشتريات",
-      "sale": "بيع"
+      "write_off": "شطب",
+      "supply": "توريد",
+      "sale": "بيع",
+      "sale_reversal": "عكس بيع"
     },
     "sources": {
       "opening_balance": "رصيد افتتاحي",
@@ -361,7 +362,13 @@
       "productCreated": "تم إنشاء المنتج '{{ name }}'",
       "productDeleted": "تم حذف المنتج '{{ name }}'",
       "categoryDeleted": "تم حذف الفئة '{{ name }}'",
-      "supplierDeleted": "تم حذف المورد '{{ name }}'"
+      "supplierDeleted": "تم حذف المورد '{{ name }}'",
+      "saleReversed": "تم عكس البيع: {{ total }} الإجمالي",
+      "categoryCreated": "تم إنشاء الفئة '{{ name }}'",
+      "categoryUpdated": "تم تحديث الفئة '{{ name }}'",
+      "supplierCreated": "تم إنشاء المورد '{{ name }}'",
+      "supplierUpdated": "تم تحديث المورد '{{ name }}'",
+      "productUpdated": "تم تحديث المنتج '{{ name }}'"
     }
   },
   "pos": {
@@ -453,6 +460,8 @@
   },
   "settings": {
     "title": "الإعدادات",
+    "storeNameEn": "اسم المتجر بالانجليزي",
+    "storeNameAr": "اسم المتجر بالعربي",
     "general": "عام",
     "operatorOne": "اسم المستخدم 1",
     "operatorTwo": "اسم المستخدم 2",
@@ -471,6 +480,27 @@
     "persistent": "التخزين الدائم مفعّل",
     "notPersistent": "التخزين الدائم غير مفعّل",
     "requestPersistence": "طلب التخزين الدائم",
+    "description": "إدارة المشغلين والعملة والنسخ الاحتياطي والتخزين.",
+    "validation": {
+      "operatorName": "يجب أن يكون اسم المشغل بين 1 و100 حرف.",
+      "currencyRate": "يجب أن يكون سعر الصرف رقماً موجباً.",
+      "threshold": "يجب أن يكون الحد رقماً صحيحاً غير سالب."
+    },
+    "storageUnits": {
+      "megabytes": "ميغابايت",
+      "gigabytes": "غيغابايت"
+    },
+    "clear": {
+      "title": "مسح جميع البيانات",
+      "message": "سيؤدي هذا إلى حذف جميع بيانات البيع بالتجزئة نهائياً بما في ذلك المنتجات والمبيعات والتوريدات وسجلات النشاط. سيتم تنزيل نسخة احتياطية للاسترداد أولاً. هل تريد المتابعة؟",
+      "verifyTitle": "تأكيد حذف البيانات",
+      "verifyMessage": "اكتب DELETE لتأكيد فهمك أن هذا الإجراء لا يمكن التراجع عنه.",
+      "verifyLabel": "اكتب DELETE"
+    },
+    "dangerousDescription": "لا يمكن التراجع عن هذه الإجراءات. استخدمها بحذر.",
+    "persistenceStatusError": "تعذر تحديد حالة التخزين الدائم.",
+    "storageError": "تعذر تحميل معلومات التخزين.",
+    "storageUnavailable": "معلومات التخزين غير متاحة.",
     "persistence": {
       "granted": "",
       "denied": "",

@@ -1,12 +1,13 @@
-import { Component, inject, output } from "@angular/core";
+import { Component, computed, inject, output, signal } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { TranslatePipe } from "@ngx-translate/core";
+import { TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { liveQuery } from "dexie";
 import { TranslationService } from "../../core/i18n/translation.service";
-import { ActiveOperatorService } from "@retail/kernel";
+import { ActiveOperatorService, DexieSettingsRepository, Settings } from "@retail/kernel";
 import type { SettingsLanguage } from "@retail/kernel";
 
 @Component({
@@ -17,9 +18,24 @@ import type { SettingsLanguage } from "@retail/kernel";
 })
 export class TopBarComponent {
   private readonly dialog = inject(MatDialog);
+  private readonly translate = inject(TranslateService);
   protected readonly translation = inject(TranslationService);
   protected readonly activeOperator = inject(ActiveOperatorService);
+  private readonly settingsRepo = inject(DexieSettingsRepository);
+  private readonly settingsSignal = signal<Settings | undefined>(undefined);
   readonly navigationToggle = output<void>();
+
+  protected readonly storeName = computed(() => {
+    const settings = this.settingsSignal();
+    if (!settings) return "";
+    return this.translation.activeLanguage() === "ar" ? (settings.store_name_ar ?? "") : (settings.store_name_en ?? "");
+  });
+
+  constructor() {
+    liveQuery(() => this.settingsRepo.get()).subscribe(settings => {
+      this.settingsSignal.set(settings);
+    });
+  }
 
   protected async openReportIssue(): Promise<void> {
     const { ReportIssueDialogComponent } = await import("../../features/report-issue/report-issue-dialog.component");

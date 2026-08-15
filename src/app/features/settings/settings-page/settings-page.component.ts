@@ -7,13 +7,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { firstValueFrom } from "rxjs";
-import {
-  BackupFile,
-  isValidLowStockThreshold,
-  isValidOperatorName,
-  normalizePositiveDecimal,
-  StorageHealth,
-} from "@retail/kernel";
+import { BackupFile, isValidLowStockThreshold, isValidOperatorName, normalizePositiveDecimal, StorageHealth } from "@retail/kernel";
 import { TranslationService } from "../../../core/i18n/translation.service";
 import { NotificationService } from "../../../core/notifications/notification.service";
 import { SettingsConfirmationDialogComponent } from "../settings-confirmation-dialog/settings-confirmation-dialog.component";
@@ -39,6 +33,8 @@ export class SettingsPageComponent implements OnInit {
   protected operatorTwo = "";
   protected rate = "";
   protected threshold = 5;
+  protected storeNameEn = "";
+  protected storeNameAr = "";
 
   async ngOnInit(): Promise<void> {
     try {
@@ -57,6 +53,8 @@ export class SettingsPageComponent implements OnInit {
         operatorTwo: this.operatorTwo,
         rate: this.rate,
         threshold: this.threshold,
+        storeNameEn: this.storeNameEn,
+        storeNameAr: this.storeNameAr,
       });
       this.notifications.success("notifications.success.settingsSaved");
     } catch (error: unknown) {
@@ -153,7 +151,7 @@ export class SettingsPageComponent implements OnInit {
   private async confirmRestorePreview(backup: BackupFile): Promise<boolean> {
     const manifest = backup.manifest;
     const date = new Intl.DateTimeFormat(this.translation.activeLanguage(), { dateStyle: "medium", timeStyle: "short" }).format(
-      new Date(manifest.export_timestamp),
+      new Date(manifest.export_timestamp)
     );
     const details = [
       String(this.translate.instant("settings.restore.profile", { value: manifest.profile_id })),
@@ -180,7 +178,7 @@ export class SettingsPageComponent implements OnInit {
     dialogRef.componentRef?.setInput("requiredText", options.requiredText ?? null);
     dialogRef.componentRef?.setInput(
       "confirmationLabel",
-      options.confirmationLabelKey ? String(this.translate.instant(options.confirmationLabelKey)) : "",
+      options.confirmationLabelKey ? String(this.translate.instant(options.confirmationLabelKey)) : ""
     );
     return (await firstValueFrom(dialogRef.afterClosed())) === true;
   }
@@ -191,6 +189,8 @@ export class SettingsPageComponent implements OnInit {
     const settings = this.facade.settings();
     this.rate = settings?.currency_rate ?? "";
     this.threshold = settings?.low_stock_threshold ?? 5;
+    this.storeNameEn = settings?.store_name_en ?? "";
+    this.storeNameAr = settings?.store_name_ar ?? "";
   }
 
   private logHandledError(operation: SettingsOperation, error: unknown): void {

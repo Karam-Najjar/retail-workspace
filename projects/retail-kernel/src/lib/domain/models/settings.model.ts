@@ -6,4 +6,6 @@ export interface Settings {
   readonly language: "en" | "ar";
   readonly last_backup_date: Date | null;
   readonly last_modified_by_operator_id: string;
+  readonly store_name_en?: string;
+  readonly store_name_ar?: string;
 }

@@ -47,15 +47,16 @@
     "valuation": "Valuation"
   },
   "common": {
-    "back": "Back",
+    "actions": "Actions",
+    "save": "Save",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "save": "Save",
     "edit": "Edit",
     "delete": "Delete",
-    "createdBy": "Created by",
-    "createdAt": "Created at",
-    "lastModifiedBy": "Last modified by"
+    "createdBy": "Created By",
+    "createdAt": "Created At",
+    "lastModifiedBy": "Last Modified By",
+    "loading": "Loading..."
   },
   "categories": {
     "title": "Categories",
@@ -157,9 +158,10 @@
       "opening_balance": "Opening Balance",
       "adjustment_in": "Add Stock",
       "adjustment_out": "Remove Stock",
-      "write_off": "Write Off and Delete",
+      "write_off": "Write Off",
       "supply": "Supply",
-      "sale": "Sale"
+      "sale": "Sale",
+      "sale_reversal": "Sale Reversal"
     },
     "sources": {
       "opening_balance": "Opening Balance",
@@ -361,7 +363,13 @@
       "productCreated": "Product '{{ name }}' created",
       "productDeleted": "Product '{{ name }}' deleted",
       "categoryDeleted": "Category '{{ name }}' deleted",
-      "supplierDeleted": "Supplier '{{ name }}' deleted"
+      "supplierDeleted": "Supplier '{{ name }}' deleted",
+      "saleReversed": "Sale reversed: {{ total }} total",
+      "categoryCreated": "Category '{{ name }}' created",
+      "categoryUpdated": "Category '{{ name }}' updated",
+      "supplierCreated": "Supplier '{{ name }}' created",
+      "supplierUpdated": "Supplier '{{ name }}' updated",
+      "productUpdated": "Product '{{ name }}' updated"
     }
   },
   "pos": {
@@ -453,6 +461,8 @@
   },
   "settings": {
     "title": "Settings",
+    "storeNameEn": "Store Name EN",
+    "storeNameAr": "Store Name AR",
     "general": "General",
     "operatorOne": "Operator 1 Name",
     "operatorTwo": "Operator 2 Name",
@@ -471,6 +481,27 @@
     "persistent": "Persistent storage enabled",
     "notPersistent": "Persistent storage not enabled",
     "requestPersistence": "Request persistent storage",
+    "description": "Manage operators, currency, backup, and storage.",
+    "validation": {
+      "operatorName": "Operator name must be between 1 and 100 characters.",
+      "currencyRate": "Currency rate must be a positive number.",
+      "threshold": "Threshold must be a non-negative whole number."
+    },
+    "storageUnits": {
+      "megabytes": "MB",
+      "gigabytes": "GB"
+    },
+    "clear": {
+      "title": "Clear All Data",
+      "message": "This will permanently delete all retail data including products, sales, supplies, and activity logs. A recovery backup will be downloaded first. Continue?",
+      "verifyTitle": "Confirm Data Deletion",
+      "verifyMessage": "Type DELETE to confirm you understand this action cannot be undone.",
+      "verifyLabel": "Type DELETE"
+    },
+    "dangerousDescription": "These actions cannot be undone. Use with caution.",
+    "persistenceStatusError": "Could not determine persistent storage status.",
+    "storageError": "Storage information could not be loaded.",
+    "storageUnavailable": "Storage information is not available.",
     "persistence": {
       "granted": "Persistent storage granted",
       "denied": "Persistent storage request was denied",

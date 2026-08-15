@@ -25,7 +25,13 @@
       [exchangeRate]="exchangeRate()"
       labelKey="supplies.costPerPackage"
       (centsChange)="update({ unitCostEntered: $event })" />
-    <button mat-icon-button color="warn" type="button" [attr.aria-label]="'supplies.removeLine' | translate" (click)="remove.emit()">
+    <button
+      mat-icon-button
+      color="warn"
+      type="button"
+      [attr.aria-label]="'supplies.removeLine' | translate"
+      [disabled]="!canRemove()"
+      (click)="remove.emit()">
       <mat-icon>delete</mat-icon>
     </button>
   </div>

@@ -44,6 +44,7 @@ export class SupplyLineEditorComponent {
   readonly exchangeRate = input.required<string>();
   readonly lineChange = output<SupplyLineDraft>();
   readonly remove = output<void>();
+  readonly canRemove = input(true);
 
   protected update(values: Partial<SupplyLineDraft>): void {
     this.lineChange.emit({ ...this.line(), ...values });

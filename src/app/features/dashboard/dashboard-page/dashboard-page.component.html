@@ -12,10 +12,27 @@
 
   @if (facade.snapshot(); as data) {
     <div class="dashboard-grid">
-      <mat-card class="dashboard-card stat-card stat-card--products grid-span-4">
-        <span class="stat-label">{{ "dashboard.totalProducts" | translate }}</span>
-        <strong class="stat-value">{{ data.total_products }}</strong>
-        <span class="stat-support">{{ "dashboard.activeProducts" | translate: { count: data.active_products } }}</span>
+      <mat-card class="dashboard-card stat-card stat-card--inventory-summary grid-span-4">
+        <div class="inventory-summary-row">
+          <span class="stat-label">{{ "dashboard.totalProducts" | translate }}</span>
+          <strong class="stat-value">{{ data.total_products }}</strong>
+          <span class="stat-support">{{ "dashboard.activeProducts" | translate: { count: data.active_products } }}</span>
+        </div>
+
+        <div class="inventory-summary-row inventory-summary-row--clickable" routerLink="/valuation" tabindex="0" role="link">
+          <span class="stat-label">{{ "dashboard.inventoryValue" | translate }}</span>
+          <strong class="stat-value">{{ primaryMoney(data.inventory_valuation.total_value) }}</strong>
+          <span class="stat-support">
+            {{ data.inventory_valuation.product_count }} {{ "dashboard.products" | translate }} · {{ data.inventory_valuation.total_units }}
+            {{ "dashboard.units" | translate }}
+          </span>
+        </div>
+
+        <div class="inventory-summary-row">
+          <span class="stat-label">{{ "dashboard.inventoryAlerts" | translate }}</span>
+          <strong class="stat-value">{{ data.low_stock_products.length }}</strong>
+          <span class="status-pill" [class]="'status-pill status-pill--' + alertTone()">{{ alertStatusKey() | translate }}</span>
+        </div>
       </mat-card>
 
       <mat-card class="dashboard-card stat-card stat-card--hero grid-span-4">
@@ -48,19 +65,14 @@
         </div>
       </mat-card>
 
-      <mat-card class="dashboard-card stat-card stat-card--alerts grid-span-4">
-        <span class="stat-label">{{ "dashboard.inventoryAlerts" | translate }}</span>
-        <strong class="stat-value">{{ data.low_stock_products.length }}</strong>
-        <span class="status-pill" [class]="'status-pill status-pill--' + alertTone()">{{ alertStatusKey() | translate }}</span>
-      </mat-card>
-
-      <mat-card class="dashboard-card stat-card stat-card--valuation grid-span-4" routerLink="/valuation" tabindex="0" role="link">
-        <span class="stat-label">{{ "dashboard.inventoryValue" | translate }}</span>
-        <strong class="stat-value">{{ primaryMoney(data.inventory_valuation.total_value) }}</strong>
-        <span class="stat-support">
-          {{ data.inventory_valuation.product_count }} {{ "dashboard.products" | translate }} · {{ data.inventory_valuation.total_units }}
-          {{ "dashboard.units" | translate }}
-        </span>
+      <mat-card class="dashboard-card widget-card grid-span-4">
+        <div class="widget-heading">
+          <h2>{{ "dashboard.inventoryHealth" | translate }}</h2>
+        </div>
+        <app-circular-chart
+          [segments]="inventorySegments()"
+          [centerText]="inventoryHealthPercentage()"
+          [centerLabel]="'products.stock.in' | translate" />
       </mat-card>
 
       <mat-card class="dashboard-card widget-card weekly-sales grid-span-8">
@@ -87,16 +99,6 @@
         } @else {
           <app-empty-state titleKey="dashboard.empty.lowStockTitle" messageKey="dashboard.empty.lowStockMessage" />
         }
-      </mat-card>
-
-      <mat-card class="dashboard-card widget-card grid-span-4">
-        <div class="widget-heading">
-          <h2>{{ "dashboard.inventoryHealth" | translate }}</h2>
-        </div>
-        <app-circular-chart
-          [segments]="inventorySegments()"
-          [centerText]="inventoryHealthPercentage()"
-          [centerLabel]="'products.stock.in' | translate" />
       </mat-card>
 
       <mat-card class="dashboard-card widget-card grid-span-4">

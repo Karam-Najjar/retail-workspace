@@ -300,3 +300,59 @@
     grid-column: span 12;
   }
 }
+
+.stat-card--inventory-summary {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.inventory-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #eef0f1;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .stat-support {
+    font-size: 0.8125rem;
+    margin: 0;
+  }
+
+  .status-pill {
+    margin-block-start: 0;
+    align-self: center;
+  }
+}
+
+.inventory-summary-row--clickable {
+  cursor: pointer;
+  transition: background 120ms ease;
+  background: #f8fafb;
+
+  &:hover {
+    background: #eef3f5;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--retail-primary);
+    outline-offset: -2px;
+  }
+}
