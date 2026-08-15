@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { DashboardSnapshot, DashboardWeeklySalesDay } from "../dto/dashboard-snapshot.model";
+import { DashboardSnapshot, DashboardValuationSummary, DashboardWeeklySalesDay } from "../dto/dashboard-snapshot.model";
 import { RetailDatabase } from "../../data-access/database/retail.database";
 import { sumCurrencyMinorUnits } from "../../domain/policies/currency-rounding.policy";
 import { liveQuery } from "dexie";
@@ -76,6 +76,40 @@ export class DashboardQueryService {
       };
     });
 
+    // Inventory valuation at latest batch cost
+    const inventoryBatches = await this.db.inventoryBatches.toArray();
+    const batchesByProduct = new Map<string, typeof inventoryBatches>();
+    for (const batch of inventoryBatches) {
+      if (batch.remaining_quantity <= 0) continue;
+      const list = batchesByProduct.get(batch.product_id) ?? [];
+      list.push(batch);
+      batchesByProduct.set(batch.product_id, list);
+    }
+
+    const valuationItems = products
+      .filter(product => product.quantity > 0)
+      .map(product => {
+        const productBatches = batchesByProduct.get(product.id) ?? [];
+        const latestBatch = productBatches
+          .filter(batch => batch.remaining_quantity > 0)
+          .sort((a, b) => b.sequence - a.sequence)[0];
+        if (!latestBatch) return null;
+        const latestUnitCost = latestBatch.remaining_quantity > 0
+          ? Math.round(latestBatch.remaining_total_cost / latestBatch.remaining_quantity)
+          : 0;
+        return {
+          quantity: product.quantity,
+          total_value: Math.round(latestUnitCost * product.quantity),
+        };
+      })
+      .filter((item): item is { quantity: number; total_value: number } => item !== null);
+
+    const inventory_valuation: DashboardValuationSummary = {
+      total_units: valuationItems.reduce((sum, item) => sum + item.quantity, 0),
+      total_value: sumCurrencyMinorUnits(valuationItems.map(item => item.total_value)),
+      product_count: valuationItems.length,
+    };
+
     return {
       total_products: products.length,
       active_products: products.filter(product => product.quantity > 0).length,
@@ -95,6 +129,7 @@ export class DashboardQueryService {
         .map(({ id, name, quantity }) => ({ id, name, quantity })),
       recent_activity: activity,
       top_products: topProducts,
+      inventory_valuation,
     };
   }
 

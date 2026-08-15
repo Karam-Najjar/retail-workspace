@@ -1,0 +1,49 @@
+<section class="valuation">
+  <header class="page-header">
+    <div>
+      <h1>{{ "valuation.title" | translate }}</h1>
+      <p>{{ "valuation.description" | translate }}</p>
+    </div>
+  </header>
+
+  @if (facade.valuation(); as data) {
+    <div class="valuation-summary">
+      <div class="summary-pill">
+        <span>{{ "valuation.products" | translate }}</span>
+        <strong>{{ data.items.length }}</strong>
+      </div>
+      <div class="summary-pill">
+        <span>{{ "valuation.units" | translate }}</span>
+        <strong>{{ data.total_units }}</strong>
+      </div>
+      <div class="summary-pill">
+        <span>{{ "valuation.value" | translate }}</span>
+        <strong>{{ formatPrimary(data.total_value) }}</strong>
+      </div>
+    </div>
+
+    @if (data.items.length) {
+      <div class="valuation-grid">
+        @for (item of data.items; track item.product_id) {
+          <mat-card class="valuation-card">
+            <mat-card-content>
+              <strong class="valuation-card__name">{{ item.product_name }}</strong>
+              <span class="valuation-card__detail">{{ item.quantity }} {{ "valuation.units" | translate }}</span>
+              <span class="valuation-card__detail">{{ "valuation.latestCost" | translate }}: {{ formatPrimary(item.latest_unit_cost) }}</span>
+              <span class="valuation-card__total">{{ formatPrimary(item.total_value) }}</span>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+
+      <div class="valuation-footer">
+        <span>{{ "valuation.totalValue" | translate }}</span>
+        <strong>{{ formatPrimary(data.total_value) }}</strong>
+      </div>
+    } @else {
+      <app-empty-state titleKey="valuation.emptyTitle" messageKey="valuation.emptyMessage" />
+    }
+  } @else if (facade.loading()) {
+    <div class="valuation-loading">{{ "dashboard.loading" | translate }}</div>
+  }
+</section>

@@ -35,4 +35,11 @@ export interface DashboardSnapshot {
   readonly low_stock_products: readonly { readonly id: string; readonly name: string; readonly quantity: number }[];
   readonly recent_activity: readonly ActivityLog[];
   readonly top_products: readonly DashboardTopProduct[];
+  readonly inventory_valuation: DashboardValuationSummary;
+}
+
+export interface DashboardValuationSummary {
+  readonly total_units: number;
+  readonly total_value: number;
+  readonly product_count: number;
 }
