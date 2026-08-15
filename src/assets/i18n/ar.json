@@ -260,6 +260,11 @@
     "subtotal": "المجموع الفرعي",
     "notFoundTitle": "البيع غير موجود",
     "notFoundMessage": "البيع المطلوب غير موجود.",
+    "undoSale": "تراجع عن البيع",
+    "reverseTitle": "عكس البيع",
+    "reverseMessage": "سيؤدي هذا إلى عكس البيع بالكامل وإعادة المخزون. لا يمكن التراجع عن هذا الإجراء.",
+    "reversed": "تم عكسه",
+    "reversalSale": "بيع معكوس",
     "filters": {
       "today": "اليوم",
       "week": "هذا الأسبوع",
@@ -269,7 +274,8 @@
       "to": "إلى"
     },
     "errors": {
-      "load": "تعذر تحميل المبيعات."
+      "load": "تعذر تحميل المبيعات.",
+      "reverse": "تعذر عكس البيع."
     },
     "fifoAllocations": "توزيع دفعات FIFO",
     "batch": "الدفعة",
@@ -535,7 +541,8 @@
       "dataCleared": "تم مسح البيانات",
       "licenceActivated": "تم تفعيل الترخيص",
       "cartUpdated": "تم تحديث السلة",
-      "cartCleared": "تم مسح السلة"
+      "cartCleared": "تم مسح السلة",
+      "saleReversed": "تم عكس البيع بنجاح"
     }
   }
 }

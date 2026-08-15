@@ -11,7 +11,14 @@ import { Sale } from "../../domain/models/sale.model";
 import { SaleCurrencySnapshot } from "../../domain/models/sale-currency-snapshot.model";
 import { allocateFifo } from "../../domain/policies/fifo-allocation.policy";
 import { CURRENCY_ROUNDING_POLICY } from "../../domain/policies/currency-rounding.policy";
-import { SaleCheckoutRequest, SaleDetail, SaleListEntry, SaleListFilter, SaleRepository } from "../../domain/repository-contracts/sale.repository";
+import {
+  ReverseSaleRequest,
+  SaleCheckoutRequest,
+  SaleDetail,
+  SaleListEntry,
+  SaleListFilter,
+  SaleRepository,
+} from "../../domain/repository-contracts/sale.repository";
 import { RetailDatabase } from "../database/retail.database";
 import Decimal from "decimal.js";
 
@@ -202,6 +209,152 @@ export class DexieSaleRepository implements SaleRepository {
     }
   }
 
+  async reverseSale(request: ReverseSaleRequest): Promise<Sale> {
+    return await this.database.transaction(
+      "rw",
+      [
+        this.database.sales,
+        this.database.saleItems,
+        this.database.saleItemBatchAllocations,
+        this.database.products,
+        this.database.inventoryBatches,
+        this.database.inventoryMovements,
+        this.database.activity_logs,
+      ],
+      async () => {
+        const originalSale = await this.database.sales.get(request.originalSaleId);
+        if (!originalSale) throw new Error("The sale could not be found.");
+        if (originalSale.reversed) throw new Error("This sale has already been reversed.");
+        if (originalSale.original_sale_id) throw new Error("A reversal sale cannot be reversed.");
+
+        // Ensure no newer sale consumed from the same batches
+        const originalItems = await this.database.saleItems.where("sale_id").equals(originalSale.id).toArray();
+        const originalItemIds = originalItems.map(item => item.id);
+        const originalAllocations = originalItemIds.length
+          ? await this.database.saleItemBatchAllocations.where("sale_item_id").anyOf(originalItemIds).toArray()
+          : [];
+        const batchIds = [...new Set(originalAllocations.map(allocation => allocation.batch_id))];
+
+        // Block if any sale exists with a later date
+        const latestSale = await this.database.sales.orderBy("date").reverse().first();
+        if (latestSale && latestSale.id !== originalSale.id) {
+          throw new Error("Only the latest sale can be reversed.");
+        }
+
+        // Restore batches
+        const restoredBatches = new Map<string, InventoryBatch>();
+        for (const allocation of originalAllocations) {
+          const batch = await this.database.inventoryBatches.get(allocation.batch_id);
+          if (!batch) throw new Error("An inventory batch could not be found.");
+          restoredBatches.set(batch.id, {
+            ...batch,
+            remaining_quantity: this.safeAdd(batch.remaining_quantity, allocation.quantity_consumed, "Inventory quantity is too large."),
+            remaining_total_cost: this.safeAdd(batch.remaining_total_cost, allocation.allocated_cost, "Inventory cost is too large."),
+          });
+        }
+
+        // Restore product quantities
+        const productIds = [...new Set(originalItems.map(item => item.product_id))];
+        const updatedProducts: Product[] = [];
+        for (const productId of productIds) {
+          const product = await this.database.products.get(productId);
+          if (!product) throw new Error("A product could not be found.");
+          const restoredQuantity = originalItems
+            .filter(item => item.product_id === productId)
+            .reduce((sum, item) => this.safeAdd(sum, item.quantity_base_units, "Product quantity is too large."), 0);
+          updatedProducts.push({
+            ...product,
+            quantity: this.safeAdd(product.quantity, restoredQuantity, "Product quantity is too large."),
+            last_modified_by_operator_id: request.operatorId,
+            updated_at: request.date,
+          });
+        }
+
+        // Create reversal sale record (negative values)
+        const reversalSaleId = crypto.randomUUID();
+        const reversalSale: Sale = {
+          ...originalSale,
+          id: reversalSaleId,
+          date: request.date,
+          total_amount: -originalSale.total_amount,
+          total_cost: -originalSale.total_cost,
+          total_profit: -originalSale.total_profit,
+          operator_id: request.operatorId,
+          operator_name: request.operatorName,
+          idempotency_key: `reversal-${reversalSaleId}`,
+          created_at: request.date,
+          reversed: false,
+          reversal_of_sale_id: null,
+          original_sale_id: originalSale.id,
+        };
+
+        // Mark original as reversed
+        const updatedOriginalSale: Sale = {
+          ...originalSale,
+          reversed: true,
+          reversal_of_sale_id: reversalSaleId,
+        };
+
+        // Create movements
+        const movements: InventoryMovement[] = [];
+        for (const allocation of originalAllocations) {
+          const item = originalItems.find(i => i.id === allocation.sale_item_id);
+          if (!item) continue;
+          movements.push({
+            id: crypto.randomUUID(),
+            product_id: item.product_id,
+            type: "sale_reversal",
+            quantity_change: allocation.quantity_consumed,
+            batch_id: allocation.batch_id,
+            sale_id: reversalSaleId,
+            supply_id: null,
+            adjustment_id: null,
+            operator_id: request.operatorId,
+            operator_name: request.operatorName,
+            reason: `Reversal of sale ${originalSale.id}`,
+            created_at: request.date,
+          });
+        }
+
+        // Activity log
+        const activityLog: ActivityLog<"sale_reversed"> = {
+          id: crypto.randomUUID(),
+          event_code: "sale_reversed",
+          entity_type: "sale",
+          entity_id: originalSale.id,
+          entity_name_snapshot: null,
+          payload: {
+            original_sale_id: originalSale.id,
+            reversal_sale_id: reversalSaleId,
+            total_amount: originalSale.total_amount,
+            total_cost: originalSale.total_cost,
+            total_profit: originalSale.total_profit,
+          },
+          operator_id: request.operatorId,
+          operator_name: request.operatorName,
+          related_sale_id: reversalSaleId,
+          related_supply_id: null,
+          created_at: request.date,
+        };
+
+        // Write everything
+        await this.database.sales.put(updatedOriginalSale);
+        await this.database.sales.add(reversalSale);
+        await this.database.inventoryBatches.bulkPut([...restoredBatches.values()]);
+        await this.database.products.bulkPut(updatedProducts);
+        await this.database.inventoryMovements.bulkAdd(movements);
+        await this.database.activity_logs.add(activityLog);
+
+        // Verify integrity
+        for (const product of updatedProducts) {
+          await this.assertStoredQuantity(product.id, product.quantity);
+        }
+
+        return reversalSale;
+      }
+    );
+  }
+
   async list(filter: SaleListFilter = {}): Promise<readonly SaleListEntry[]> {
     const sales =
       filter.from && filter.to
@@ -214,7 +367,13 @@ export class DexieSaleRepository implements SaleRepository {
     for (const item of items) {
       totals.set(item.sale_id, (totals.get(item.sale_id) ?? 0) + item.quantity_base_units);
     }
-    return sales.map(sale => ({ sale, totalItemsSold: totals.get(sale.id) ?? 0 }));
+    return sales.map(sale => {
+      if (sale.original_sale_id) {
+        const originalCount = totals.get(sale.original_sale_id) ?? 0;
+        return { sale, totalItemsSold: -originalCount };
+      }
+      return { sale, totalItemsSold: totals.get(sale.id) ?? 0 };
+    });
   }
 
   async getDetail(id: string): Promise<SaleDetail | undefined> {

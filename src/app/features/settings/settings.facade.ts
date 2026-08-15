@@ -198,7 +198,6 @@ export class SettingsFacade {
         const tablesToClear = this.database.tables.filter(table => !CLEAR_ALL_EXCLUDED_TABLES.has(table.name));
         await this.database.transaction("rw", tablesToClear, async () => {
           for (const table of tablesToClear) await table.clear();
-          await this.initializer.initialize();
           const event: ActivityLog<"data.cleared"> = {
             id: crypto.randomUUID(),
             event_code: "data.cleared",
@@ -214,6 +213,7 @@ export class SettingsFacade {
           };
           await this.database.activity_logs.add(event);
         });
+        await this.initializer.initialize();
       } catch (error: unknown) {
         throw new Error("The atomic data clear failed. The pre-clear recovery backup was downloaded.", { cause: error });
       }

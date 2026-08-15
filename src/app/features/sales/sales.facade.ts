@@ -11,6 +11,7 @@ import {
   sumSafeIntegers,
 } from "@retail/kernel";
 import { NotificationService } from "../../core/notifications/notification.service";
+import { ReverseSaleUseCase } from "@retail/kernel/application/use-cases/sales/reverse-sale.use-case";
 
 export interface SalesSummary {
   readonly totalRevenue: number;
@@ -25,6 +26,7 @@ export class SalesFacade {
   private readonly reporting = inject(SalesReportingService);
   private readonly excel = inject(ExcelExportService);
   private readonly notifications = inject(NotificationService);
+  private readonly reverseSale = inject(ReverseSaleUseCase);
 
   readonly sales = signal<readonly SaleListEntry[]>([]);
   readonly loading = signal(false);
@@ -36,7 +38,10 @@ export class SalesFacade {
       totalRevenue: sumCurrencyMinorUnits(sales.map(entry => entry.sale.total_amount)),
       totalCost: sumCurrencyMinorUnits(sales.map(entry => entry.sale.total_cost)),
       totalProfit: sumCurrencyMinorUnits(sales.map(entry => entry.sale.total_profit)),
-      totalItemsSold: sumSafeIntegers(sales.map(entry => entry.totalItemsSold), "Sales item total is too large."),
+      totalItemsSold: sumSafeIntegers(
+        sales.map(entry => entry.totalItemsSold),
+        "Sales item total is too large."
+      ),
     };
   });
 
@@ -69,6 +74,17 @@ export class SalesFacade {
       this.notifications.error("notifications.errors.export");
     } finally {
       this.exporting.set(false);
+    }
+  }
+
+  async reverse(id: string): Promise<boolean> {
+    try {
+      await this.reverseSale.execute(id);
+      this.notifications.success("notifications.success.saleReversed");
+      return true;
+    } catch {
+      this.notifications.error("sales.errors.reverse");
+      return false;
     }
   }
 }

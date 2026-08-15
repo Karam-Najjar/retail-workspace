@@ -20,6 +20,13 @@ export interface SaleDetail {
   readonly allocations: readonly SaleItemBatchAllocation[];
 }
 
+export interface ReverseSaleRequest {
+  readonly originalSaleId: string;
+  readonly operatorId: string;
+  readonly operatorName: string;
+  readonly date: Date;
+}
+
 export type SaleCurrencySnapshotFactory = (totalAmount: number, totalCost: number) => SaleCurrencySnapshot;
 
 export interface SaleCheckoutRequest {
@@ -36,4 +43,5 @@ export interface SaleRepository {
   list(filter?: SaleListFilter): Promise<readonly SaleListEntry[]>;
   getDetail(id: string): Promise<SaleDetail | undefined>;
   getByIdempotencyKey(idempotencyKey: string): Promise<Sale | undefined>;
+  reverseSale(request: ReverseSaleRequest): Promise<Sale>;
 }

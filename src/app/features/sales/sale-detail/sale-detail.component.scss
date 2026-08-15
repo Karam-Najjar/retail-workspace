@@ -7,8 +7,29 @@
 
 // ---- Fixed Header ----
 .detail-layout__top {
-  padding: 1.5rem 1.5rem 1rem;
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  button[mat-flat-button] {
+    margin-inline-end: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding-inline: 1.25rem;
+    padding-block: 0.625rem;
+    border-radius: 999px;
+    background-color: var(--retail-primary);
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background-color: #0d3b4f;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
 }
 
 // ---- Scrollable Body ----
@@ -152,6 +173,17 @@ tr:hover td {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+// ---- Reversal Badges ----
+.badge--reversed {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.badge--reversal {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
 .total-card {
   border-radius: 0.75rem;
   padding: 1.25rem 1.5rem;
@@ -190,25 +222,46 @@ tr:hover td {
 .total-card--revenue {
   border: 1px solid var(--retail-outline-variant);
 
-  &::before { background: #3b82f6; }
-  strong { color: #1d4ed8; }
-  span, small { color: var(--retail-on-surface-muted); }
+  &::before {
+    background: #3b82f6;
+  }
+  strong {
+    color: #1d4ed8;
+  }
+  span,
+  small {
+    color: var(--retail-on-surface-muted);
+  }
 }
 
 .total-card--cost {
   border: 1px solid var(--retail-outline-variant);
 
-  &::before { background: #f59e0b; }
-  strong { color: #b45309; }
-  span, small { color: var(--retail-on-surface-muted); }
+  &::before {
+    background: #f59e0b;
+  }
+  strong {
+    color: #b45309;
+  }
+  span,
+  small {
+    color: var(--retail-on-surface-muted);
+  }
 }
 
 .total-card--profit {
   border: 1px solid var(--retail-outline-variant);
 
-  &::before { background: #22c55e; }
-  strong { color: #15803d; }
-  span, small { color: var(--retail-on-surface-muted); }
+  &::before {
+    background: #22c55e;
+  }
+  strong {
+    color: #15803d;
+  }
+  span,
+  small {
+    color: var(--retail-on-surface-muted);
+  }
 }
 
 @media (max-width: 48rem) {

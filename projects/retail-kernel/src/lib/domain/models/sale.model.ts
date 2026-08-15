@@ -14,4 +14,7 @@ export interface Sale {
   readonly currency_snapshot: SaleCurrencySnapshot;
   readonly idempotency_key: string;
   readonly created_at: Date;
+  readonly reversed?: boolean;
+  readonly reversal_of_sale_id?: string | null;
+  readonly original_sale_id?: string | null;
 }
