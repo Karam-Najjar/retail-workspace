@@ -8,10 +8,12 @@ import { DetailPageHeaderComponent } from "../../../shared-ui/detail-page-header
 import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.component";
 import { SalesFacade } from "../sales.facade";
 import { formatDualCurrencyMinorUnits, STORE_PROFILE, StoreProfile } from "@retail/kernel";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from "@app/shared-ui/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: "app-sale-detail",
-  imports: [DatePipe, DetailPageHeaderComponent, EmptyStateComponent, MatCardModule, TranslatePipe],
+  imports: [DatePipe, DetailPageHeaderComponent, EmptyStateComponent, MatCardModule, TranslatePipe,],
   providers: [SalesFacade],
   templateUrl: "./sale-detail.component.html",
   styleUrl: "./sale-detail.component.scss",
@@ -21,9 +23,12 @@ export class SaleDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly facade = inject(SalesFacade);
   private readonly storeProfile: StoreProfile = inject(STORE_PROFILE);
+  private readonly dialog = inject(MatDialog);
 
   protected readonly detail = signal<SaleDetail | null>(null);
   protected readonly loading = signal(true);
+  protected readonly reversing = signal(false);
+
 
   async ngOnInit(): Promise<void> {
     try {
@@ -58,4 +63,25 @@ export class SaleDetailComponent implements OnInit {
   protected allocationsFor(item: SaleItem) {
     return this.detail()?.allocations.filter(allocation => allocation.sale_item_id === item.id) ?? [];
   }
+
+  protected confirmReverse(): void {
+  const sale = this.detail()?.sale;
+  if (!sale || sale.reversed || sale.original_sale_id) return;
+
+  const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    width: "min(30rem, calc(100vw - 2rem))",
+  });
+  dialogRef.componentRef?.setInput("titleKey", "sales.reverseTitle");
+  dialogRef.componentRef?.setInput("message", "sales.reverseMessage");
+  dialogRef.afterClosed().subscribe(async confirmed => {
+    if (confirmed === true) {
+      this.reversing.set(true);
+      const success = await this.facade.reverse(sale.id);
+      this.reversing.set(false);
+      if (success) {
+        this.detail.set((await this.facade.get(sale.id)) ?? null);
+      }
+    }
+  });
+}
 }

@@ -2,6 +2,15 @@
   <div class="detail-layout">
     <div class="detail-layout__top">
       <app-detail-page-header [title]="'sales.detailTitle' | translate" (back)="goBack()" />
+      @if (current.sale.reversed) {
+        <span class="badge badge--reversed">{{ "sales.reversed" | translate }}</span>
+      } @else if (current.sale.original_sale_id) {
+        <span class="badge badge--reversal">{{ "sales.reversalSale" | translate }}</span>
+      } @else {
+        <button mat-flat-button color="warn" type="button" (click)="confirmReverse()" [disabled]="reversing()">
+          {{ "sales.undoSale" | translate }}
+        </button>
+      }
     </div>
 
     <div class="detail-layout__body">

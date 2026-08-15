@@ -1,9 +1,5 @@
 import { BackupImportedPayload } from "../events/backup-event.payload";
-import {
-  InventoryStockAddedEventPayload,
-  InventoryStockRemovedEventPayload,
-  InventoryWriteOffEventPayload,
-} from "../events/inventory-event.payload";
+import { InventoryStockAddedEventPayload, InventoryStockRemovedEventPayload, InventoryWriteOffEventPayload } from "../events/inventory-event.payload";
 import { ProductEventPayload } from "../events/product-event.payload";
 import { SaleCompletedPayload } from "../events/sale-completed.payload";
 import { DataClearedPayload, SettingsUpdatedPayload } from "../events/settings-event.payload";
@@ -19,6 +15,14 @@ export interface ProductDeletedPayload {
 
 export interface SupplierDeletedPayload {
   readonly affected_supplies: number;
+}
+
+export interface SaleReversedPayload {
+  readonly original_sale_id: string;
+  readonly reversal_sale_id: string;
+  readonly total_amount: number;
+  readonly total_cost: number;
+  readonly total_profit: number;
 }
 
 export interface EmptyPayload {}
@@ -38,6 +42,7 @@ export interface ActivityEventPayloadMap {
   readonly "product.updated": EmptyPayload;
   readonly product_created: ProductEventPayload;
   readonly sale_completed: SaleCompletedPayload;
+  readonly sale_reversed: SaleReversedPayload;
   readonly "settings.updated": SettingsUpdatedPayload;
   readonly "supplier.created": EmptyPayload;
   readonly "supplier.deleted": SupplierDeletedPayload;

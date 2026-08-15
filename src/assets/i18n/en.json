@@ -260,6 +260,11 @@
     "subtotal": "Subtotal",
     "notFoundTitle": "Sale not found",
     "notFoundMessage": "The requested sale could not be found.",
+    "undoSale": "Undo Sale",
+    "reverseTitle": "Reverse Sale",
+    "reverseMessage": "This will reverse the entire sale and return stock. This cannot be undone.",
+    "reversed": "Reversed",
+    "reversalSale": "Reversal Sale",
     "filters": {
       "today": "Today",
       "week": "This Week",
@@ -269,7 +274,8 @@
       "to": "To"
     },
     "errors": {
-      "load": "Sales could not be loaded."
+      "load": "Sales could not be loaded.",
+      "reverse": "Could not reverse the sale."
     },
     "fifoAllocations": "FIFO batch allocations",
     "batch": "Batch",
@@ -535,7 +541,8 @@
       "dataCleared": "Application data cleared.",
       "licenceActivated": "Licence activated.",
       "cartUpdated": "Cart updated.",
-      "cartCleared": "Cart cleared."
+      "cartCleared": "Cart cleared.",
+      "saleReversed": "Sale reversed successfully."
     }
   }
 }
