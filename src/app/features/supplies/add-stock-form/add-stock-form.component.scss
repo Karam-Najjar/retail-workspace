@@ -1,25 +1,45 @@
-:host {
-  display: block;
+.stock-dialog {
+  display: flex;
+  flex-direction: column;
+  block-size: 90vh;
+  max-block-size: 90vh;
+  inline-size: min(72rem, calc(100vw - 4rem));
+  background: var(--retail-surface);
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
-::ng-deep .mat-mdc-dialog-title {
-  font-size: 1.125rem !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.02em;
-  color: var(--retail-on-surface);
-  padding: 1.5rem 1.5rem 0.5rem !important;
+.stock-dialog__header {
+  flex-shrink: 0;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--retail-outline-variant);
+
+  h2 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--retail-on-surface);
+  }
 }
 
-::ng-deep .mat-mdc-dialog-actions {
-  padding: 0.75rem 1.5rem 1.25rem !important;
-  gap: 0.5rem;
-}
-
-.supply-form-content {
+.stock-dialog__body {
+  align-content: start;
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  padding: 1.5rem;
   display: grid;
   gap: 1.25rem;
-  min-inline-size: min(66rem, calc(100vw - 5rem));
-  padding-block-start: 0.5rem;
+}
+
+.stock-dialog__footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--retail-outline-variant);
+  background: var(--retail-surface);
 }
 
 .header-fields {
@@ -47,7 +67,6 @@
     margin: 0;
     font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--retail-on-surface);
   }
 
   span {
@@ -58,7 +77,6 @@
   strong {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--retail-on-surface);
   }
 }
 
@@ -69,10 +87,6 @@
 }
 
 @media (max-width: 48rem) {
-  .supply-form-content {
-    min-inline-size: auto;
-  }
-
   .header-fields {
     grid-template-columns: 1fr;
   }

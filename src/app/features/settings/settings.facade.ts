@@ -81,6 +81,8 @@ export class SettingsFacade {
     readonly operatorTwo: string;
     readonly rate: string;
     readonly threshold: number;
+    readonly storeNameEn: string;
+    readonly storeNameAr: string;
   }): Promise<void> {
     await this.runOperation("save", true, async () => {
       const settings = this.settings();
@@ -99,6 +101,9 @@ export class SettingsFacade {
           changed.push("operators");
         if (settings.currency_rate !== currencyRate) changed.push("currency_rate");
         if (settings.low_stock_threshold !== lowStockThreshold) changed.push("low_stock_threshold");
+        if ((settings.store_name_en ?? "") !== input.storeNameEn.trim() || (settings.store_name_ar ?? "") !== input.storeNameAr.trim()) {
+          changed.push("store_name");
+        }
         if (changed.length === 0) return;
 
         if (changed.includes("operators")) await this.database.operators.bulkPut([first, second]);
@@ -106,6 +111,8 @@ export class SettingsFacade {
           ...settings,
           currency_rate: currencyRate,
           low_stock_threshold: lowStockThreshold,
+          store_name_en: input.storeNameEn.trim(),
+          store_name_ar: input.storeNameAr.trim(),
           last_modified_by_operator_id: actor.id,
         });
         const event: ActivityLog<"settings.updated"> = {

@@ -8,7 +8,7 @@
     <mat-icon>menu</mat-icon>
   </button>
 
-  <span class="app-title">{{ "app.title" | translate }}</span>
+  <span class="app-title">{{ storeName() || ("app.title" | translate) }}</span>
   <span class="spacer"></span>
 
   <button mat-button type="button" (click)="openReportIssue()">

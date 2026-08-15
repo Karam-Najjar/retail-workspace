@@ -4,7 +4,8 @@ export type SettingsChangedField =
   | "low_stock_threshold"
   | "language"
   | "last_backup_date"
-  | "active_operator_id";
+  | "active_operator_id"
+  | "store_name";
 
 export interface SettingsUpdatedPayload {
   readonly changed: readonly SettingsChangedField[];

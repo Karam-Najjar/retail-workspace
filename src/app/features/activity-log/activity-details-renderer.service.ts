@@ -56,6 +56,22 @@ export class ActivityDetailsRendererService {
         return this.text("activityLog.eventDetails.settingsUpdated", "Settings updated", {});
       case "backup.imported":
         return this.text("activityLog.eventDetails.backupImported", "Backup imported", {});
+      case "sale_reversed":
+        return this.text("activityLog.eventDetails.saleReversed", "Sale reversed: {{ total }} total", {
+          total: this.money(this.numberValue(payload, "total_amount") ?? 0),
+        });
+      case "category.created":
+        return this.text("activityLog.eventDetails.categoryCreated", "Category '{{ name }}' created", { name });
+      case "category.updated":
+        return this.text("activityLog.eventDetails.categoryUpdated", "Category '{{ name }}' updated", { name });
+      case "supplier.created":
+        return this.text("activityLog.eventDetails.supplierCreated", "Supplier '{{ name }}' created", { name });
+      case "supplier.updated":
+        return this.text("activityLog.eventDetails.supplierUpdated", "Supplier '{{ name }}' updated", { name });
+      case "product.updated":
+        return this.text("activityLog.eventDetails.productUpdated", "Product '{{ name }}' updated", { name });
+      case "backup_imported":
+        return this.text("activityLog.eventDetails.backupImported", "Backup imported", {});
       case "data.cleared":
         return this.text("activityLog.eventDetails.dataCleared", "All retail data cleared", {});
       default:
