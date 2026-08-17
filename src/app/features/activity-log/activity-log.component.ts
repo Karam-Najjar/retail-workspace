@@ -11,6 +11,7 @@ import { EmptyStateComponent } from "../../shared-ui/empty-state/empty-state.com
 import { ExportButtonComponent } from "../../shared-ui/export-button/export-button.component";
 import { ActivityLogFacade } from "./activity-log.facade";
 import { ActivityDetailsRendererService } from "./activity-details-renderer.service";
+import { PaginatorComponent } from "@app/shared-ui/paginator/paginator.component";
 
 @Component({
   selector: "app-activity-log",
@@ -23,6 +24,7 @@ import { ActivityDetailsRendererService } from "./activity-details-renderer.serv
     MatFormFieldModule,
     MatSelectModule,
     TranslatePipe,
+    PaginatorComponent,
   ],
   providers: [ActivityDetailsRendererService, ActivityLogFacade],
   templateUrl: "./activity-log.component.html",
@@ -76,6 +78,7 @@ export class ActivityLogComponent implements OnInit {
     this.load();
   }
   protected load(): void {
+    this.facade.page.set(1);
     void this.facade.load(this.filter());
   }
   protected export(): void {
@@ -134,5 +137,8 @@ export class ActivityLogComponent implements OnInit {
   }
   private isArabic(): boolean {
     return document.documentElement.lang.toLowerCase().startsWith("ar");
+  }
+  protected goToPage(page: number): void {
+    void this.facade.goToPage(page, this.filter());
   }
 }

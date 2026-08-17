@@ -55,7 +55,9 @@
     "createdBy": "أنشئ بواسطة",
     "createdAt": "تاريخ الإنشاء",
     "lastModifiedBy": "آخر تعديل بواسطة",
-    "loading": "جارٍ التحميل..."
+    "loading": "جارٍ التحميل...",
+    "previous": "الصفحة السابقة",
+    "next": "الصفحة التالية"
   },
   "categories": {
     "title": "الفئات",

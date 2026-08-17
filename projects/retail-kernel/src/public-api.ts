@@ -140,3 +140,4 @@ export * from "./lib/platform/backup/restore.service";
 export * from "./lib/platform/concurrency/multi-tab.service";
 export * from "./lib/platform/pwa/pwa-update.service";
 export * from "./lib/application/use-cases/sales/reverse-sale.use-case";
+export * from "./lib/application/dto/pagination.model";

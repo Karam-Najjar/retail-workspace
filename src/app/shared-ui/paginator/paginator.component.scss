@@ -1,0 +1,13 @@
+.paginator {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0.5rem;
+
+  span {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--retail-on-surface-muted);
+  }
+}

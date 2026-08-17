@@ -1,0 +1,14 @@
+<div class="paginator">
+  <button mat-icon-button type="button" [disabled]="page() <= 1" (click)="goToPage(page() - 1)" [attr.aria-label]="'common.previous' | translate">
+    <mat-icon>{{ isRtl() ? "chevron_right" : "chevron_left" }}</mat-icon>
+  </button>
+  <span>{{ page() }} / {{ totalPages() }}</span>
+  <button
+    mat-icon-button
+    type="button"
+    [disabled]="page() >= totalPages()"
+    (click)="goToPage(page() + 1)"
+    [attr.aria-label]="'common.next' | translate">
+    <mat-icon>{{ isRtl() ? "chevron_left" : "chevron_right" }}</mat-icon>
+  </button>
+</div>

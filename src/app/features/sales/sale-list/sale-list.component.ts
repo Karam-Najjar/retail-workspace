@@ -17,6 +17,7 @@ import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.
 import { ExportButtonComponent } from "../../../shared-ui/export-button/export-button.component";
 import { SummaryCardComponent } from "../../../shared-ui/summary-card/summary-card.component";
 import { SalesFacade } from "../sales.facade";
+import { PaginatorComponent } from "@app/shared-ui/paginator/paginator.component";
 
 type DatePreset = "today" | "week" | "month" | "custom";
 
@@ -30,6 +31,7 @@ type DatePreset = "today" | "week" | "month" | "custom";
     ExportButtonComponent,
     SummaryCardComponent,
     TranslatePipe,
+    PaginatorComponent,
   ],
   providers: [SalesFacade],
   templateUrl: "./sale-list.component.html",
@@ -82,6 +84,7 @@ export class SaleListComponent implements OnInit {
   }
   protected rangeChanged(range: DateRange): void {
     this.range = range;
+    this.facade.page.set(1);
     this.load();
   }
   protected export(): void {
@@ -92,17 +95,14 @@ export class SaleListComponent implements OnInit {
     void this.router.navigate(["/sales", id]);
   }
 
-  protected summaryMoney(amount: number): string {
-    const firstSale = this.facade.sales().at(0)?.sale;
-    if (firstSale) return this.formatDual(amount, firstSale.currency_snapshot);
-    return formatDualCurrencyMinorUnits(
-      amount,
-      this.storeProfile.currency.primary.precision,
-      this.storeProfile.currency.primary.code,
-      "1",
-      this.storeProfile.currency.secondary.code,
-      this.storeProfile.currency.secondary.precision
-    );
+  protected summaryMoney(amount: number, sypAmount: number): string {
+    const firstSale = this.facade.summaryEntries().at(0)?.sale;
+    if (firstSale) {
+      const primary = this.formatDual(amount, firstSale.currency_snapshot);
+      const primaryOnly = primary.split("(")[0].trim();
+      return `${primaryOnly} (${sypAmount} ${this.storeProfile.currency.secondary.code})`;
+    }
+    return `${amount} ${this.storeProfile.currency.primary.code}`;
   }
 
   private formatDual(amount: number, snapshot: SaleCurrencySnapshot): string {
@@ -135,5 +135,8 @@ export class SaleListComponent implements OnInit {
   }
   private isArabic(): boolean {
     return document.documentElement.lang.toLowerCase().startsWith("ar");
+  }
+  protected goToPage(page: number): void {
+    void this.facade.goToPage(page, this.filter());
   }
 }

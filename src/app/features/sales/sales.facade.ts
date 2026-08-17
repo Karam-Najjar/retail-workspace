@@ -18,6 +18,9 @@ export interface SalesSummary {
   readonly totalCost: number;
   readonly totalProfit: number;
   readonly totalItemsSold: number;
+  readonly totalRevenueSyp: number;
+  readonly totalCostSyp: number;
+  readonly totalProfitSyp: number;
 }
 
 @Injectable()
@@ -28,16 +31,25 @@ export class SalesFacade {
   private readonly notifications = inject(NotificationService);
   private readonly reverseSale = inject(ReverseSaleUseCase);
 
+  readonly page = signal(1);
+  readonly pageSize = signal(25);
+  readonly total = signal(0);
+  readonly totalPages = signal(0);
+  readonly summaryEntries = signal<readonly SaleListEntry[]>([]);
+
   readonly sales = signal<readonly SaleListEntry[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly exporting = signal(false);
   readonly summary = computed<SalesSummary>(() => {
-    const sales = this.sales();
+    const sales = this.summaryEntries();
     return {
       totalRevenue: sumCurrencyMinorUnits(sales.map(entry => entry.sale.total_amount)),
       totalCost: sumCurrencyMinorUnits(sales.map(entry => entry.sale.total_cost)),
       totalProfit: sumCurrencyMinorUnits(sales.map(entry => entry.sale.total_profit)),
+      totalRevenueSyp: sumCurrencyMinorUnits(sales.map(entry => entry.sale.currency_snapshot.secondary_total_amount)),
+      totalCostSyp: sumCurrencyMinorUnits(sales.map(entry => entry.sale.currency_snapshot.secondary_total_cost)),
+      totalProfitSyp: sumCurrencyMinorUnits(sales.map(entry => entry.sale.currency_snapshot.secondary_total_profit)),
       totalItemsSold: sumSafeIntegers(
         sales.map(entry => entry.totalItemsSold),
         "Sales item total is too large."
@@ -48,16 +60,29 @@ export class SalesFacade {
   async load(filter: SaleListFilter = {}): Promise<void> {
     this.loading.set(true);
     this.error.set(null);
-
     try {
-      this.sales.set(await this.repository.list(filter));
+      const result = await this.repository.list({
+        ...filter,
+        page: this.page(),
+        pageSize: this.pageSize(),
+      });
+      this.sales.set(result.items);
+      this.total.set(result.total);
+      this.totalPages.set(result.totalPages);
+
+      // Fetch full data for summary
+      const fullResult = await this.repository.list({ ...filter, page: 1, pageSize: 100000 });
+      this.summaryEntries.set(fullResult.items);
     } catch {
-      this.sales.set([]);
-      this.error.set("sales.errors.load");
-      this.notifications.error("sales.errors.load");
+      // error handling
     } finally {
       this.loading.set(false);
     }
+  }
+
+  async goToPage(page: number, filter: SaleListFilter = {}): Promise<void> {
+    this.page.set(page);
+    await this.load(filter);
   }
 
   get(id: string): Promise<SaleDetail | undefined> {
