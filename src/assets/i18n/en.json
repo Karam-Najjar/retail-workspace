@@ -56,7 +56,9 @@
     "createdBy": "Created By",
     "createdAt": "Created At",
     "lastModifiedBy": "Last Modified By",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "previous": "Previous page",
+    "next": "Next page"
   },
   "categories": {
     "title": "Categories",

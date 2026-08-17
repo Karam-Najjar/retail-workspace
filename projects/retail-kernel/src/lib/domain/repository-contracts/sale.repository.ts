@@ -1,3 +1,4 @@
+import { PagedResult } from "@retail/kernel";
 import { DraftCartItem } from "../models/draft-cart-item.model";
 import { SaleCurrencySnapshot } from "../models/sale-currency-snapshot.model";
 import { SaleItemBatchAllocation } from "../models/sale-item-batch-allocation.model";
@@ -7,6 +8,8 @@ import { Sale } from "../models/sale.model";
 export interface SaleListFilter {
   readonly from?: Date;
   readonly to?: Date;
+  readonly page?: number;
+  readonly pageSize?: number;
 }
 
 export interface SaleListEntry {
@@ -40,7 +43,7 @@ export interface SaleCheckoutRequest {
 
 export interface SaleRepository {
   checkout(request: SaleCheckoutRequest): Promise<Sale>;
-  list(filter?: SaleListFilter): Promise<readonly SaleListEntry[]>;
+  list(filter?: SaleListFilter): Promise<PagedResult<SaleListEntry>>;
   getDetail(id: string): Promise<SaleDetail | undefined>;
   getByIdempotencyKey(idempotencyKey: string): Promise<Sale | undefined>;
   reverseSale(request: ReverseSaleRequest): Promise<Sale>;

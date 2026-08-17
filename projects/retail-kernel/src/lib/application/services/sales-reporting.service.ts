@@ -14,8 +14,8 @@ export class SalesReportingService {
   private readonly repository = inject(DexieSaleRepository);
 
   async getReport(filter: SaleListFilter = {}): Promise<SalesReport> {
-    const entries = await this.repository.list(filter);
-    const details = (await Promise.all(entries.map(entry => this.repository.getDetail(entry.sale.id)))).filter(
+    const result = await this.repository.list({ ...filter, page: 1, pageSize: 100000 });
+    const details = (await Promise.all(result.items.map(entry => this.repository.getDetail(entry.sale.id)))).filter(
       (detail): detail is SaleDetail => detail !== undefined
     );
     return {

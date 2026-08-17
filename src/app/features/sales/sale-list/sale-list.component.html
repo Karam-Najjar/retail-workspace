@@ -11,14 +11,15 @@
   </div>
 
   <section class="summary-grid" [attr.aria-label]="'sales.summary' | translate">
-    <app-summary-card labelKey="sales.totalRevenue" [value]="summaryMoney(facade.summary().totalRevenue)" />
-    <app-summary-card labelKey="sales.totalCost" [value]="summaryMoney(facade.summary().totalCost)" />
-    <app-summary-card labelKey="sales.totalProfit" [value]="summaryMoney(facade.summary().totalProfit)" />
+    <app-summary-card labelKey="sales.totalRevenue" [value]="summaryMoney(facade.summary().totalRevenue, facade.summary().totalRevenueSyp)" />
+    <app-summary-card labelKey="sales.totalCost" [value]="summaryMoney(facade.summary().totalCost, facade.summary().totalCostSyp)" />
+    <app-summary-card labelKey="sales.totalProfit" [value]="summaryMoney(facade.summary().totalProfit, facade.summary().totalProfitSyp)" />
     <app-summary-card labelKey="sales.totalItemsSold" [value]="facade.summary().totalItemsSold" />
   </section>
 
   @if (facade.sales().length) {
     <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openDetail($event)" />
+    <app-paginator [page]="facade.page()" [totalPages]="facade.totalPages()" (pageChange)="goToPage($event)" />
   } @else if (!facade.loading()) {
     <app-empty-state titleKey="sales.emptyTitle" messageKey="sales.emptyMessage" />
   }

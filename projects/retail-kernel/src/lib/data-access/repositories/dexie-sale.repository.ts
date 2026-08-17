@@ -21,6 +21,7 @@ import {
 } from "../../domain/repository-contracts/sale.repository";
 import { RetailDatabase } from "../database/retail.database";
 import Decimal from "decimal.js";
+import { createPagedResult, PagedResult } from "@retail/kernel";
 
 @Injectable({ providedIn: "root" })
 export class DexieSaleRepository implements SaleRepository {
@@ -355,25 +356,38 @@ export class DexieSaleRepository implements SaleRepository {
     );
   }
 
-  async list(filter: SaleListFilter = {}): Promise<readonly SaleListEntry[]> {
-    const sales =
+  async list(filter: SaleListFilter = {}): Promise<PagedResult<SaleListEntry>> {
+    const page = filter.page ?? 1;
+    const pageSize = filter.pageSize ?? 25;
+
+    const allSales =
       filter.from && filter.to
         ? await this.database.sales.where("date").between(filter.from, filter.to, true, true).reverse().sortBy("date")
         : await this.database.sales.orderBy("date").reverse().toArray();
-    if (!sales.length) return [];
-    const saleIds = sales.map(sale => sale.id);
+
+    const total = allSales.length;
+    const pagedSales = allSales.slice((page - 1) * pageSize, page * pageSize);
+
+    if (!pagedSales.length) {
+      return createPagedResult([], total, page, pageSize);
+    }
+
+    const saleIds = pagedSales.map(sale => sale.id);
     const items = await this.database.saleItems.where("sale_id").anyOf(saleIds).toArray();
     const totals = new Map<string, number>();
     for (const item of items) {
       totals.set(item.sale_id, (totals.get(item.sale_id) ?? 0) + item.quantity_base_units);
     }
-    return sales.map(sale => {
+
+    const entries: SaleListEntry[] = pagedSales.map(sale => {
       if (sale.original_sale_id) {
         const originalCount = totals.get(sale.original_sale_id) ?? 0;
         return { sale, totalItemsSold: -originalCount };
       }
       return { sale, totalItemsSold: totals.get(sale.id) ?? 0 };
     });
+
+    return createPagedResult(entries, total, page, pageSize);
   }
 
   async getDetail(id: string): Promise<SaleDetail | undefined> {

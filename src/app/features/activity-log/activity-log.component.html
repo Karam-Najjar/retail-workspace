@@ -14,8 +14,10 @@
       </mat-select></mat-form-field
     ><app-export-button [busy]="facade.exporting()" (export)="export()" />
   </div>
+
   @if (facade.entries().length) {
     <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openEntry($event)" />
+    <app-paginator [page]="facade.page()" [totalPages]="facade.totalPages()" (pageChange)="goToPage($event)" />
   } @else if (!facade.loading()) {
     <app-empty-state titleKey="activityLog.emptyTitle" messageKey="activityLog.emptyMessage" />
   }
