@@ -24,7 +24,7 @@
       labelKey="supplies.totalBaseUnits"
       [value]="facade.summary().total_base_units" /><app-summary-card
       labelKey="supplies.totalCost"
-      [value]="(facade.summary().total_cost / 100).toFixed(4)" />
+      [value]="formatMoney(facade.summary().total_cost)" />
   </section>
   @if (facade.supplies().length) {
     <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openDetail($event)" />

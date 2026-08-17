@@ -3,7 +3,7 @@ import { Component, inject, OnInit, signal } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
-import { SupplyCurrencySnapshot, SupplyDetail } from "@retail/kernel";
+import { formatCurrencyMinorUnits, SupplyCurrencySnapshot, SupplyDetail } from "@retail/kernel";
 import { DetailPageHeaderComponent } from "../../../shared-ui/detail-page-header/detail-page-header.component";
 import { SuppliesFacade } from "../supplies.facade";
 import { formatDualCurrencyMinorUnits, STORE_PROFILE, StoreProfile } from "@retail/kernel";
@@ -41,7 +41,7 @@ export class SupplyDetailComponent implements OnInit {
   }
   protected secondaryTotal(detail: SupplyDetail): string {
     const snapshot = detail.supply.currency_snapshot;
-    return `${(snapshot.secondary_total_cost / 10 ** snapshot.secondary_precision).toFixed(snapshot.secondary_precision)} ${snapshot.secondary_code}`;
+    return `${formatCurrencyMinorUnits(snapshot.secondary_total_cost, snapshot.secondary_precision)} ${snapshot.secondary_code}`;
   }
 
   protected formatDual(amount: number, snapshot: SupplyCurrencySnapshot): string {

@@ -6,7 +6,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from "@angular/material/select";
 import { Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
-import { DateRange, SupplyListFilter } from "@retail/kernel";
+import { DateRange, formatCurrencyMinorUnits, SupplyListFilter } from "@retail/kernel";
 import { DataTableColumn, DataTableComponent, DataTableRow } from "../../../shared-ui/data-table/data-table.component";
 import { DateRangeFilterComponent } from "../../../shared-ui/date-range-filter/date-range-filter.component";
 import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.component";
@@ -51,25 +51,23 @@ export class SupplyListComponent implements OnInit {
     { labelKey: "supplies.operator", sortable: true, sortKey: "operator" },
   ];
   protected readonly rows = (): readonly DataTableRow[] =>
-    this.facade
-      .supplies()
-      .map(({ supply, itemCount }) => ({
-        id: supply.id,
-        sortValues: {
-          dateTime: supply.date.getTime(),
-          supplier: supply.supplier_name,
-          itemsCount: itemCount,
-          totalCost: supply.total_cost,
-          operator: supply.operator_name,
-        },
-        values: [
-          this.dateFormatter.format(supply.date),
-          supply.supplier_name,
-          String(itemCount),
-          this.formatDual(supply.total_cost, supply.currency_snapshot),
-          supply.operator_name,
-        ],
-      }));
+    this.facade.supplies().map(({ supply, itemCount }) => ({
+      id: supply.id,
+      sortValues: {
+        dateTime: supply.date.getTime(),
+        supplier: supply.supplier_name,
+        itemsCount: itemCount,
+        totalCost: supply.total_cost,
+        operator: supply.operator_name,
+      },
+      values: [
+        this.dateFormatter.format(supply.date),
+        supply.supplier_name,
+        String(itemCount),
+        this.formatDual(supply.total_cost, supply.currency_snapshot),
+        supply.operator_name,
+      ],
+    }));
   ngOnInit(): void {
     this.load();
   }
@@ -94,6 +92,9 @@ export class SupplyListComponent implements OnInit {
   protected openDetail(id: string): void {
     void this.router.navigate(["/supplies", id]);
   }
+  protected formatMoney(cents: number): string {
+    return formatCurrencyMinorUnits(cents, 4);
+  }
   private filter(): SupplyListFilter {
     return { supplierId: this.supplierId || undefined, from: this.range.from, to: this.range.to };
   }
@@ -116,13 +117,13 @@ export class SupplyListComponent implements OnInit {
   }
 
   private formatDual(amount: number, snapshot: SupplyCurrencySnapshot): string {
-  return formatDualCurrencyMinorUnits(
-    amount,
-    snapshot.primary_precision,
-    snapshot.primary_code,
-    snapshot.exchange_rate,
-    this.storeProfile.currency.secondary.code,
-    this.storeProfile.currency.secondary.precision,
-  );
-}
+    return formatDualCurrencyMinorUnits(
+      amount,
+      snapshot.primary_precision,
+      snapshot.primary_code,
+      snapshot.exchange_rate,
+      this.storeProfile.currency.secondary.code,
+      this.storeProfile.currency.secondary.precision
+    );
+  }
 }
