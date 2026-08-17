@@ -6,7 +6,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
-import { Supplier } from "@retail/kernel";
+import { formatCurrencyMinorUnits, Supplier } from "@retail/kernel";
 import { LineItemEditorComponent } from "../../../shared-ui/line-item-editor/line-item-editor.component";
 import { SupplierPickerComponent } from "../../../shared-ui/supplier-picker/supplier-picker.component";
 import { SupplierFormComponent } from "../../suppliers/supplier-form/supplier-form.component";
@@ -129,5 +129,9 @@ export class AddStockFormComponent implements OnInit {
   private toDateTimeValue(date: Date): string {
     const offset = date.getTimezoneOffset() * 60_000;
     return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+  }
+
+  protected formatMoney(cents: number): string {
+    return formatCurrencyMinorUnits(cents, 4);
   }
 }

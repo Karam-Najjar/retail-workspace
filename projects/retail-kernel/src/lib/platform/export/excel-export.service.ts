@@ -1,14 +1,12 @@
 import { inject, Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
-import { saveAs } from "file-saver";
+import { Workbook } from "exceljs";
 import { ExcelWorkbookDefinition } from "./excel-export.models";
-
 @Injectable({ providedIn: "root" })
 export class ExcelExportService {
   private readonly translate = inject(TranslateService);
 
   async export(definition: ExcelWorkbookDefinition): Promise<void> {
-    const { Workbook } = await import("exceljs");
     const workbook = new Workbook();
     for (const definitionSheet of definition.sheets) {
       const sheet = workbook.addWorksheet(definitionSheet.name, {
@@ -35,7 +33,14 @@ export class ExcelExportService {
     }
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer as unknown as BlobPart], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-    saveAs(blob, definition.fileName);
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = definition.fileName;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
   }
 
   private header(key: string, fallback: string): string {

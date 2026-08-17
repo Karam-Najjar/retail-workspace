@@ -46,7 +46,7 @@ export function currencyMinorUnitsToMajor(value: number, precision: number): num
 
 export function formatCurrencyMinorUnits(value: number, precision: number): string {
   assertSafeCurrencyMinorUnits(value);
-  return new Decimal(value).div(currencyScale(precision)).toFixed(precision);
+  return new Decimal(value).div(currencyScale(precision)).toFixed(precision).replace(/\.?0+$/, "");
 }
 
 function assertSafeCurrencyMinorUnits(value: number): void {
@@ -84,4 +84,10 @@ export function formatDualCurrencyMinorUnits(
   } catch {
     return `${primary} ${primaryCode}`;
   }
+}
+
+
+export function formatCurrencyMinorUnitsTrimmed(value: number, precision: number): string {
+  const formatted = formatCurrencyMinorUnits(value, precision);
+  return formatted.replace(/\.?0+$/, "");
 }

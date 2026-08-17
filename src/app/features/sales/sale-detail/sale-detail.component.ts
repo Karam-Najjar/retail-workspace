@@ -3,7 +3,7 @@ import { Component, inject, OnInit, signal } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
-import { SaleCurrencySnapshot, SaleDetail, SaleItem } from "@retail/kernel";
+import { formatCurrencyMinorUnits, SaleCurrencySnapshot, SaleDetail, SaleItem } from "@retail/kernel";
 import { DetailPageHeaderComponent } from "../../../shared-ui/detail-page-header/detail-page-header.component";
 import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.component";
 import { SalesFacade } from "../sales.facade";
@@ -57,7 +57,7 @@ export class SaleDetailComponent implements OnInit {
   }
 
   protected secondaryAmount(amount: number, snapshot: SaleCurrencySnapshot): string {
-    return `${(amount / 10 ** snapshot.secondary_precision).toFixed(snapshot.secondary_precision)} ${snapshot.secondary_code}`;
+    return `${formatCurrencyMinorUnits(amount, snapshot.secondary_precision)} ${snapshot.secondary_code}`;
   }
 
   protected allocationsFor(item: SaleItem) {

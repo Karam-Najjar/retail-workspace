@@ -10,16 +10,21 @@ export class MoneyDisplayComponent {
 
   readonly cents = input.required<number>();
 
-  readonly primaryValue = computed(() =>
-    new Intl.NumberFormat(undefined, {
+  readonly primaryValue = computed(() => {
+    const scale = 10 ** this.profile.currency.primary.precision;
+    const major = this.cents() / scale;
+    const trimmed = Number(major.toFixed(this.profile.currency.primary.precision).replace(/\.?0+$/, ""));
+    return new Intl.NumberFormat(undefined, {
       style: "currency",
       currency: this.profile.currency.primary.code,
-      minimumFractionDigits: this.profile.currency.primary.precision,
-    }).format(this.cents() / 100)
-  );
+      minimumFractionDigits: this.decimals(trimmed),
+      maximumFractionDigits: this.profile.currency.primary.precision,
+    }).format(trimmed);
+  });
 
   readonly secondaryValue = computed(() => {
-    const syp = this.exchangeRate().mul(this.cents()).div(100).toDecimalPlaces(0).toString();
+    const scale = 10 ** this.profile.currency.primary.precision;
+    const syp = this.exchangeRate().mul(this.cents()).div(scale).toDecimalPlaces(0).toString();
     return `${syp} ${this.profile.currency.secondary.code}`;
   });
 
@@ -34,5 +39,11 @@ export class MoneyDisplayComponent {
     } catch {
       this.exchangeRate.set(new Decimal(1));
     }
+  }
+
+  private decimals(value: number): number {
+    const text = String(value);
+    const dotIndex = text.indexOf(".");
+    return dotIndex === -1 ? 0 : text.length - dotIndex - 1;
   }
 }

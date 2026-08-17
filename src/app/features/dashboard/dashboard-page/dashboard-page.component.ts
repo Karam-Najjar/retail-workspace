@@ -234,12 +234,20 @@ export class DashboardPageComponent implements OnDestroy, OnInit {
 
   private formatCurrency(value: number, currency: CurrencyDefinition): string {
     const safeValue = Number.isFinite(value) ? value : 0;
+    const major = safeValue / 10 ** currency.precision;
+    const trimmed = Number(major.toFixed(currency.precision).replace(/\.?0+$/, ""));
     return new Intl.NumberFormat(this.translation.activeLanguage(), {
       style: "currency",
       currency: currency.code,
-      minimumFractionDigits: currency.precision,
+      minimumFractionDigits: this.decimals(trimmed),
       maximumFractionDigits: currency.precision,
-    }).format(safeValue / 10 ** currency.precision);
+    }).format(trimmed);
+  }
+
+  private decimals(value: number): number {
+    const text = String(value);
+    const dotIndex = text.indexOf(".");
+    return dotIndex === -1 ? 0 : text.length - dotIndex - 1;
   }
 
   private translatedText(text: ActivityText): string {

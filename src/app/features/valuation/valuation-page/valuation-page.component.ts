@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { TranslatePipe } from "@ngx-translate/core";
-import { StoreProfileService } from "@retail/kernel";
+import { formatCurrencyMinorUnits, StoreProfileService } from "@retail/kernel";
 import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.component";
 import { ValuationFacade } from "../valuation.facade";
 
@@ -22,7 +22,7 @@ export class ValuationPageComponent implements OnInit {
 
   protected formatPrimary(cents: number): string {
     const { code, precision } = this.profile.currency.primary;
-    return `${(cents / 10 ** precision).toFixed(precision)} ${code}`;
+    return `${formatCurrencyMinorUnits(cents, precision)} ${code}`;
   }
 
   protected formatSecondary(cents: number): string {

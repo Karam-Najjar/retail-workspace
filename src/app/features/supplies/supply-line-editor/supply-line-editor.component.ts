@@ -6,7 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { TranslatePipe } from "@ngx-translate/core";
-import { DexieInventoryBatchRepository, Product, roundCurrencyMinorUnits, StorePackageType } from "@retail/kernel";
+import { DexieInventoryBatchRepository, formatCurrencyMinorUnits, Product, roundCurrencyMinorUnits, StorePackageType } from "@retail/kernel";
 import Decimal from "decimal.js";
 import { DualCurrencyInputComponent } from "../../../shared-ui/dual-currency-input/dual-currency-input.component";
 import { ProductPickerComponent } from "../../../shared-ui/product-picker/product-picker.component";
@@ -69,6 +69,9 @@ export class SupplyLineEditorComponent {
   protected baseUnitCost(): string {
     const multiplier = this.multiplier();
     return multiplier ? new Decimal(this.line().unitCostEntered).div(multiplier).div(100).toString() : "0";
+  }
+  protected formatMoney(cents: number): string {
+    return formatCurrencyMinorUnits(cents, 4);
   }
 
   private async autofill(productId: string, packageTypeCode: string): Promise<void> {

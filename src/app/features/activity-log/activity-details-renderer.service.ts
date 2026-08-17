@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
-import { ActivityLog, StoreProfileService } from "@retail/kernel";
+import { ActivityLog, formatCurrencyMinorUnits, StoreProfileService } from "@retail/kernel";
 
 type PayloadRecord = Readonly<Record<string, unknown>>;
 
@@ -90,8 +90,7 @@ export class ActivityDetailsRendererService {
 
   private money(cents: number): string {
     const currency = this.profile.profile.currency.primary;
-    return `${(cents / 10 ** currency.precision).toFixed(currency.precision)} ${currency.code}`;
-  }
+    return `${formatCurrencyMinorUnits(cents, currency.precision)} ${currency.code}`;  }
 
   private record(payload: unknown): PayloadRecord {
     return typeof payload === "object" && payload !== null ? (payload as PayloadRecord) : {};
