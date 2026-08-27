@@ -520,7 +520,18 @@
       "retry": "Please try again. If the problem continues, keep your latest backup and reload the application."
     },
     "dangerousActions": "Dangerous actions",
-    "clearAllData": "Clear All Data"
+    "clearAllData": "Clear All Data",
+    "restore": {
+      "previewTitle": "Restore Backup Preview",
+      "previewMessage": "Review the backup details before restoring. This will replace all current data.",
+      "profile": "Profile: {{ value }}",
+      "schema": "Schema version: {{ value }}",
+      "appVersion": "App version: {{ value }}",
+      "timestamp": "Backup date: {{ value }}",
+      "recordCount": "{{ table }}: {{ count }} records",
+      "confirmTitle": "Confirm Restore",
+      "confirmMessage": "This will overwrite all existing data with the backup contents. Continue?"
+    }
   },
   "pwa": {
     "updateReady": "Update ready.",

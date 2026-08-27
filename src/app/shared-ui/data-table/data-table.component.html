@@ -8,7 +8,9 @@
       } @else {
         <th mat-header-cell *matHeaderCellDef>{{ column.labelKey | translate }}</th>
       }
-      <td mat-cell *matCellDef="let row">{{ row.values[index] | translate }}</td>
+      <td mat-cell *matCellDef="let row">
+        {{ row.values[index].includes("\n") ? row.values[index] : (row.values[index] | translate) }}
+      </td>
     </ng-container>
   }
   @if (showActions()) {

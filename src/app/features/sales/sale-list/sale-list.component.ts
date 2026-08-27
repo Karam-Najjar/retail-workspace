@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { Router } from "@angular/router";
-import { TranslatePipe } from "@ngx-translate/core";
+import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import {
   DateRange,
   formatDualCurrencyMinorUnits,
@@ -17,7 +17,7 @@ import { EmptyStateComponent } from "../../../shared-ui/empty-state/empty-state.
 import { ExportButtonComponent } from "../../../shared-ui/export-button/export-button.component";
 import { SummaryCardComponent } from "../../../shared-ui/summary-card/summary-card.component";
 import { SalesFacade } from "../sales.facade";
-import { PaginatorComponent } from "@app/shared-ui/paginator/paginator.component";
+import { PaginatorComponent } from "../../../shared-ui/paginator/paginator.component";
 
 type DatePreset = "today" | "week" | "month" | "custom";
 
@@ -46,6 +46,7 @@ export class SaleListComponent implements OnInit {
     timeStyle: "short",
   });
   private readonly storeProfile: StoreProfile = inject(STORE_PROFILE);
+  private readonly translate = inject(TranslateService);
 
   protected range: DateRange = this.todayRange();
   protected readonly columns: readonly DataTableColumn[] = [
@@ -68,9 +69,9 @@ export class SaleListComponent implements OnInit {
       },
       values: [
         this.dateFormatter.format(sale.date),
-        this.formatDual(sale.total_amount, sale.currency_snapshot),
-        this.formatDual(sale.total_cost, sale.currency_snapshot),
-        this.formatDual(sale.total_profit, sale.currency_snapshot),
+        this.formatTableMoney(sale.total_amount, sale.currency_snapshot.secondary_total_amount),
+        this.formatTableMoney(sale.total_cost, sale.currency_snapshot.secondary_total_cost),
+        this.formatTableMoney(sale.total_profit, sale.currency_snapshot.secondary_total_profit),
         sale.operator_name,
       ],
     }));
@@ -82,11 +83,13 @@ export class SaleListComponent implements OnInit {
   protected load(): void {
     void this.facade.load(this.filter());
   }
+
   protected rangeChanged(range: DateRange): void {
     this.range = range;
     this.facade.page.set(1);
     this.load();
   }
+
   protected export(): void {
     void this.facade.export(this.filter(), this.fileName(), this.isArabic());
   }
@@ -96,13 +99,33 @@ export class SaleListComponent implements OnInit {
   }
 
   protected summaryMoney(amount: number, sypAmount: number): string {
-    const firstSale = this.facade.summaryEntries().at(0)?.sale;
-    if (firstSale) {
-      const primary = this.formatDual(amount, firstSale.currency_snapshot);
-      const primaryOnly = primary.split("(")[0].trim();
-      return `${primaryOnly} (${sypAmount} ${this.storeProfile.currency.secondary.code})`;
-    }
-    return `${amount} ${this.storeProfile.currency.primary.code}`;
+    const primary = this.formatPrimary(amount);
+    const secondary = this.formatSecondary(sypAmount);
+    return `${primary} $  |  ${secondary}`;
+  }
+
+  protected formatTableMoney(primaryAmount: number, sypAmount: number): string {
+    const primary = this.formatPrimary(primaryAmount);
+    const secondary = this.formatSecondary(sypAmount);
+    return `${primary} $\n${secondary}`;
+  }
+
+  protected formatPrimary(amount: number): string {
+    const scale = 10 ** this.storeProfile.currency.primary.precision;
+    const major = amount / scale;
+    const trimmed = Number(major.toFixed(this.storeProfile.currency.primary.precision).replace(/\.?0+$/, ""));
+    return new Intl.NumberFormat(undefined, {
+      minimumFractionDigits: this.decimals(trimmed),
+      maximumFractionDigits: this.storeProfile.currency.primary.precision,
+    }).format(trimmed);
+  }
+
+  protected formatSecondary(amount: number): string {
+    const major = amount / 10 ** this.storeProfile.currency.secondary.precision;
+    return `${new Intl.NumberFormat(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(major)} SYP`;
   }
 
   private formatDual(amount: number, snapshot: SaleCurrencySnapshot): string {
@@ -116,9 +139,16 @@ export class SaleListComponent implements OnInit {
     );
   }
 
+  private decimals(value: number): number {
+    const text = String(value);
+    const dotIndex = text.indexOf(".");
+    return dotIndex === -1 ? 0 : text.length - dotIndex - 1;
+  }
+
   private filter(): SaleListFilter {
     return { from: this.range.from, to: this.range.to };
   }
+
   private todayRange(): DateRange {
     const now = new Date();
     return {
@@ -127,15 +157,19 @@ export class SaleListComponent implements OnInit {
       preset: "today",
     };
   }
+
   private fileName(): string {
     return `sales-report-${this.datePart(this.range.from)}-to-${this.datePart(this.range.to)}.xlsx`;
   }
+
   private datePart(date: Date): string {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
   }
+
   private isArabic(): boolean {
     return document.documentElement.lang.toLowerCase().startsWith("ar");
   }
+
   protected goToPage(page: number): void {
     void this.facade.goToPage(page, this.filter());
   }

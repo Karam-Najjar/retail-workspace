@@ -33,6 +33,7 @@ td[mat-cell] {
   color: var(--retail-on-surface);
   padding-inline: 1rem;
   border-bottom: 1px solid var(--retail-outline-variant);
+  white-space: pre-line;
 }
 
 tr[mat-row]:last-child td[mat-cell] {
@@ -55,5 +56,9 @@ tr[mat-row]:hover {
     &:hover {
       background: var(--retail-primary-container);
     }
+  }
+
+  td {
+    white-space: pre-line;
   }
 }
