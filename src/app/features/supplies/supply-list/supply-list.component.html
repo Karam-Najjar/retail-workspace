@@ -20,11 +20,13 @@
     ><app-export-button [busy]="facade.exporting()" (export)="export()" />
   </div>
   <section class="summary-grid">
-    <app-summary-card labelKey="supplies.totalSupplies" [value]="facade.summary().transaction_count" /><app-summary-card
-      labelKey="supplies.totalBaseUnits"
-      [value]="facade.summary().total_base_units" /><app-summary-card
+    <app-summary-card tone="items" labelKey="supplies.totalSupplies" [primaryValue]="facade.summary().transaction_count" [secondaryValue]="null" />
+    <app-summary-card tone="items" labelKey="supplies.totalBaseUnits" [primaryValue]="facade.summary().total_base_units" [secondaryValue]="null" />
+    <app-summary-card
+      tone="cost"
       labelKey="supplies.totalCost"
-      [value]="formatMoney(facade.summary().total_cost)" />
+      [primaryValue]="formatPrimary(facade.summary().total_cost) + ' $'"
+      [secondaryValue]="formatSecondary(facade.summary().total_cost_syp)" />
   </section>
   @if (facade.supplies().length) {
     <app-data-table [columns]="columns" [rows]="rows()" (rowClick)="openDetail($event)" />

@@ -1,6 +1,7 @@
-<mat-card appearance="outlined"
-  ><mat-card-content
-    ><span>{{ labelKey() | translate }}</span
-    ><strong>{{ value() }}</strong></mat-card-content
-  ></mat-card
->
+<mat-card appearance="outlined" class="summary-card summary-card--{{ tone() }}">
+  <mat-card-content>
+    <span class="summary-card__label">{{ labelKey() | translate }}</span>
+    <strong class="summary-card__primary">{{ primaryValue() }}</strong>
+    <small class="summary-card__secondary">{{ secondaryValue() || "" }}</small>
+  </mat-card-content>
+</mat-card>

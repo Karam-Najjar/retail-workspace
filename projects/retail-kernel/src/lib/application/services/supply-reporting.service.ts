@@ -22,6 +22,7 @@ export class SupplyReportingService {
       details,
       summary: {
         total_cost: sumCurrencyMinorUnits(details.map(detail => detail.supply.total_cost)),
+        total_cost_syp: sumCurrencyMinorUnits(details.map(detail => detail.supply.currency_snapshot.secondary_total_cost)),
         transaction_count: details.length,
         total_base_units: sumSafeIntegers(
           details.flatMap(detail => detail.items.map(item => item.quantity_base_units)),

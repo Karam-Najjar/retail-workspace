@@ -2,35 +2,57 @@
   display: block;
 }
 
-mat-card {
-  border-radius: 0.75rem;
-  border-color: var(--retail-outline-variant);
-  transition: box-shadow 150ms ease;
+.summary-card {
+  border: 1px solid var(--retail-outline-variant);
+  border-radius: 1rem;
+  background: #fff;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    block-size: 3px;
+  }
 
   &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 16px rgba(18, 78, 102, 0.08);
+    transform: translateY(-2px);
   }
 }
 
-mat-card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.25rem 1.5rem;
-}
+// Accent colors per tone
+.summary-card--revenue::before { background: #3b82f6; }
+.summary-card--cost::before { background: #f59e0b; }
+.summary-card--profit::before { background: #22c55e; }
+.summary-card--items::before { background: #8b5cf6; }
 
-span {
-  font-size: 0.8125rem;
-  font-weight: 500;
+.summary-card__label {
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--retail-on-surface-muted);
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
-strong {
+.summary-card__primary {
   font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--retail-on-surface);
   line-height: 1.2;
+  display: block;
+}
+
+.summary-card__secondary {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--retail-primary);
+  display: block;
+  margin-top: 0.25rem;
+  min-block-size: 1.25rem;
 }

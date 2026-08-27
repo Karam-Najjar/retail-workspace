@@ -41,7 +41,7 @@ export class SuppliesFacade {
   readonly suppliers = signal<readonly Supplier[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
-  readonly summary = signal<SupplySummary>({ total_cost: 0, transaction_count: 0, total_base_units: 0 });
+  readonly summary = signal<SupplySummary>({ total_cost: 0, total_cost_syp: 0, transaction_count: 0, total_base_units: 0 });
   readonly exporting = signal(false);
   readonly packageTypes: readonly StorePackageType[] = this.profile.profile.package_types;
 
@@ -49,10 +49,7 @@ export class SuppliesFacade {
     this.loading.set(true);
     this.error.set(null);
     try {
-      const [suppliers, report] = await Promise.all([
-        this.listSuppliers.execute(),
-        this.reporting.getReport(filter),
-      ]);
+      const [suppliers, report] = await Promise.all([this.listSuppliers.execute(), this.reporting.getReport(filter)]);
       this.supplies.set(report.entries);
       this.suppliers.set(suppliers);
       this.summary.set(report.summary);

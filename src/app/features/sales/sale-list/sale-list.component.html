@@ -11,10 +11,22 @@
   </div>
 
   <section class="summary-grid" [attr.aria-label]="'sales.summary' | translate">
-    <app-summary-card labelKey="sales.totalRevenue" [value]="summaryMoney(facade.summary().totalRevenue, facade.summary().totalRevenueSyp)" />
-    <app-summary-card labelKey="sales.totalCost" [value]="summaryMoney(facade.summary().totalCost, facade.summary().totalCostSyp)" />
-    <app-summary-card labelKey="sales.totalProfit" [value]="summaryMoney(facade.summary().totalProfit, facade.summary().totalProfitSyp)" />
-    <app-summary-card labelKey="sales.totalItemsSold" [value]="facade.summary().totalItemsSold" />
+    <app-summary-card
+      tone="revenue"
+      labelKey="sales.totalRevenue"
+      [primaryValue]="formatPrimary(facade.summary().totalRevenue) + ' $'"
+      [secondaryValue]="formatSecondary(facade.summary().totalRevenueSyp)" />
+    <app-summary-card
+      tone="cost"
+      labelKey="sales.totalCost"
+      [primaryValue]="formatPrimary(facade.summary().totalCost) + ' $'"
+      [secondaryValue]="formatSecondary(facade.summary().totalCostSyp)" />
+    <app-summary-card
+      tone="profit"
+      labelKey="sales.totalProfit"
+      [primaryValue]="formatPrimary(facade.summary().totalProfit) + ' $'"
+      [secondaryValue]="formatSecondary(facade.summary().totalProfitSyp)" />
+    <app-summary-card tone="items" labelKey="sales.totalItemsSold" [primaryValue]="facade.summary().totalItemsSold" />
   </section>
 
   @if (facade.sales().length) {

@@ -126,4 +126,28 @@ export class SupplyListComponent implements OnInit {
       this.storeProfile.currency.secondary.precision
     );
   }
+
+  protected formatPrimary(amount: number): string {
+    const scale = 10 ** this.storeProfile.currency.primary.precision;
+    const major = amount / scale;
+    const trimmed = Number(major.toFixed(this.storeProfile.currency.primary.precision).replace(/\.?0+$/, ""));
+    return new Intl.NumberFormat(undefined, {
+      minimumFractionDigits: this.decimals(trimmed),
+      maximumFractionDigits: this.storeProfile.currency.primary.precision,
+    }).format(trimmed);
+  }
+
+  protected formatSecondary(amount: number): string {
+    const major = amount / 10 ** this.storeProfile.currency.secondary.precision;
+    return `${new Intl.NumberFormat(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(major)} SYP`;
+  }
+
+  private decimals(value: number): number {
+    const text = String(value);
+    const dotIndex = text.indexOf(".");
+    return dotIndex === -1 ? 0 : text.length - dotIndex - 1;
+  }
 }
